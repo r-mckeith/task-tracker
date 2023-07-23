@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import DraggableFlatList, { DragEndParams } from 'react-native-draggable-flatlist';
+import SortableList from 'react-native-sortable-list';
 
 // Define the interface for the task object
 interface Task {
@@ -60,22 +60,33 @@ const NestedSortableList: React.FC = () => {
     return nestedData;
   };
 
-  // Create the nested data structure for the root tasks
-  const nestedData: Task[] = createNestedData(null);
-
-  // Function to handle the end of drag and update the tasks order
-  const onDragEnd = ({ data }: DragEndParams<Task>) => {
-    setTasks(data);
+  // Function to update the order of the list items when an item is moved
+  const onRowMoved = (
+    e: { from: number; to: number; row: Task } // Define a custom type for the argument
+  ) => {
+    const newData = [...tasks]; // Create a new copy of the tasks array
+    newData.splice(e.to, 0, newData.splice(e.from, 1)[0]); // Move the task from 'e.from' to 'e.to' in the newData array
+    setTasks(newData); // Update the state with the new order of the tasks
   };
 
-  // Function to render each item in the list
-  const renderItem = ({ item }: { item: Task }) => {
+  // Function to recursively render a task and its children
+  const renderTask = (task: Task) => {
     return (
-      <View style={styles.row}>
-        <Text style={styles.taskName}>{item.name}</Text>
+      <View key={task.id}>
+        <Text style={styles.taskName}>{task.name}</Text>
+        {task.children && (
+          <SortableList
+            data={task.children}
+            renderRow={renderTask as any}
+            onChangeOrder={onRowMoved as any}
+          />
+        )}
       </View>
     );
   };
+
+  // Create the nested data structure for the root tasks
+  const nestedData: Task[] = createNestedData(null);
 
   return (
     <View style={styles.container}>
@@ -83,12 +94,10 @@ const NestedSortableList: React.FC = () => {
       <Button title="Add Child Task" onPress={() => console.log('Add child task')} />
 
       {/* Render the tasks as a nested, sortable list */}
-      <DraggableFlatList
+      <SortableList
         data={nestedData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        onDragEnd={onDragEnd}
-        nestedScrollEnabled
+        renderRow={renderTask as any}
+        onChangeOrder={onRowMoved as any}
       />
     </View>
   );
@@ -98,12 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-  },
-  row: {
-    backgroundColor: '#EEE',
-    padding: 20,
-    marginBottom: 10,
-    borderRadius: 5,
   },
   taskName: {
     fontSize: 18,
