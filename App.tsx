@@ -6,7 +6,8 @@ import Auth from './components/Auth'
 import Account from './components/Account'
 import { View, StyleSheet } from 'react-native'
 import { Session } from '@supabase/supabase-js'
-import SortableListComponent from './components/SortableList';
+// import SortableListComponent from './components/SortableList';
+import NestedSortableList from './components/NestedSortableList';
 
 
 export default function App() {
@@ -28,7 +29,8 @@ export default function App() {
       {/* loads the auth component if there's not */}
       {/* the account component will be replaced w the today screen for default, but leaving it in for now */}
       {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
-      <SortableListComponent />
+      {/* <SortableListComponent /> */}
+      <NestedSortableList />
     </View>
   )
 }
