@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import SortableList from 'react-native-sortable-list';
 
+// Define a type for the items in the list
 interface Item {
   id: string;
   text: string;
@@ -16,17 +17,18 @@ const SortableListComponent: React.FC = () => {
     // Add more items as needed
   ]);
 
-  // Function to update the order of the list items
+  // Function to update the order of the list items when an item is moved
   const onRowMoved = (
     e: { from: number; to: number; row: Item } // Define a custom type for the argument
   ) => {
-    const newData = [...data];
-    newData.splice(e.to, 0, newData.splice(e.from, 1)[0]);
-    setData(newData);
+    const newData = [...data]; // Create a new copy of the data array
+    newData.splice(e.to, 0, newData.splice(e.from, 1)[0]); // Move the item from 'e.from' to 'e.to' in the newData array
+    setData(newData); // Update the state with the new order of the items
   };
 
   // Render function for each item in the list
   const renderRow = ({ data: row }: { data: Item }) => {
+    // This function is called for each item in the 'data' array to render it in the list
     return (
       <View key={row.id} style={styles.row}>
         <Text>{row.text}</Text>
@@ -36,10 +38,11 @@ const SortableListComponent: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      {/* Render the SortableList component */}
       <SortableList
-        data={data}
-        renderRow={renderRow}
-        onChangeOrder={onRowMoved as any}
+        data={data} // Pass the data array as the list of items
+        renderRow={renderRow} // Pass the renderRow function to render each item
+        onChangeOrder={onRowMoved as any} // Pass the onRowMoved function to handle item movements
       />
     </View>
   );
@@ -59,3 +62,4 @@ const styles = StyleSheet.create({
 });
 
 export default SortableListComponent;
+
