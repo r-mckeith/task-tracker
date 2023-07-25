@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, Modal } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 interface TaskProps {
   id: number;
@@ -50,7 +52,12 @@ const Task: React.FC<TaskProps> = ({
     <Swipeable renderRightActions={renderRightActions} overshootLeft={false}>
     <View style={styles.taskContainer}>
       {parentId && (
-        <Text onPress={handleToggleCompleted} style={styles.completeIcon}>{completed ? '🟢' : '🔴'}</Text>
+        <MaterialCommunityIcons 
+        name={completed ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"} 
+        size={24} 
+        color={completed ? 'green' : 'black'}
+        onPress={handleToggleCompleted}
+      />
       )}
       <Text onPress={onPress} style={styles.taskName}>
         {name}
@@ -91,6 +98,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    backgroundColor: '#f9f9f9', // Light gray background
+    padding: 10, // Some padding
+    borderRadius: 5, // Rounded corners
+    borderWidth: 1, // Thin border
+    borderColor: '#ddd', // Light gray border
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
   },
   taskName: {
     fontSize: 18,
