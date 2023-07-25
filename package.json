@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.1",
+    "@react-native-picker/picker": "^2.4.10",
     "@supabase/supabase-js": "^2.26.0",
     "expo": "^49.0.4",
     "expo-secure-store": "~12.3.1",
