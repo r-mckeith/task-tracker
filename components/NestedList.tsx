@@ -9,33 +9,12 @@ parentId: number | null;
 completed: boolean;
 }
 
-const NestedList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([  {
-    id: 1,
-    name: 'Health',
-    parentId: null,
-    completed: false,
+interface NestedListProps {
+  taskProps: Task[];
+}
 
-  },
-  {
-    id: 2,
-    name: 'Wealth',
-    parentId: null,
-    completed: false,
-  },
-  {
-    id: 3,
-    name: 'Relationships',
-    parentId: null,
-    completed: false,
-  },
-  {
-    id: 4,
-    name: 'Not tied to goals',
-    parentId: null,
-    completed: false,
-  },
-]);
+const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
+    const [tasks, setTasks] = useState<Task[]>(taskProps);
 
 const addTask = (name: string, parentId: number | null) => {
   const newTask: Task = {
