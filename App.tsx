@@ -8,6 +8,8 @@ import { View, StyleSheet } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import SortableListComponent from './components/SortableList';
 import NestedList from './components/NestedList';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 // import Task from './components/Task';
 
 
@@ -48,6 +50,7 @@ export default function App() {
   };
 
   return (
+    <GestureHandlerRootView style={{flex: 1}}>
     <View style={styles.container}>
       {/* loads the account component if there's an active session and user, */}
       {/* loads the auth component if there's not */}
@@ -66,6 +69,7 @@ export default function App() {
         />
       ))} */}
     </View>
+    </GestureHandlerRootView>
   )
 }
 

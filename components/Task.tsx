@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, Modal } from 'react-native';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
 interface TaskProps {
   id: number;
@@ -9,6 +10,7 @@ interface TaskProps {
   onPress: () => void;
   onAddSubTask: (name: string, parentId: number) => void;
   onToggleCompleted: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
 const Task: React.FC<TaskProps> = ({
@@ -19,6 +21,7 @@ const Task: React.FC<TaskProps> = ({
   onPress,
   onAddSubTask,
   onToggleCompleted,
+  onDelete,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [newSubTaskName, setNewSubTaskName] = useState('');
@@ -33,7 +36,18 @@ const Task: React.FC<TaskProps> = ({
     onToggleCompleted(id);
   };
 
+  const renderRightActions = (progress: any, dragX: any) => {
+    return (
+      parentId !== null && (
+      <RectButton style={styles.leftSwipeItem} onPress={() => onDelete(id)}>
+        <Text style={styles.deleteText}>Delete</Text>
+      </RectButton>
+      )
+    );
+  };
+
   return (
+    <Swipeable renderRightActions={renderRightActions} overshootLeft={false}>
     <View style={styles.taskContainer}>
       {parentId && (
         <Text onPress={handleToggleCompleted} style={styles.completeIcon}>{completed ? '🟢' : '🔴'}</Text>
@@ -68,6 +82,7 @@ const Task: React.FC<TaskProps> = ({
         </View>
       </Modal>
     </View>
+  </Swipeable>  
   );
 };
 
@@ -117,6 +132,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     padding: 10,
+  },
+  leftSwipeItem: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 20,
+    backgroundColor: 'red',
+  },
+  deleteText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 

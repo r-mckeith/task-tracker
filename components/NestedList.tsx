@@ -60,6 +60,19 @@ const toggleCompleted = (id: number) => {
   setTasks(tasks.map(task => task.id === id ? {...task, completed: !task.completed} : task));
 };
 
+const deleteTask = (id: number) => {
+  // This will recursively delete all children tasks
+  const recursiveDelete = (taskId: number) => {
+    const childTasks = tasks.filter(task => task.parentId === taskId);
+    for (let childTask of childTasks) {
+      recursiveDelete(childTask.id);
+    }
+    setTasks(tasks => tasks.filter(task => task.id !== taskId));
+  };
+
+  recursiveDelete(id);
+};
+
 
 const renderTasks = (parentId: number | null) => {
   return tasks
@@ -75,11 +88,12 @@ const renderTasks = (parentId: number | null) => {
           onPress={() => handleTaskPress(task.id)}
           onAddSubTask={addTask}
           onToggleCompleted={toggleCompleted}
+          onDelete={deleteTask}
         />
         {renderTasks(task.id)}
       </View>
     ));
-  };
+};
 
   return (
     <View style={styles.container}>
