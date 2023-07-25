@@ -38,7 +38,7 @@ const Task: React.FC<TaskProps> = ({
     onToggleCompleted(id);
   };
 
-  const renderRightActions = (progress: any, dragX: any) => {
+  const renderRightActions = () => {
     return (
       parentId !== null && (
       <RectButton style={styles.leftSwipeItem} onPress={() => onDelete(id)}>
@@ -49,7 +49,7 @@ const Task: React.FC<TaskProps> = ({
   };
 
   return (
-    <Swipeable renderRightActions={renderRightActions} overshootLeft={false}>
+    <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
     <View style={styles.taskContainer}>
       {parentId && (
         <MaterialCommunityIcons 

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Task from './Task';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface Task {
 id: number;
@@ -38,9 +36,6 @@ const NestedList: React.FC = () => {
     completed: false,
   },
 ]);
-
-
-const [newTaskName, setNewTaskName] = useState('');
 
 const addTask = (name: string, parentId: number | null) => {
   const newTask: Task = {
