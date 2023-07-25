@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
 import Auth from './components/Auth'
 import Account from './components/Account'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, SafeAreaView } from 'react-native'
 import { Session } from '@supabase/supabase-js'
-import SortableListComponent from './components/SortableList';
 import NestedList from './components/NestedList';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 export default function App() {
@@ -24,14 +24,14 @@ export default function App() {
   }, [])
 
   return (
-    <View style={styles.container}>
-      {/* loads the account component if there's an active session and user, */}
-      {/* loads the auth component if there's not */}
-      {/* the account component will be replaced w the today screen for default, but leaving it in for now */}
-      {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />}
-      <SortableListComponent />
-      <NestedList />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <View style={styles.container}>
+          {/* {session && session.user ? <Account key={session.user.id} session={session} /> : <Auth />} */}
+          <NestedList />
+        </View>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   )
 }
 
