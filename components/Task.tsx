@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Modal } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 
 interface TaskProps {
   id: number;
@@ -10,7 +9,8 @@ interface TaskProps {
   parentId: number | null;
   completed: boolean;
   onPress: () => void;
-  onAddSubTask: (name: string, parentId: number) => void;
+  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
+  depth: number;
   onToggleCompleted: (id: number) => void;
   onDelete: (id: number) => void;
 }
@@ -22,15 +22,35 @@ const Task: React.FC<TaskProps> = ({
   completed,
   onPress,
   onAddSubTask,
+  depth,
   onToggleCompleted,
   onDelete,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [newSubTaskName, setNewSubTaskName] = useState('');
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [selectedDays, setSelectedDays] = useState('');
+  const [timesPerDay, setTimesPerDay] = useState('');
+
+  const getTaskLevelName = (depth: number) => {
+    switch (depth) {
+      case 0:
+        return 'Section';
+      case 1:
+        return 'Objective';
+      case 2:
+        return 'Goal';
+      case 3:
+        return 'Task';
+      default:
+        return 'Subtask';
+    }
+  }
 
   const handleAddSubTask = () => {
-    onAddSubTask(newSubTaskName, id);
+    onAddSubTask(newSubTaskName, id, {isRecurring, selectedDays, timesPerDay});
     setNewSubTaskName('');
+    setIsRecurring(false);
     setShowModal(false);
   };
 
@@ -41,55 +61,81 @@ const Task: React.FC<TaskProps> = ({
   const renderRightActions = () => {
     return (
       parentId !== null && (
-      <RectButton style={styles.leftSwipeItem} onPress={() => onDelete(id)}>
-        <Text style={styles.deleteText}>Delete</Text>
-      </RectButton>
+        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete(id)}>
+          <Text style={styles.deleteText}>Delete</Text>
+        </RectButton>
       )
     );
   };
 
+  console.log(id, isRecurring)
+
   return (
     <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
-    <View style={styles.taskContainer}>
-      {parentId && (
-        <MaterialCommunityIcons 
-        name={completed ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"} 
-        size={24} 
-        color={completed ? 'green' : 'black'}
-        onPress={handleToggleCompleted}
-      />
-      )}
-      <Text onPress={onPress} style={styles.taskName}>
-        {name}
-      </Text>
-      <Button
+      <View style={[
+          styles.taskContainer, 
+          depth === 0 && styles.sectionLevel, 
+          depth === 1 && styles.objectiveLevel,
+          depth === 2 && styles.goalLevel,
+          depth === 3 && styles.taskLevel,
+          depth === 4 && styles.subtaskLevel,
+        ]}>
+        {parentId && (
+          <MaterialCommunityIcons 
+            name={completed ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"} 
+            size={24} 
+            color={completed ? 'green' : 'black'}
+            onPress={handleToggleCompleted}
+          />
+        )}
+        <Text onPress={onPress} style={[styles.taskName]}>
+          {name}
+        </Text>
+        <Button
         title="+"
-        onPress={() => setShowModal(true)}
-      />
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showModal}
-        onRequestClose={() => {
-          setShowModal(!showModal);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>New SubTask</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="SubTask Name"
-              value={newSubTaskName}
-              onChangeText={setNewSubTaskName}
-            />
-            <Button title="Add SubTask" onPress={handleAddSubTask} />
-            <Button title="Close" onPress={() => setShowModal(false)} />
+          onPress={() => setShowModal(true)}
+        />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showModal}
+          onRequestClose={() => {
+            setShowModal(!showModal);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{`New ${getTaskLevelName(depth + 1)}`}</Text>
+              <TextInput
+                style={[styles.input, { marginBottom: 10 }]} // Add some margin to bottom
+                placeholder={`${getTaskLevelName(depth + 1)} Name`}
+                value={newSubTaskName}
+                onChangeText={setNewSubTaskName}
+              />
+              <View style={styles.switchRow}>
+                <Text>Recurring: </Text>
+                <Switch 
+                  trackColor={{ false: "#767577", true: "#81b0ff" }}
+                  thumbColor={isRecurring ? "#f5dd4b" : "#f4f3f4"}
+                  onValueChange={setIsRecurring}
+                  value={isRecurring}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
+                  <MaterialCommunityIcons name="plus" size={24} color="#000" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
+                  <MaterialCommunityIcons name="close" size={24} color="#000" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
-  </Swipeable>  
+
+        </Modal>
+      </View>
+    </Swipeable>  
   );
 };
 
@@ -117,6 +163,22 @@ const styles = StyleSheet.create({
   completeIcon: {
     fontSize: 24,
   },
+  sectionLevel: {
+    backgroundColor: 'rgb(0, 0, 255)', // Dark blue
+  },
+  objectiveLevel: {
+    backgroundColor: 'rgb(70, 70, 255)', // Medium-dark blue
+  },
+  goalLevel: {
+    backgroundColor: 'rgb(100, 100, 255)', // Medium blue
+  },
+  taskLevel: {
+    backgroundColor: 'rgb(135, 135, 255)', // Light blue
+  },
+  subtaskLevel: {
+    backgroundColor: 'rgb(175, 175, 255)', // Very light blue
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -145,12 +207,13 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     width: 200,
+    margin: 12,
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 20,
     padding: 10,
   },
-  leftSwipeItem: {
+  rightSwipeItem: {
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 20,
@@ -160,6 +223,21 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
+  },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    width: 200,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  iconButton: {
+    padding: 10,
   },
 });
 
