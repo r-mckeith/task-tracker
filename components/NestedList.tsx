@@ -17,9 +17,10 @@ interface Task {
 
 interface NestedListProps {
   taskProps: Task[];
+  planningScreen: boolean;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
+const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
     const [tasks, setTasks] = useState<Task[]>(taskProps);
 
     // Function to add a new task
@@ -77,6 +78,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
               name={task.name}
               parentId={task.parentId}
               depth={task.depth}
+              planningScreen={planningScreen}
               completed={task.completed}
               onPress={() => handleTaskPress(task.id)}
               onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 

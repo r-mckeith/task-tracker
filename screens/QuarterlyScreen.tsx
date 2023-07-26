@@ -52,7 +52,7 @@ export default function HomeScreen() {
 ]);
   return (
     <View style={{flex: 1}}>
-      <NestedList taskProps={tasks} />
+      <NestedList taskProps={tasks} planningScreen={true} /> 
     </View>
   );
 }

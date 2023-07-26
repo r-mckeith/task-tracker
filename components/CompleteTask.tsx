@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import React from 'react';
+import { View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface IconProps {
@@ -9,11 +8,12 @@ interface IconProps {
   onToggleCompleted: (id: number) => void;
 }
 
-const CompletionIcon: React.FC<IconProps> = ({
+const CompleteTask: React.FC<IconProps> = ({
   id,
   completed,
   onToggleCompleted,
 }) => {
+  
 
   const handleToggleCompleted = () => {
     onToggleCompleted(id);
@@ -31,4 +31,4 @@ const CompletionIcon: React.FC<IconProps> = ({
   );
 };
 
-export default CompletionIcon;
+export default CompleteTask;
