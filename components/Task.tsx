@@ -10,7 +10,7 @@ interface TaskProps {
   parentId: number | null;
   completed: boolean;
   onPress: () => void;
-  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
+  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean | null, selectedDays: string | null, timesPerDay: string | null}) => void;
   depth: number;
   planningScreen: boolean;
   onToggleCompleted: (id: number) => void;

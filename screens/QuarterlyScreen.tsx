@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import NestedList from '../components/NestedList';
+import apiCall from '../lib/apiCall';
 
 interface Task {
   id: number;
@@ -8,48 +9,21 @@ interface Task {
   parentId: number | null;
   completed: boolean;
   recurringOptions: {
-    isRecurring: boolean;
-    selectedDays: string;
-    timesPerDay: string;
-  } | null;
+    isRecurring: boolean | null;
+    selectedDays: string | null;
+    timesPerDay: string | null;
+  }
   depth: number;
   }
 
 export default function HomeScreen() {
-  const [tasks, setTasks] = useState<Task[]>([  {
-    id: 1,
-    name: 'Health',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
+  const [tasks, setTasks] = useState<Task[]>(apiCall);
 
-  },
-  {
-    id: 2,
-    name: 'Wealth',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-  {
-    id: 3,
-    name: 'Relationships',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-  {
-    id: 4,
-    name: 'Not tied to goals',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-]);
+  useEffect(() => {
+    const allTasks = apiCall()
+    setTasks(allTasks)
+  }, [])
+
   return (
     <View style={{flex: 1}}>
       <NestedList taskProps={tasks} planningScreen={true} /> 

@@ -8,11 +8,12 @@ import { Session } from '@supabase/supabase-js'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import DailyScreen from './screens/DailyScreen';
 import WeeklyScreen from './screens/WeeklyScreen'
 import QuarterlyScreen from './screens/QuarterlyScreen'
 import ReviewScreen from './screens/ReviewScreen'
-
+import ScopeScreen from './screens/ScopeScreen';  // Don't forget to import ScopeScreen
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -28,6 +29,7 @@ export default function App() {
   }, [])
 
   const Tab = createBottomTabNavigator();
+  const Stack = createStackNavigator();  // Create Stack.Navigator here
 
   function MyTabs() {
     return (
@@ -38,7 +40,7 @@ export default function App() {
         <Tab.Screen name="Review" component={ReviewScreen} />
       </Tab.Navigator>
     );
-}
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,7 +48,10 @@ export default function App() {
       <View style={styles.container}>
         {session && session.user ?  
           <NavigationContainer>
-            <MyTabs />
+            <Stack.Navigator>
+              <Stack.Screen name="Tabs" component={MyTabs} />
+              <Stack.Screen name="Scope" component={ScopeScreen} />
+            </Stack.Navigator>
           </NavigationContainer> : 
           <Auth />}
         </View>
@@ -55,7 +60,7 @@ export default function App() {
   )
 }
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',

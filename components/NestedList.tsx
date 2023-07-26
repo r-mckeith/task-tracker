@@ -8,10 +8,10 @@ interface Task {
   parentId: number | null;
   completed: boolean;
   recurringOptions: {
-    isRecurring: boolean;
-    selectedDays: string;
-    timesPerDay: string;
-  } | null;
+    isRecurring: boolean | null;
+    selectedDays: string | null;
+    timesPerDay: string | null;
+  }
   depth: number;
 }
 
@@ -24,7 +24,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
     const [tasks, setTasks] = useState<Task[]>(taskProps);
 
     // Function to add a new task
-    const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => {
+    const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean | null, selectedDays: string | null, timesPerDay: string | null}) => {
       // Find the parent task in the tasks list
       const parentTask = tasks.find(task => task.id === parentId);
     
@@ -92,9 +92,6 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
         ));
     };
     
-    
-    
-
     // Render the list of tasks
     return (
       <View style={styles.container}>
