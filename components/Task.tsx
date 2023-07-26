@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import CompletionIcon from './CompletionIcon';
 
 interface TaskProps {
   id: number;
@@ -81,12 +82,7 @@ const Task: React.FC<TaskProps> = ({
           depth === 4 && styles.subtaskLevel,
         ]}>
         {parentId && (
-          <MaterialCommunityIcons 
-            name={completed ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"} 
-            size={24} 
-            color={completed ? 'green' : 'black'}
-            onPress={handleToggleCompleted}
-          />
+          <CompletionIcon id={id} completed={completed} onToggleCompleted={onToggleCompleted}/>
         )}
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
@@ -159,9 +155,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     flex: 1,
-  },
-  completeIcon: {
-    fontSize: 24,
   },
   sectionLevel: {
     backgroundColor: 'rgb(0, 0, 255)', // Dark blue
