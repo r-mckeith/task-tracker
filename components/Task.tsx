@@ -67,11 +67,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    backgroundColor: '#f9f9f9', // Light gray background
-    padding: 10, // Some padding
-    borderRadius: 5, // Rounded corners
-    borderWidth: 1, // Thin border
-    borderColor: '#ddd', // Light gray border
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
@@ -83,20 +83,25 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     flex: 1,
   },
+  deleteText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   sectionLevel: {
-    backgroundColor: 'rgb(0, 0, 255)', // Dark blue
+    backgroundColor: 'rgb(0, 0, 255)',
   },
   objectiveLevel: {
-    backgroundColor: 'rgb(70, 70, 255)', // Medium-dark blue
+    backgroundColor: 'rgb(70, 70, 255)',
   },
   goalLevel: {
-    backgroundColor: 'rgb(100, 100, 255)', // Medium blue
+    backgroundColor: 'rgb(100, 100, 255)',
   },
   taskLevel: {
-    backgroundColor: 'rgb(135, 135, 255)', // Light blue
+    backgroundColor: 'rgb(135, 135, 255)',
   },
   subtaskLevel: {
-    backgroundColor: 'rgb(175, 175, 255)', // Very light blue
+    backgroundColor: 'rgb(175, 175, 255)',
   },
   rightSwipeItem: {
     flex: 1,
@@ -104,19 +109,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     backgroundColor: 'red',
   },
-  deleteText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    width: 200,
-  },
-
 });
 
 export default Task;

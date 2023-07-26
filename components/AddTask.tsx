@@ -79,56 +79,18 @@ const AddTask: React.FC<TaskProps> = ({
               <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
                 <MaterialCommunityIcons name="plus" size={24} color="#000" />
               </TouchableOpacity>
-
               <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
                 <MaterialCommunityIcons name="close" size={24} color="#000" />
               </TouchableOpacity>
             </View>
           </View>
         </View>
-
       </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  taskContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    backgroundColor: '#f9f9f9', // Light gray background
-    padding: 10, // Some padding
-    borderRadius: 5, // Rounded corners
-    borderWidth: 1, // Thin border
-    borderColor: '#ddd', // Light gray border
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  taskName: {
-    fontSize: 18,
-    marginLeft: 10,
-    flex: 1,
-  },
-  sectionLevel: {
-    backgroundColor: 'rgb(0, 0, 255)', // Dark blue
-  },
-  objectiveLevel: {
-    backgroundColor: 'rgb(70, 70, 255)', // Medium-dark blue
-  },
-  goalLevel: {
-    backgroundColor: 'rgb(100, 100, 255)', // Medium blue
-  },
-  taskLevel: {
-    backgroundColor: 'rgb(135, 135, 255)', // Light blue
-  },
-  subtaskLevel: {
-    backgroundColor: 'rgb(175, 175, 255)', // Very light blue
-  },
-
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -162,17 +124,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     padding: 10,
-  },
-  rightSwipeItem: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 20,
-    backgroundColor: 'red',
-  },
-  deleteText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
   },
   switchRow: {
     flexDirection: 'row',
