@@ -7,6 +7,12 @@ interface Task {
   name: string;
   parentId: number | null;
   completed: boolean;
+  recurringOptions: {
+    isRecurring: boolean;
+    selectedDays: string;
+    timesPerDay: string;
+  } | null;
+  depth: number;
   }
 
 export default function HomeScreen() {
@@ -15,6 +21,8 @@ export default function HomeScreen() {
     name: 'Health',
     parentId: null,
     completed: false,
+    recurringOptions: null,
+    depth: 0,
 
   },
   {
@@ -22,18 +30,24 @@ export default function HomeScreen() {
     name: 'Wealth',
     parentId: null,
     completed: false,
+    recurringOptions: null,
+    depth: 0,
   },
   {
     id: 3,
     name: 'Relationships',
     parentId: null,
     completed: false,
+    recurringOptions: null,
+    depth: 0,
   },
   {
     id: 4,
     name: 'Not tied to goals',
     parentId: null,
     completed: false,
+    recurringOptions: null,
+    depth: 0,
   },
 ]);
   return (
