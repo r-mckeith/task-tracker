@@ -1,13 +1,13 @@
 import { TaskInterface } from '../types/TaskTypes'; 
 
 export type Action =
-  | { type: 'COMPLETE_TASK'; id: number }
+  | { type: 'TOGGLE_COMPLETED'; id: number }
   | { type: 'ADD_TASK'; task: TaskInterface }
   | { type: 'DELETE_TASK'; id: number };
 
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
   switch (action.type) {
-    case 'COMPLETE_TASK':
+    case 'TOGGLE_COMPLETED':
       return state.map((task) => {
         if (task.id === action.id) {
           return { ...task, completed: !task.completed };
@@ -21,4 +21,17 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
     default:
       return state;
   }
+    //  // Function to delete a task
+    //  const deleteTask = (id: number) => {
+    //   // This will recursively delete all children tasks
+    //   const recursiveDelete = (taskId: number) => {
+    //     const childTasks = tasks.filter(task => task.parentId === taskId);
+    //     for (let childTask of childTasks) {
+    //       recursiveDelete(childTask.id);
+    //     }
+    //     setTasks(tasks => tasks.filter(task => task.id !== taskId));
+    //   };
+  
+    //   recursiveDelete(id);
+    // };
 };

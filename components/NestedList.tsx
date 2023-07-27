@@ -14,6 +14,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
     // Function to add a new task
     const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => {
       // Find the parent task in the tasks list
+      console.log("ADD TASK!!!")
       const parentTask = tasks.find(task => task.id === parentId);
     
       // Calculate the depth based on the parent task's depth
@@ -24,20 +25,19 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
         name: name,
         parentId: parentId,
         completed: false,
-        recurringOptions: recurringOptions,
+        recurringOptions: recurringOptions, // <-- Use this object
         depth: depth,
         inScopeDay: false,
         inScopeWeek: false,
         planningScreen: planningScreen, 
         onPress: () => handleTaskPress(tasks.length + 1),
-        onAddSubTask: (name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
-          addTask(name, parentId, {isRecurring, selectedDays, timesPerDay}),
+        onAddSubTask: (name, parentId, recurringOptions) => 
+          addTask(name, parentId, recurringOptions), // <-- Use this object here
         onToggleCompleted: () => toggleCompleted(tasks.length + 1),
         onDelete: () => deleteTask(tasks.length + 1),
       };
-      
       setTasks([...tasks, newTask]);
-    }; // <-- Move this closing bracket to here
+    }; 
 
     const handleTaskPress = (taskId: number) => {
       console.log(`Task with ID ${taskId} is pressed.`);
@@ -68,7 +68,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
         .filter((task) => task.parentId === parentId)
         .map((task) => (
           <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-            <Task {...task} />
+            <Task {...task} onAddSubTask={addTask} onToggleCompleted={toggleCompleted} planningScreen={planningScreen} />
             {renderTasks(task.id)}
           </View>
         ));

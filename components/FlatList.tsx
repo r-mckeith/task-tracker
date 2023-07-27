@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import useTaskActions from '../src/actions/UseTaskActions';
+import { TaskContext } from '../src/contexts/TaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './Task'
 
@@ -11,30 +12,34 @@ interface FlatListProps {
 
 const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
   const { handleTaskPress, addTask, toggleCompleted, deleteTask } = useTaskActions();
+  const context = useContext(TaskContext);
+
+if (!context) {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Loading...</Text>
+    </View>
+  );
+}
+
+const { dispatch } = context;
+
 
   const renderTasks = (tasks: TaskInterface[]) => {
     return tasks.map((task) => (
-      <View key={task.id} style={task.parentId !== null ? styles.subtask : undefined}>
-        <Task
-          key={task.id}
-          id={task.id}
-          name={task.name}
-          parentId={task.parentId}
-          depth={task.depth}
-          planningScreen={planningScreen}
-          completed={task.completed}
-          onPress={() => handleTaskPress(task.id)}
-          onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
-            addTask(name, parentId, {isRecurring, selectedDays, timesPerDay})
-          }
-          onToggleCompleted={toggleCompleted}
-          onDelete={deleteTask}
+      <View key={task.id}>
+        <Task 
+          {...task} 
+          // update this to use reducer
+          onAddSubTask={addTask} 
+          planningScreen={planningScreen} 
+          onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
+          onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
       </View>
     ));
   };
   
-
   return (
     <View style={styles.container}>
       {renderTasks(taskProps)}

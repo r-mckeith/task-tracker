@@ -1,23 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { TaskInterface } from '../src/types/TaskTypes'
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
 
-interface TaskProps {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  onPress: () => void;
-  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
-  depth: number;
-  planningScreen: boolean;
-  onToggleCompleted: (id: number) => void;
-  onDelete: (id: number) => void;
-}
-
-const Task: React.FC<TaskProps> = ({
+const Task: React.FC<TaskInterface> = ({
   id,
   name,
   parentId,

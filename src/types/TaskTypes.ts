@@ -16,11 +16,10 @@ export interface TaskDataInterface {
 export interface TaskInterface extends TaskDataInterface {
   planningScreen: boolean;
   onPress: () => void;
+  onToggleCompleted: (id: number) => void;
+  onDelete: (id: number) => void;
   onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
-  onToggleCompleted: () => void;
-  onDelete: () => void;
 }
-
 
 // export interface TaskInterface {
 //   id: number;
