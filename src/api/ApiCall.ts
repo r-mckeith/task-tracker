@@ -11,6 +11,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 0,
+    inScopeWeek: false,
 
   },
   {
@@ -24,6 +25,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 0,
+    inScopeWeek: false,
   },
   {
     id: 3,
@@ -36,6 +38,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 0,
+    inScopeWeek: false,
   },
   {
     id: 4,
@@ -48,6 +51,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 0,
+    inScopeWeek: false,
   },
   {
     id: 5,
@@ -60,6 +64,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 1,
+    inScopeWeek: true,
   },
   {
     id: 6,
@@ -72,6 +77,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 2,
+    inScopeWeek: true,
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 2,
+    inScopeWeek: true,
   },
   {
     id: 8,
@@ -96,6 +103,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 3,
+    inScopeWeek: true,
   },
   {
     id: 9,
@@ -108,6 +116,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 3,
+    inScopeWeek: false,
   },
   {
     id: 10,
@@ -120,6 +129,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 1,
+    inScopeWeek: false,
   },
   {
     id: 11,
@@ -132,6 +142,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 2,
+    inScopeWeek: false,
   },
   {
     id: 12,
@@ -144,6 +155,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 2,
+    inScopeWeek: false,
   },
   {
     id: 13,
@@ -156,6 +168,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 3,
+    inScopeWeek: false,
   },
   {
     id: 14,
@@ -168,6 +181,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 2,
+    inScopeWeek: false,
   },
   {
     id: 15,
@@ -180,6 +194,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 3,
+    inScopeWeek: false,
   },
 ]
 

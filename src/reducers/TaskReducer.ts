@@ -2,7 +2,18 @@ import { TaskInterface } from '../types/TaskTypes';
 
 export type Action =
   | { type: 'TOGGLE_COMPLETED'; id: number }
-  | { type: 'ADD_TASK'; payload: { name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string} } }
+  | { type: 'TOGGLE_SCOPE'; id: number }
+  | { type: 'ADD_TASK'; payload: { 
+      name: string, 
+      parentId: number, 
+      recurringOptions: {
+        isRecurring: boolean, 
+        selectedDays: string, 
+        timesPerDay: string
+        } 
+      },
+      inScopeDay: boolean;
+    }
   | { type: 'DELETE_TASK'; id: number };
 
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
@@ -11,6 +22,13 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
       return state.map((task) => {
         if (task.id === action.id) {
           return { ...task, completed: !task.completed };
+        }
+        return task;
+      });
+      case 'TOGGLE_SCOPE':
+      return state.map((task) => {
+        if (task.id === action.id) {
+          return { ...task, inScopeDay: !task.inScopeDay };
         }
         return task;
       });
@@ -27,6 +45,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
           completed: false,
           recurringOptions,
           depth,
+          inScopeDay: action.inScopeDay !== undefined ? action.inScopeDay : false,
         };
         return [...state, newTask];
     case 'DELETE_TASK':

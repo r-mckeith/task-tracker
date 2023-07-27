@@ -25,7 +25,7 @@ export default function HomeScreen() {
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
 
   useEffect(() => {
-    const tasks = state.filter(t => t.recurringOptions?.isRecurring);
+    const tasks = state.filter(t => (t.recurringOptions?.isRecurring || t.inScopeDay));
     setFilteredTasks(tasks);
   }, [state]);
 
