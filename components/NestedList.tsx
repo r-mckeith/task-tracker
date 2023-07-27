@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { TaskInterface, TaskDataInterface } from '../src/types/TaskTypes'
 import Task from './Task';
 
-interface Task {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean;
-    selectedDays: string;
-    timesPerDay: string;
-  } | null;
-  depth: number;
-}
-
 interface NestedListProps {
-  taskProps: Task[];
+  taskProps: TaskInterface[];
   planningScreen: boolean;
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
-    const [tasks, setTasks] = useState<Task[]>(taskProps);
+    const [tasks, setTasks] = useState<TaskInterface[]>(taskProps);
 
     // Function to add a new task
     const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => {
@@ -31,16 +19,25 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
       // Calculate the depth based on the parent task's depth
       const depth = parentTask ? parentTask.depth + 1 : 0;
     
-      const newTask: Task = {
+      const newTask: TaskInterface = {
         id: tasks.length + 1,
         name: name,
         parentId: parentId,
         completed: false,
-        recurringOptions: recurringOptions, // Set recurringOptions in the new task
+        recurringOptions: recurringOptions,
         depth: depth,
+        inScopeDay: false,
+        inScopeWeek: false,
+        planningScreen: planningScreen, 
+        onPress: () => handleTaskPress(tasks.length + 1),
+        onAddSubTask: (name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
+          addTask(name, parentId, {isRecurring, selectedDays, timesPerDay}),
+        onToggleCompleted: () => toggleCompleted(tasks.length + 1),
+        onDelete: () => deleteTask(tasks.length + 1),
       };
+      
       setTasks([...tasks, newTask]);
-    };
+    }; // <-- Move this closing bracket to here
 
     const handleTaskPress = (taskId: number) => {
       console.log(`Task with ID ${taskId} is pressed.`);
@@ -65,36 +62,18 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
       recursiveDelete(id);
     };
 
-
     // Function to render tasks based on parentId
     const renderTasks = (parentId: number | null) => {
       return tasks
         .filter((task) => task.parentId === parentId)
         .map((task) => (
           <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-            <Task
-              key={task.id}
-              id={task.id}
-              name={task.name}
-              parentId={task.parentId}
-              depth={task.depth}
-              planningScreen={planningScreen}
-              completed={task.completed}
-              onPress={() => handleTaskPress(task.id)}
-              onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
-                addTask(name, parentId, {isRecurring, selectedDays, timesPerDay})
-              }
-              onToggleCompleted={toggleCompleted}
-              onDelete={deleteTask}
-            />
+            <Task {...task} />
             {renderTasks(task.id)}
           </View>
         ));
     };
     
-    
-    
-
     // Render the list of tasks
     return (
       <View style={styles.container}>

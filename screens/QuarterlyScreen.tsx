@@ -1,58 +1,25 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text } from 'react-native';
+import { TaskContext } from '../src/contexts/TaskContext';
+import { TaskInterface } from '../src/types/TaskTypes'
 import NestedList from '../components/NestedList';
 
-interface Task {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean;
-    selectedDays: string;
-    timesPerDay: string;
-  } | null;
-  depth: number;
+export default function HomeScreen() {
+  const context = useContext(TaskContext);
+
+  if (!context) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
-export default function HomeScreen() {
-  const [tasks, setTasks] = useState<Task[]>([  {
-    id: 1,
-    name: 'Health',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
+  const { state, dispatch } = context;
 
-  },
-  {
-    id: 2,
-    name: 'Wealth',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-  {
-    id: 3,
-    name: 'Relationships',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-  {
-    id: 4,
-    name: 'Not tied to goals',
-    parentId: null,
-    completed: false,
-    recurringOptions: null,
-    depth: 0,
-  },
-]);
   return (
     <View style={{flex: 1}}>
-      <NestedList taskProps={tasks} planningScreen={true} /> 
+      <NestedList taskProps={state} planningScreen={true} /> 
     </View>
   );
 }
