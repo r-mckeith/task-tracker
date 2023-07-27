@@ -1,23 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { TaskInterface } from '../src/types/TaskTypes'
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
 
-interface TaskProps {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  onPress: () => void;
-  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
-  depth: number;
-  planningScreen: boolean;
-  onToggleCompleted: (id: number) => void;
-  onDelete: (id: number) => void;
-}
-
-const Task: React.FC<TaskProps> = ({
+const Task: React.FC<TaskInterface> = ({
   id,
   name,
   parentId,
@@ -33,7 +21,7 @@ const Task: React.FC<TaskProps> = ({
   const renderRightActions = () => {
     return (
       parentId !== null && (
-        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete(id)}>
+        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete ? onDelete(id) : () => {}}>
           <Text style={styles.deleteText}>Delete</Text>
         </RectButton>
       )
@@ -51,12 +39,12 @@ const Task: React.FC<TaskProps> = ({
           depth === 4 && styles.subtaskLevel,
         ]}>
         {parentId && planningScreen && 
-          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted}/>
+          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
         }
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
         </Text>
-        <AddTask id={id} onAddSubTask={onAddSubTask} depth={depth}/>
+        <AddTask id={id} onAddSubTask={onAddSubTask? onAddSubTask : () => {}} depth={depth}/>
       </View>
     </Swipeable>  
   );

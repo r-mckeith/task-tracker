@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { TaskContext } from '../src/contexts/TaskContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import CompleteTask from './CompleteTask';
 
 interface TaskProps {
   id: number;
@@ -12,7 +11,6 @@ interface TaskProps {
 
 const AddTask: React.FC<TaskProps> = ({
   id,
-  onAddSubTask,
   depth,
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -20,6 +18,18 @@ const AddTask: React.FC<TaskProps> = ({
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedDays, setSelectedDays] = useState('');
   const [timesPerDay, setTimesPerDay] = useState('');
+
+  const context = useContext(TaskContext);
+
+  if (!context) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  const { dispatch } = context;
 
   const getTaskLevelName = (depth: number) => {
     switch (depth) {
@@ -37,7 +47,14 @@ const AddTask: React.FC<TaskProps> = ({
   }
 
   const handleAddSubTask = () => {
-    onAddSubTask(newSubTaskName, id, {isRecurring, selectedDays, timesPerDay});
+    dispatch({ 
+      type: 'ADD_TASK', 
+      payload: { 
+        name: newSubTaskName, 
+        parentId: id, 
+        recurringOptions: {isRecurring, selectedDays, timesPerDay}
+      } 
+    }); 
     setNewSubTaskName('');
     setIsRecurring(false);
     setShowModal(false);
@@ -61,7 +78,7 @@ const AddTask: React.FC<TaskProps> = ({
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{`New ${getTaskLevelName(depth + 1)}`}</Text>
             <TextInput
-              style={[styles.input, { marginBottom: 10 }]} // Add some margin to bottom
+              style={[styles.input, { marginBottom: 10 }]}
               placeholder={`${getTaskLevelName(depth + 1)} Name`}
               value={newSubTaskName}
               onChangeText={setNewSubTaskName}
@@ -79,6 +96,7 @@ const AddTask: React.FC<TaskProps> = ({
               <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
                 <MaterialCommunityIcons name="plus" size={24} color="#000" />
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
                 <MaterialCommunityIcons name="close" size={24} color="#000" />
               </TouchableOpacity>
@@ -91,6 +109,41 @@ const AddTask: React.FC<TaskProps> = ({
 };
 
 const styles = StyleSheet.create({
+  taskContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  taskName: {
+    fontSize: 18,
+    marginLeft: 10,
+    flex: 1,
+  },
+  sectionLevel: {
+    backgroundColor: 'rgb(0, 0, 255)',
+  },
+  objectiveLevel: {
+    backgroundColor: 'rgb(70, 70, 255)',
+  },
+  goalLevel: {
+    backgroundColor: 'rgb(100, 100, 255)',
+  },
+  taskLevel: {
+    backgroundColor: 'rgb(135, 135, 255)',
+  },
+  subtaskLevel: {
+    backgroundColor: 'rgb(175, 175, 255)',
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -125,6 +178,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
   },
+  rightSwipeItem: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 20,
+    backgroundColor: 'red',
+  },
+  deleteText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,4 +205,5 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 export default AddTask;

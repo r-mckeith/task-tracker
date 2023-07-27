@@ -2,14 +2,14 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { TaskContext } from '../src/contexts/TaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
-import Task from './Task';
+import Task from './Task'
 
-interface NestedListProps {
+interface FlatListProps {
   taskProps: TaskInterface[];
   planningScreen: boolean;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
+const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -19,15 +19,13 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
       </View>
     );
   }
-  
+
   const { dispatch } = context;
 
-  const renderTasks = (parentId: number | null) => {
-    return taskProps
-      .filter((task) => task.parentId === parentId)
-      .map((task) => (
-        <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-           <Task 
+  const renderTasks = (tasks: TaskInterface[]) => {
+    return tasks.map((task) => (
+      <View key={task.id}>
+        <Task 
           {...task} 
           planningScreen={planningScreen} 
           onAddSubTask={(name, parentId, recurringOptions) => 
@@ -36,17 +34,16 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
-          {renderTasks(task.id)}
-        </View>
-      ));
-    };
-    
-    return (
-      <View style={styles.container}>
-        {renderTasks(null)}
       </View>
-    );
-};
+    ));
+  };
+  
+  return (
+    <View style={styles.container}>
+      {renderTasks(taskProps)}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -65,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NestedList;
+export default FlatList;
