@@ -2,20 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/Types';
 import Task from './Task';
+import { TaskDataInterface } from '../src/types/Types';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
   planningScreen: boolean;
-}
-
-export interface TaskDataInterface {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  depth: number;
-  inScopeDay: boolean;
-  inScopeWeek: boolean;
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
@@ -71,18 +62,18 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
         .filter((task) => task.parentId === parentId)
         .map((task) => (
           <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-            <Task
-              {...task} // This is assuming task is of type TaskDataInterface
-              onPress={() => handleTaskPress(task.id)}
-              onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
-                addTask(name, parentId, {isRecurring, selectedDays, timesPerDay})
-              }
-              onToggleCompleted={toggleCompleted}
-              onDelete={deleteTask}
-              planningScreen={planningScreen}
-              inScopeDay={task.inScopeDay}
-              inScopeWeek={task.inScopeWeek}
-/>
+           <Task
+            {...task} // This is assuming task is of type TaskDataInterface
+            onPress={() => handleTaskPress(task.id)}
+            onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
+              addTask(name, parentId, {isRecurring, selectedDays, timesPerDay})
+            }
+            onToggleScope={toggleScope}
+            onDelete={deleteTask}
+            planningScreen={planningScreen}
+            inScopeDay={task.inScopeDay}
+            inScopeWeek={task.inScopeWeek}
+          />
             {renderTasks(task.id)}
           </View>
         ));

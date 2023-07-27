@@ -18,4 +18,17 @@ export interface TaskInterface {
   onDelete: (id: number) => void;
   inScopeWeek: boolean;
   inScopeDay: boolean;
+  tasks?: TaskDataInterface[];
+  toggleInScopeWeek?: (id: number) => void;
+  toggleInScopeDay?: (id: number) => void;
+}
+
+export interface TaskDataInterface {
+  id: number;
+  name: string;
+  parentId: number | null;
+  completed: boolean;
+  depth: number;
+  inScopeDay: boolean;
+  inScopeWeek: boolean;
 }
