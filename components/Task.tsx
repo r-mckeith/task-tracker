@@ -21,7 +21,7 @@ const Task: React.FC<TaskInterface> = ({
   const renderRightActions = () => {
     return (
       parentId !== null && (
-        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete(id)}>
+        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete ? onDelete(id) : () => {}}>
           <Text style={styles.deleteText}>Delete</Text>
         </RectButton>
       )
@@ -39,12 +39,12 @@ const Task: React.FC<TaskInterface> = ({
           depth === 4 && styles.subtaskLevel,
         ]}>
         {parentId && planningScreen && 
-          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted}/>
+          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
         }
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
         </Text>
-        <AddTask id={id} onAddSubTask={onAddSubTask} depth={depth}/>
+        <AddTask id={id} onAddSubTask={onAddSubTask? onAddSubTask : () => {}} depth={depth}/>
       </View>
     </Swipeable>  
   );

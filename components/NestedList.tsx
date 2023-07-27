@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TaskInterface, TaskDataInterface } from '../src/types/TaskTypes'
+import React, { useContext } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { TaskContext } from '../src/contexts/TaskContext';
+import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './Task';
 
 interface NestedListProps {
@@ -9,72 +10,37 @@ interface NestedListProps {
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
-    const [tasks, setTasks] = useState<TaskInterface[]>(taskProps);
+  const context = useContext(TaskContext);
 
-    // Function to add a new task
-    const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => {
-      // Find the parent task in the tasks list
-      console.log("ADD TASK!!!")
-      const parentTask = tasks.find(task => task.id === parentId);
-    
-      // Calculate the depth based on the parent task's depth
-      const depth = parentTask ? parentTask.depth + 1 : 0;
-    
-      const newTask: TaskInterface = {
-        id: tasks.length + 1,
-        name: name,
-        parentId: parentId,
-        completed: false,
-        recurringOptions: recurringOptions, // <-- Use this object
-        depth: depth,
-        inScopeDay: false,
-        inScopeWeek: false,
-        planningScreen: planningScreen, 
-        onPress: () => handleTaskPress(tasks.length + 1),
-        onAddSubTask: (name, parentId, recurringOptions) => 
-          addTask(name, parentId, recurringOptions), // <-- Use this object here
-        onToggleCompleted: () => toggleCompleted(tasks.length + 1),
-        onDelete: () => deleteTask(tasks.length + 1),
-      };
-      setTasks([...tasks, newTask]);
-    }; 
+  if (!context) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+  
+  const { dispatch } = context;
 
-    const handleTaskPress = (taskId: number) => {
-      console.log(`Task with ID ${taskId} is pressed.`);
-    };
-
-    // Function to toggle completed status of a task
-    const toggleCompleted = (id: number) => {
-      setTasks(tasks.map(task => task.id === id ? {...task, completed: !task.completed} : task));
-    };
-
-    // Function to delete a task
-    const deleteTask = (id: number) => {
-      // This will recursively delete all children tasks
-      const recursiveDelete = (taskId: number) => {
-        const childTasks = tasks.filter(task => task.parentId === taskId);
-        for (let childTask of childTasks) {
-          recursiveDelete(childTask.id);
-        }
-        setTasks(tasks => tasks.filter(task => task.id !== taskId));
-      };
-
-      recursiveDelete(id);
-    };
-
-    // Function to render tasks based on parentId
-    const renderTasks = (parentId: number | null) => {
-      return tasks
-        .filter((task) => task.parentId === parentId)
-        .map((task) => (
-          <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-            <Task {...task} onAddSubTask={addTask} onToggleCompleted={toggleCompleted} planningScreen={planningScreen} />
-            {renderTasks(task.id)}
-          </View>
-        ));
+  const renderTasks = (parentId: number | null) => {
+    return taskProps
+      .filter((task) => task.parentId === parentId)
+      .map((task) => (
+        <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
+           <Task 
+          {...task} 
+          planningScreen={planningScreen} 
+          onAddSubTask={(name, parentId, recurringOptions) => 
+            dispatch({ type: 'ADD_TASK', payload: { name, parentId, recurringOptions } })
+          }
+          onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
+          onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
+        />
+          {renderTasks(task.id)}
+        </View>
+      ));
     };
     
-    // Render the list of tasks
     return (
       <View style={styles.container}>
         {renderTasks(null)}
