@@ -1,8 +1,13 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from '../screens/DailyScreen.js'
-import SettingsScreen from '../screens/WeeklyScreen.js'
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import HomeScreen from '../screens/DailyScreen.js';
+import SettingsScreen from '../screens/WeeklyScreen.js';
+import ReviewScreen from '../screens/ReviewScreen.js';
+import ScopeScreen from '../screens/ScopeScreen.js';
+
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
@@ -17,7 +22,10 @@ function MyTabs() {
 export default function App() {
   return (
     <NavigationContainer>
-      <MyTabs />
+      <Stack.Navigator>
+        <Stack.Screen name="Tabs" component={MyTabs} />
+        <Stack.Screen name="Scope" component={ScopeScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

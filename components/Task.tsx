@@ -1,23 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { TaskInterface } from '../src/types/Types';
 import CompleteTask from './CompleteTask';
+import ScopeToggle from './ScopeToggle';
 import AddTask from './AddTask';
 
-interface TaskProps {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  onPress: () => void;
-  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
-  depth: number;
-  planningScreen: boolean;
-  onToggleCompleted: (id: number) => void;
-  onDelete: (id: number) => void;
-}
-
-const Task: React.FC<TaskProps> = ({
+const Task: React.FC<TaskInterface> = ({
   id,
   name,
   parentId,
@@ -26,8 +15,12 @@ const Task: React.FC<TaskProps> = ({
   onAddSubTask,
   depth,
   planningScreen,
-  onToggleCompleted,
+  tasks,
+  toggleInScopeWeek,
+  toggleInScopeDay,
   onDelete,
+  inScopeDay,
+  inScopeWeek,
 }) => {
 
   const renderRightActions = () => {
@@ -52,6 +45,16 @@ const Task: React.FC<TaskProps> = ({
         ]}>
         {parentId && planningScreen && 
           <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted}/>
+        }
+         {parentId && !planningScreen && 
+          <ScopeToggle 
+          id={id} 
+          tasks={tasks} 
+          mode={mode}
+          toggleInScopeWeek={toggleInScopeWeek}
+          inScopeWeek={inScopeWeek} 
+          onToggleScope={onToggleScope}
+        />
         }
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
