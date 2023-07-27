@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
+import { TaskInterface } from '../src/types/Types';
+import apiCall from '../src/apiCall';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import NestedList from '../components/NestedList';
 
-export default function ScopeScreen() {
+const Tab = createMaterialTopTabNavigator();
+
+function HomeScreen() {
+  const [tasks, setTasks] = useState<TaskInterface[]>(apiCall);
+
+  useEffect(() => {
+    const allTasks = apiCall()
+    setTasks(allTasks)
+  }, [])
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Scope Screen</Text>
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen name="Add" children={() => <NestedList taskProps={tasks} planningScreen={false} />} />
+      <Tab.Screen name="Adjust" children={() => <NestedList taskProps={tasks} planningScreen={false} />} />
+    </Tab.Navigator>
   );
 }
+
+export default HomeScreen;

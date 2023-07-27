@@ -1,21 +1,9 @@
 import { useState, useCallback } from 'react';
-
-interface Task {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean | null;
-    selectedDays: string | null;
-    timesPerDay: string | null;
-  }
-  depth: number;
-}
+import { TaskInterface } from '../src/types/Types';
 
 const useTaskActions = () => {
   // assuming tasks are managed in a state hook
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskInterface[]>([]);
 
 
   const handleTaskPress = useCallback((taskId: number) => {

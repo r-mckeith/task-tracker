@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { TaskInterface } from '../src/types/Types';
 import Task from './Task';
 
-interface Task {
+interface NestedListProps {
+  taskProps: TaskInterface[];
+  planningScreen: boolean;
+}
+
+export interface TaskDataInterface {
   id: number;
   name: string;
   parentId: number | null;
   completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean | null;
-    selectedDays: string | null;
-    timesPerDay: string | null;
-  }
   depth: number;
-}
-
-interface NestedListProps {
-  taskProps: Task[];
-  planningScreen: boolean;
+  inScopeDay: boolean;
+  inScopeWeek: boolean;
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
-    const [tasks, setTasks] = useState<Task[]>(taskProps);
+    const [tasks, setTasks] = useState<TaskDataInterface[]>(taskProps);
 
     // Function to add a new task
     const addTask = (name: string, parentId: number | null, recurringOptions: {isRecurring: boolean | null, selectedDays: string | null, timesPerDay: string | null}) => {
@@ -31,13 +29,14 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
       // Calculate the depth based on the parent task's depth
       const depth = parentTask ? parentTask.depth + 1 : 0;
     
-      const newTask: Task = {
+      const newTask: TaskDataInterface = {
         id: tasks.length + 1,
         name: name,
         parentId: parentId,
         completed: false,
-        recurringOptions: recurringOptions, // Set recurringOptions in the new task
         depth: depth,
+        inScopeDay: false,
+        inScopeWeek: false,
       };
       setTasks([...tasks, newTask]);
     };
@@ -73,20 +72,17 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
         .map((task) => (
           <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
             <Task
-              key={task.id}
-              id={task.id}
-              name={task.name}
-              parentId={task.parentId}
-              depth={task.depth}
-              planningScreen={planningScreen}
-              completed={task.completed}
+              {...task} // This is assuming task is of type TaskDataInterface
               onPress={() => handleTaskPress(task.id)}
               onAddSubTask={(name, parentId, {isRecurring, selectedDays, timesPerDay}) => 
                 addTask(name, parentId, {isRecurring, selectedDays, timesPerDay})
               }
               onToggleCompleted={toggleCompleted}
               onDelete={deleteTask}
-            />
+              planningScreen={planningScreen}
+              inScopeDay={task.inScopeDay}
+              inScopeWeek={task.inScopeWeek}
+/>
             {renderTasks(task.id)}
           </View>
         ));

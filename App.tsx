@@ -8,12 +8,11 @@ import { Session } from '@supabase/supabase-js'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import DailyScreen from './screens/DailyScreen';
 import WeeklyScreen from './screens/WeeklyScreen'
-import QuarterlyScreen from './screens/QuarterlyScreen'
+import PlanScreen from './screens/PlanScreen'
 import ReviewScreen from './screens/ReviewScreen'
-import ScopeScreen from './screens/ScopeScreen';  // Don't forget to import ScopeScreen
+import ScopeScreen from './screens/ScopeScreen';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -29,14 +28,19 @@ export default function App() {
   }, [])
 
   const Tab = createBottomTabNavigator();
-  const Stack = createStackNavigator();  // Create Stack.Navigator here
 
   function MyTabs() {
     return (
-      <Tab.Navigator>
-        <Tab.Screen name="Day" component={DailyScreen} />
-        <Tab.Screen name="Week" component={WeeklyScreen} />
-        <Tab.Screen name="Quarter" component={QuarterlyScreen} />
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            paddingVertical: 10,
+          },
+        }}
+      >
+        <Tab.Screen name="Do" component={DailyScreen} />
+        <Tab.Screen name="Scope" component={ScopeScreen} />
+        <Tab.Screen name="Plan" component={PlanScreen} />
         <Tab.Screen name="Review" component={ReviewScreen} />
       </Tab.Navigator>
     );
@@ -48,10 +52,7 @@ export default function App() {
       <View style={styles.container}>
         {session && session.user ?  
           <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name="Tabs" component={MyTabs} />
-              <Stack.Screen name="Scope" component={ScopeScreen} />
-            </Stack.Navigator>
+            <MyTabs />
           </NavigationContainer> : 
           <Auth />}
         </View>

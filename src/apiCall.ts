@@ -1,17 +1,5 @@
-interface Task {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean | null;
-    selectedDays: string | null;
-    timesPerDay: string | null;
-  };
-  depth: number;
-}
-
-const apiCall = (): Task[] => [
+import { TaskInterface } from "./types/Types";
+const apiCall = (): TaskInterface[] => [
   {
     id: 1,
     name: 'Health',

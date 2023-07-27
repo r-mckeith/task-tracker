@@ -1,30 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import useTaskActions from '../lib/useTaskActions';
+import { TaskInterface } from '../src/types/Types';
 import Task from './Task'
 
-interface Task {
-  id: number;
-  name: string;
-  parentId: number | null;
-  completed: boolean;
-  recurringOptions: {
-    isRecurring: boolean | null;
-    selectedDays: string | null;
-    timesPerDay: string | null;
-  }
-  depth: number;
-}
-
 interface FlatListProps {
-  taskProps: Task[];
+  taskProps: TaskInterface[];
   planningScreen: boolean;
 }
 
 const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
   const { handleTaskPress, addTask, toggleCompleted, deleteTask } = useTaskActions();
 
-  const renderTasks = (tasks: Task[]) => {
+  const renderTasks = (tasks: TaskInterface[]) => {
     return tasks.map((task) => (
       <View key={task.id} style={task.parentId !== null ? styles.subtask : undefined}>
         <Task
@@ -41,6 +29,8 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
           }
           onToggleCompleted={toggleCompleted}
           onDelete={deleteTask}
+          inScopeWeek={task.inScopeWeek}
+          inScopeDay={task.inScopeDay}
         />
       </View>
     ));
