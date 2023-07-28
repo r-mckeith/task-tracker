@@ -19,5 +19,6 @@ export interface TaskInterface extends TaskDataInterface {
   onToggleCompleted?: (id: number) => void;
   onToggleScope?: (id: number) => void;
   onDelete?: (id: number) => void;
+  subTasks?: any;
   onAddSubTask?: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
 }

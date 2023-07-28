@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { TaskInterface } from '../src/types/TaskTypes';
 import { TaskContext } from '../src/contexts/TaskContext';
@@ -31,8 +30,8 @@ function HomeScreen() {
 
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Add" children={() => <FlatList taskProps={filteredTasks} planningScreen={false} />} />
-      <Tab.Screen name="Adjust" children={() => <NestedList taskProps={state} planningScreen={false} />} />
+      <Tab.Screen name="Add" children={() => <FlatList taskProps={filteredTasks} planningScreen={false} currentTab={'Add'} />} />
+      <Tab.Screen name="Adjust" children={() => <NestedList taskProps={state} planningScreen={false} currentTab={'Adjust'}/>} />
     </Tab.Navigator>
   );
 }

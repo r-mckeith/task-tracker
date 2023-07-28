@@ -7,11 +7,11 @@ import Task from './Task';
 interface NestedListProps {
   taskProps: TaskInterface[];
   planningScreen: boolean;
+  currentTab?: string;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
-  console.log('NestedList taskProps:', taskProps);
-  console.log('Mapped tasks:', taskProps.map(task => task.name));
+const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
+
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -40,7 +40,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
-          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id })} 
+          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id, currentTab: currentTab || '' })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
           {renderTasks(task.id)}

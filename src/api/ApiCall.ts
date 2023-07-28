@@ -64,7 +64,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 1,
-    inScopeWeek: true,
+    inScopeWeek: false,
   },
   {
     id: 6,
@@ -72,12 +72,12 @@ const apiCall = (): TaskInterface[] => [
     parentId: 5,
     completed: false,
     recurringOptions: {
-      isRecurring: true,
+      isRecurring: false,
       selectedDays: null,
       timesPerDay: null,
     },
     depth: 2,
-    inScopeWeek: true,
+    inScopeWeek: false,
   },
   {
     id: 7,
@@ -85,12 +85,12 @@ const apiCall = (): TaskInterface[] => [
     parentId: 5,
     completed: false,
     recurringOptions: {
-      isRecurring: true,
+      isRecurring: false,
       selectedDays: null,
       timesPerDay: null,
     },
     depth: 2,
-    inScopeWeek: true,
+    inScopeWeek: false,
   },
   {
     id: 8,
@@ -103,7 +103,7 @@ const apiCall = (): TaskInterface[] => [
       timesPerDay: null,
     },
     depth: 3,
-    inScopeWeek: true,
+    inScopeWeek: false,
   },
   {
     id: 9,
@@ -150,7 +150,7 @@ const apiCall = (): TaskInterface[] => [
     parentId: 10,
     completed: false,
     recurringOptions: {
-      isRecurring: true,
+      isRecurring: false,
       selectedDays: null,
       timesPerDay: null,
     },
