@@ -23,7 +23,7 @@ const ScopeTask: React.FC<ScopeProps> = ({
   };
 
   // Determine scope and color based on current tab
-  const inScope = currentTab === 'Add' ? inScopeDay : inScopeWeek;
+  const inScope = currentTab === 'Day' ? inScopeDay : inScopeWeek;
   const color = inScope ? 'green' : 'black';
 
   return (

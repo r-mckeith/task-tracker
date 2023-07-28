@@ -8,11 +8,13 @@ import { Session } from '@supabase/supabase-js';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import TaskContextProvider from './src/contexts/TaskContextProvider';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import DailyScreen from './screens/DailyScreen';
 import PlanScreen from './screens/PlanScreen';
 import ReviewScreen from './screens/ReviewScreen';
-import ScopeScreen from './screens/ScopeScreen';
+import ScopeWeekScreen from './screens/ScopeWeekScreen';
+import ScopeDayScreen from './screens/ScopeDayScreen';
 
 
 export default function App() {
@@ -28,8 +30,19 @@ export default function App() {
     })
   }, [])
 
-  const Tab = createBottomTabNavigator();
+  const Stack = createStackNavigator();
 
+  function DoStack() {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen name="Daily" component={DailyScreen} />
+        <Stack.Screen name="ScopeDay" component={ScopeDayScreen} />
+      </Stack.Navigator>
+    );
+  }
+
+  const Tab = createBottomTabNavigator();
+ 
   function MyTabs() {
     return (
       <Tab.Navigator
@@ -39,13 +52,13 @@ export default function App() {
           },
         }}
       >
-      <Tab.Screen name="Do" component={DailyScreen} />
-        <Tab.Screen name="Scope" component={ScopeScreen} />
+        <Tab.Screen name="Do" component={DoStack} />
+        <Tab.Screen name="ScopeWeek" component={ScopeWeekScreen} />
         <Tab.Screen name="Plan" component={PlanScreen} />
         <Tab.Screen name="Review" component={ReviewScreen} />
       </Tab.Navigator>
     );
-}
+  }
 
   return (
     <TaskContextProvider>

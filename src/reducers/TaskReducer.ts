@@ -46,7 +46,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
     
       const descendants = findChildTasks(action.id, state);
     
-      if (action.currentTab === 'Add') {
+      if (action.currentTab === 'Day') {
         const newScopeDay = !parentTask.inScopeDay;
     
         return state.map((task) => {
@@ -55,7 +55,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
           }
           return task;
         });
-      } else if (action.currentTab === 'Adjust') {
+      } else if (action.currentTab === 'Week') {
         const newScopeWeek = !parentTask.inScopeWeek;
         const newScopeDay = newScopeWeek ? parentTask.inScopeDay : false;
     

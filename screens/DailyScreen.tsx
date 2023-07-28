@@ -1,5 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import { DoStackParamList } from '../src/types/StackTypes'
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack'
 import { TaskContext } from '../src/contexts/TaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
 import FlatList from '../components/FlatList';
@@ -14,9 +17,8 @@ export default function HomeScreen() {
       </View>
     );
   }
-  
-  const { state } = context;
 
+  const { state } = context;
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
 
   useEffect(() => {
@@ -24,9 +26,15 @@ export default function HomeScreen() {
     setFilteredTasks(tasks);
   }, [state]);
 
+  const navigation = useNavigation<StackNavigationProp<DoStackParamList, 'Daily'>>();
+
   return (
     <View style={{flex: 1}}>
       <FlatList taskProps={filteredTasks} planningScreen={true} />
+      <Button
+        title="Add Tasks"
+        onPress={() => navigation.navigate('ScopeDay')}
+      /> 
     </View>
   );
 }
