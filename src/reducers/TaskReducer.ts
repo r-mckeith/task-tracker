@@ -15,6 +15,17 @@ export type Action =
     }
   | { type: 'DELETE_TASK'; id: number };
 
+function findAllChildIds(tasks: TaskInterface[], taskId: number) {
+  let childIds: number[] = [];
+  for (let task of tasks) {
+      if (task.parentId === taskId) {
+          childIds.push(task.id);
+          childIds = [...childIds, ...findAllChildIds(tasks, task.id)];
+      }
+  }
+  return childIds;
+}
+
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
 
   switch (action.type) {
@@ -70,8 +81,11 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
         inScopeDay: action.inScopeDay !== undefined ? action.inScopeDay : false,
       };
       return [...state, newTask];
-    case 'DELETE_TASK':
-      return state.filter((task) => task.id !== action.id);
+      case 'DELETE_TASK': {
+        const allChildIds = findAllChildIds(state, action.id);
+        return state.filter(task => task.id !== action.id && !allChildIds.includes(task.id));
+      }
+      
     default:
       return state;
   }

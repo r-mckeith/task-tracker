@@ -1,10 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text } from 'react-native';
 import { TaskContext } from '../src/contexts/TaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
-import { RootStackParamList } from '../src/types/RootStackTypes'
-import { StackNavigationProp } from '@react-navigation/stack'
 import FlatList from '../components/FlatList';
 
 export default function HomeScreen() {
@@ -17,8 +14,6 @@ export default function HomeScreen() {
       </View>
     );
   }
-
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
   
   const { state } = context;
 
@@ -32,10 +27,6 @@ export default function HomeScreen() {
   return (
     <View style={{flex: 1}}>
       <FlatList taskProps={filteredTasks} planningScreen={true} />
-      <Button
-        title="Add Task"
-        onPress={() => navigation.navigate('Scope')}
-      /> 
     </View>
   );
 }
