@@ -37,7 +37,8 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
             dispatch({ 
               type: 'ADD_TASK', 
               payload: { name, parentId, recurringOptions }, 
-              inScopeDay: false
+              inScopeDay: false,
+              inScopeWeek: false,
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
@@ -61,17 +62,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#F5F5F5', // Light grey color for the background
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderWidth: 1,
     marginTop: 20,
     padding: 10,
+    borderRadius: 10, // Rounded corners
+    backgroundColor: 'white', // White color for input
+    shadowColor: "#000", // Shadow for depth
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   subtask: {
     marginLeft: 20,
+    marginTop: 10, // Give some space for each subtask
+    padding: 10,
+    backgroundColor: 'white', // White color for subtask
+    borderRadius: 10, // Rounded corners
+    shadowColor: "#000", // Shadow for depth
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
+
 
 export default NestedList;

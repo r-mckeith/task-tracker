@@ -34,7 +34,8 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTa
             dispatch({ 
               type: 'ADD_TASK', 
               payload: { name, parentId, recurringOptions }, 
-              inScopeDay: false
+              inScopeDay: false,
+              inScopeWeek: false,
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
@@ -57,17 +58,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#FAFAFA', // light grey background
   },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 20,
-    padding: 10,
-  },
-  subtask: {
-    marginLeft: 20,
-  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default FlatList;
