@@ -4,6 +4,7 @@ import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../src/types/TaskTypes'
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
+import ScopeTask from './ScopeTask'
 
 const Task: React.FC<TaskInterface> = ({
   id,
@@ -15,7 +16,9 @@ const Task: React.FC<TaskInterface> = ({
   depth,
   planningScreen,
   onToggleCompleted,
+  onToggleScope,
   onDelete,
+  inScopeDay,
 }) => {
 
   const renderRightActions = () => {
@@ -41,6 +44,13 @@ const Task: React.FC<TaskInterface> = ({
         {parentId && planningScreen && 
           <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
         }
+         {parentId && !planningScreen && 
+            <ScopeTask 
+              id={id} 
+              inScope={inScopeDay || false}
+              onToggleScope={onToggleScope ? onToggleScope : () => {}}
+            />
+         }
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
         </Text>

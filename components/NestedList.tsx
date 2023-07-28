@@ -7,9 +7,11 @@ import Task from './Task';
 interface NestedListProps {
   taskProps: TaskInterface[];
   planningScreen: boolean;
+  currentTab?: string;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
+const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
+
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -31,9 +33,14 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen}) => {
           {...task} 
           planningScreen={planningScreen} 
           onAddSubTask={(name, parentId, recurringOptions) => 
-            dispatch({ type: 'ADD_TASK', payload: { name, parentId, recurringOptions } })
+            dispatch({ 
+              type: 'ADD_TASK', 
+              payload: { name, parentId, recurringOptions }, 
+              inScopeDay: false
+            })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
+          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id, currentTab: currentTab || '' })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
           {renderTasks(task.id)}

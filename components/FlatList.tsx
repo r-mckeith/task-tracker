@@ -7,9 +7,10 @@ import Task from './Task'
 interface FlatListProps {
   taskProps: TaskInterface[];
   planningScreen: boolean;
+  currentTab?: string;
 }
 
-const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
+const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTab}) => {
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -29,9 +30,14 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen}) => {
           {...task} 
           planningScreen={planningScreen} 
           onAddSubTask={(name, parentId, recurringOptions) => 
-            dispatch({ type: 'ADD_TASK', payload: { name, parentId, recurringOptions } })
+            dispatch({ 
+              type: 'ADD_TASK', 
+              payload: { name, parentId, recurringOptions }, 
+              inScopeDay: false
+            })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
+          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id, currentTab: currentTab || '' })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
       </View>
