@@ -13,7 +13,9 @@ export type Action =
         selectedDays: string, 
         timesPerDay: string
         } 
-      }, inScopeDay: boolean;
+      }, 
+      inScopeDay: boolean;
+      inScopeWeek: boolean;
     };
 
 const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {

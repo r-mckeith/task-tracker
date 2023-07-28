@@ -5,7 +5,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 interface TaskProps {
   id: number;
-  onAddSubTask: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
+  onAddSubTask: (
+    name: string, 
+    parentId: number, 
+    recurringOptions: {
+      isRecurring: boolean, 
+      selectedDays: string, 
+      timesPerDay: string
+    }
+  ) => void;
   depth: number;
 }
 
@@ -53,7 +61,9 @@ const AddTask: React.FC<TaskProps> = ({
         name: newSubTaskName, 
         parentId: id, 
         recurringOptions: {isRecurring, selectedDays, timesPerDay}
-      } 
+      } ,
+      inScopeDay: false,
+      inScopeWeek: false,
     }); 
     setNewSubTaskName('');
     setIsRecurring(false);
@@ -62,10 +72,9 @@ const AddTask: React.FC<TaskProps> = ({
 
   return (
     <View>
-      <Button
-      title="+"
-        onPress={() => setShowModal(true)}
-      />
+     <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
+      <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#000" />
+    </TouchableOpacity>
       <Modal
         animationType="slide"
         transparent={true}
@@ -94,11 +103,11 @@ const AddTask: React.FC<TaskProps> = ({
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
-                <MaterialCommunityIcons name="plus" size={24} color="#000" />
+                <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" /> 
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
-                <MaterialCommunityIcons name="close" size={24} color="#000" />
+                <MaterialCommunityIcons name="cancel" size={24} color="#F44336" /> 
               </TouchableOpacity>
             </View>
           </View>
@@ -109,49 +118,15 @@ const AddTask: React.FC<TaskProps> = ({
 };
 
 const styles = StyleSheet.create({
-  taskContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    backgroundColor: '#f9f9f9',
-    padding: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
-  },
-  taskName: {
-    fontSize: 18,
-    marginLeft: 10,
-    flex: 1,
-  },
-  sectionLevel: {
-    backgroundColor: 'rgb(0, 0, 255)',
-  },
-  objectiveLevel: {
-    backgroundColor: 'rgb(70, 70, 255)',
-  },
-  goalLevel: {
-    backgroundColor: 'rgb(100, 100, 255)',
-  },
-  taskLevel: {
-    backgroundColor: 'rgb(135, 135, 255)',
-  },
-  subtaskLevel: {
-    backgroundColor: 'rgb(175, 175, 255)',
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',  // Adding overlay
   },
   modalView: {
     margin: 20,
+    width: '90%',  // sets the width to 90% of the screen width
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -168,33 +143,22 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontWeight: 'bold',  // Bold for headers
   },
   input: {
     height: 40,
-    width: 200,
-    margin: 12,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 20,
-    padding: 10,
-  },
-  rightSwipeItem: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 20,
-    backgroundColor: 'red',
-  },
-  deleteText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
+    borderWidth: 0,  // Remove border
+    borderBottomWidth: 1,  // Add bottom border only
+    borderColor: '#bbb',   // Light grey border
+    marginBottom: 10,   // Reduce margin
+    paddingHorizontal: 0,   // Remove horizontal padding
+    paddingVertical: 10,   // Add vertical padding
   },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
-    width: 200,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -204,6 +168,17 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
   },
+  addButton: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 25, 
+    padding: 2,
+    elevation: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+  },
 });
+
 
 export default AddTask;

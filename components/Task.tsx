@@ -74,14 +74,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#f9f9f9',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10, // Rounded corners
+    borderColor: 'lightgray',
     borderWidth: 1,
-    borderColor: '#ddd',
-    shadowColor: '#000',
+    shadowColor: '#000', // Shadow for depth
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   taskName: {
     fontSize: 18,
@@ -94,26 +94,28 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionLevel: {
-    backgroundColor: 'rgb(0, 0, 255)',
+    backgroundColor: '#4A90E2',
   },
   objectiveLevel: {
-    backgroundColor: 'rgb(70, 70, 255)',
+    backgroundColor: '#50E3C2',
   },
   goalLevel: {
-    backgroundColor: 'rgb(100, 100, 255)',
+    backgroundColor: '#B8E986',
   },
   taskLevel: {
-    backgroundColor: 'rgb(135, 135, 255)',
+    backgroundColor: '#F5A623',
   },
   subtaskLevel: {
-    backgroundColor: 'rgb(175, 175, 255)',
+    backgroundColor: '#D0021B',
   },
   rightSwipeItem: {
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 20,
     backgroundColor: 'red',
+    borderRadius: 10, // Rounded corners
   },
 });
+
 
 export default Task;
