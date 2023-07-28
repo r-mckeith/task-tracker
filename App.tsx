@@ -11,9 +11,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import DailyScreen from './screens/DailyScreen';
-import PlanScreen from './screens/PlanScreen';
+import PlanningScreen from './screens/PlanningScreen';
 import ReviewScreen from './screens/ReviewScreen';
-import ScopeWeekScreen from './screens/ScopeWeekScreen';
+import WeeklyScreen from './screens/WeeklyScreen';
 import ScopeDayScreen from './screens/ScopeDayScreen';
 
 
@@ -32,11 +32,11 @@ export default function App() {
 
   const Stack = createStackNavigator();
 
-  function DoStack() {
+  function DailyStack() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="Daily" component={DailyScreen} />
-        <Stack.Screen name="ScopeDay" component={ScopeDayScreen} />
+        <Stack.Screen name="Daily Screen" options={{ headerShown: false }} component={DailyScreen} />
+        <Stack.Screen name="ScopeDay" options={{ title: '' }} component={ScopeDayScreen} />
       </Stack.Navigator>
     );
   }
@@ -52,9 +52,9 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Do" component={DoStack} />
-        <Tab.Screen name="ScopeWeek" component={ScopeWeekScreen} />
-        <Tab.Screen name="Plan" component={PlanScreen} />
+        <Tab.Screen name="Day" component={DailyStack} />
+        <Tab.Screen name="Week" component={WeeklyScreen} />
+        <Tab.Screen name="Plan" component={PlanningScreen} />
         <Tab.Screen name="Review" component={ReviewScreen} />
       </Tab.Navigator>
     );

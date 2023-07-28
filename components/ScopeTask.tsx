@@ -6,20 +6,22 @@ interface ScopeProps {
   id: number,
   inScopeDay?: boolean;
   inScopeWeek?: boolean;
-  onToggleScope: (id: number) => void;
   currentTab?: string;
+  onToggleDay: (id: number) => void;
+  onToggleWeek: (id: number) => void;
 }
 
 const ScopeTask: React.FC<ScopeProps> = ({
   id,
   inScopeDay,
   inScopeWeek,
-  onToggleScope,
-  currentTab
+  currentTab,
+  onToggleDay,
+  onToggleWeek,
 }) => {
   
   const handleToggleScope = () => {
-    onToggleScope(id);
+    currentTab === 'Day' ? onToggleDay(id) : onToggleWeek(id);
   };
 
   // Determine scope and color based on current tab

@@ -38,7 +38,8 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTa
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
-          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id, currentTab: currentTab || '' })} 
+          onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
+          onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
       </View>
