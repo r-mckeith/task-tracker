@@ -15,10 +15,12 @@ const Task: React.FC<TaskInterface> = ({
   onAddSubTask,
   depth,
   planningScreen,
+  currentTab,
   onToggleCompleted,
   onToggleScope,
   onDelete,
   inScopeDay,
+  inScopeWeek,
 }) => {
 
   const renderRightActions = () => {
@@ -47,8 +49,10 @@ const Task: React.FC<TaskInterface> = ({
          {parentId && !planningScreen && 
             <ScopeTask 
               id={id} 
-              inScope={inScopeDay || false}
+              inScopeDay={inScopeDay}
+              inScopeWeek={inScopeWeek}
               onToggleScope={onToggleScope ? onToggleScope : () => {}}
+              currentTab={currentTab}
             />
          }
         <Text onPress={onPress} style={[styles.taskName]}>

@@ -29,6 +29,7 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTa
         <Task 
           {...task} 
           planningScreen={planningScreen} 
+          currentTab={currentTab}
           onAddSubTask={(name, parentId, recurringOptions) => 
             dispatch({ 
               type: 'ADD_TASK', 

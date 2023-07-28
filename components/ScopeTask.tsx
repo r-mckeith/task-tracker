@@ -4,30 +4,37 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 interface ScopeProps {
   id: number,
-  inScope?: boolean;
+  inScopeDay?: boolean;
+  inScopeWeek?: boolean;
   onToggleScope: (id: number) => void;
+  currentTab?: string;
 }
 
 const ScopeTask: React.FC<ScopeProps> = ({
   id,
-  inScope,
+  inScopeDay,
+  inScopeWeek,
   onToggleScope,
+  currentTab
 }) => {
   
-
   const handleToggleScope = () => {
     onToggleScope(id);
   };
 
+  // Determine scope and color based on current tab
+  const inScope = currentTab === 'Add' ? inScopeDay : inScopeWeek;
+  const color = inScope ? 'green' : 'black';
+
   return (
-      <View>
-        <MaterialCommunityIcons 
-          name={inScope ? "toggle-switch" : "toggle-switch-off"} 
-          size={24} 
-          color={inScope ? 'green' : 'black'}
-          onPress={handleToggleScope}
-        />
-      </View>
+    <View>
+      <MaterialCommunityIcons 
+        name={inScope ? "toggle-switch" : "toggle-switch-off"} 
+        size={24} 
+        color={color}
+        onPress={handleToggleScope}
+      />
+    </View>
   );
 };
 
