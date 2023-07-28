@@ -9,13 +9,14 @@ export interface TaskDataInterface {
     timesPerDay: string | null;
   };
   depth: number;
-  inScopeDay?: boolean | null;
-  inScopeWeek?: boolean | null;
+  inScopeDay?: boolean;
+  inScopeWeek?: boolean;
 }
 
 export interface TaskInterface extends TaskDataInterface {
   planningScreen?: boolean;
   onPress?: () => void;
+  currentTab?: string;
   onToggleCompleted?: (id: number) => void;
   onToggleScope?: (id: number) => void;
   onDelete?: (id: number) => void;

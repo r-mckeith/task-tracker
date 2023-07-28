@@ -32,6 +32,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
            <Task 
           {...task} 
           planningScreen={planningScreen} 
+          currentTab={currentTab}
           onAddSubTask={(name, parentId, recurringOptions) => 
             dispatch({ 
               type: 'ADD_TASK', 
