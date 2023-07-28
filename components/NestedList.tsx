@@ -41,7 +41,8 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
-          onToggleScope={() => dispatch({ type: 'TOGGLE_SCOPE', id: task.id, currentTab: currentTab || '' })} 
+          onToggleDay={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
+          onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
           onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
           {renderTasks(task.id)}
