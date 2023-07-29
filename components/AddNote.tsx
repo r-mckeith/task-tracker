@@ -1,20 +1,17 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
-import { TaskContext } from '../src/contexts/TaskContext';
-import { TaskDataInterface } from '../src/types/TaskTypes';
+import { View, Text, StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
+import { NoteContext } from '../src/contexts/NoteContext';
+import { NoteDataInterface } from '../src/types/NoteTypes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AddTask: React.FC<TaskDataInterface> = ({
-  id,
-  depth,
+const AddNote: React.FC<NoteDataInterface> = ({
+  taskId,
+  onAddNote,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [newSubTaskName, setNewSubTaskName] = useState('');
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [selectedDays, setSelectedDays] = useState('');
-  const [timesPerDay, setTimesPerDay] = useState('');
+  const [noteText, setNoteText] = useState('');
 
-  const context = useContext(TaskContext);
+  const context = useContext(NoteContext);
 
   if (!context) {
     return (
@@ -24,43 +21,28 @@ const AddTask: React.FC<TaskDataInterface> = ({
     );
   }
 
-  const { dispatch } = context;
+  const { state, dispatch } = context;
+  console.log(state)
 
-  const getTaskLevelName = (depth: number) => {
-    switch (depth) {
-      case 0:
-        return 'Section';
-      case 1:
-        return 'Objective';
-      case 2:
-        return 'Goal';
-      case 3:
-        return 'Task';
-      default:
-        return 'Subtask';
-    }
-  }
-
-  const handleAddSubTask = () => {
+  const handleAddNote = () => {
     dispatch({ 
-      type: 'ADD_TASK', 
+      type: 'ADD_NOTE',
       payload: { 
-        name: newSubTaskName, 
-        parentId: id, 
-        recurringOptions: {isRecurring, selectedDays, timesPerDay}
+        id: state.length + 1,
+        text: noteText, 
+        taskId: taskId,
+     
       } ,
-      inScopeDay: false,
-      inScopeWeek: false,
     }); 
-    setNewSubTaskName('');
-    setIsRecurring(false);
+
+    setNoteText('');
     setShowModal(false);
   };
 
   return (
     <View>
      <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
-      <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#000" />
+      <MaterialCommunityIcons name="notebook" size={24} color="#000" />
     </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -72,24 +54,15 @@ const AddTask: React.FC<TaskDataInterface> = ({
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{`New ${getTaskLevelName(depth + 1)}`}</Text>
+            <Text style={styles.modalText}>{'Add note'}</Text>
             <TextInput
               style={[styles.textInput, styles.input, { marginBottom: 10 }]}
-              placeholder={`${getTaskLevelName(depth + 1)} Name`}
-              value={newSubTaskName}
-              onChangeText={setNewSubTaskName}
+              placeholder={'New note'}
+              value={noteText}
+              onChangeText={setNoteText}
             />
-            <View style={styles.switchRow}>
-              <Text>Recurring: </Text>
-              <Switch 
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={isRecurring ? "#f5dd4b" : "#f4f3f4"}
-                onValueChange={setIsRecurring}
-                value={isRecurring}
-              />
-            </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
+              <TouchableOpacity style={styles.iconButton} onPress={handleAddNote}>
                 <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" /> 
               </TouchableOpacity>
 
@@ -144,13 +117,6 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
   },
-  
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -171,5 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default AddTask;
+export default AddNote;

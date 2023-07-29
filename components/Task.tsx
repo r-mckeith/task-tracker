@@ -4,6 +4,7 @@ import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../src/types/TaskTypes'
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
+import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
 
 const Task: React.FC<TaskInterface> = ({
@@ -18,6 +19,7 @@ const Task: React.FC<TaskInterface> = ({
   currentTab,
   onPress,
   onAddSubTask,
+  onAddNote,
   onToggleCompleted,
   onToggleDay,
   onToggleWeek,
@@ -53,15 +55,15 @@ const Task: React.FC<TaskInterface> = ({
               inScopeDay={inScopeDay}
               inScopeWeek={inScopeWeek}
               currentTab={currentTab}
-
               onToggleDay={onToggleDay ? onToggleDay : () => {}}
-              onToggleWeek={onToggleDay ? onToggleDay : () => {}}
+              onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
             />
          }
         <Text onPress={onPress} style={[styles.taskName]}>
           {name}
         </Text>
-        <AddTask id={id} onAddSubTask={onAddSubTask? onAddSubTask : () => {}} depth={depth}/>
+        {/* <AddTask id={id} onAddSubTask={onAddSubTask? onAddSubTask : () => {}} depth={depth}/> */}
+        <AddNote id={id} text={'text'} taskId={id} onAddNote={onAddNote? onAddNote : () => {}}/>
       </View>
     </Swipeable>  
   );
