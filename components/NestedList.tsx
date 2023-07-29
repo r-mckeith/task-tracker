@@ -27,29 +27,36 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
   const renderTasks = (parentId: number | null) => {
     return taskProps
       .filter((task) => task.parentId === parentId)
-      .map((task) => (
-        <View key={task.id} style={parentId !== null ? styles.subtask : undefined}>
-           <Task 
-          {...task} 
-          planningScreen={planningScreen} 
-          currentTab={currentTab}
-          onAddSubTask={(name, parentId, recurringOptions) => 
-            dispatch({ 
-              type: 'ADD_TASK', 
-              payload: { name, parentId, recurringOptions }, 
-              inScopeDay: false,
-              inScopeWeek: false,
-            })
-          }
-          onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
-          onToggleDay={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-          onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-          onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
-        />
+      .map((task, index) => (
+        <View 
+          key={task.id} 
+          style={[
+            parentId !== null ? styles.subtask : undefined,
+            parentId === null && index !== 0 ? styles.headerSpacing : undefined,
+          ]}
+        >
+          <Task 
+            {...task} 
+            planningScreen={planningScreen} 
+            currentTab={currentTab}
+            onAddSubTask={(name, parentId, recurringOptions) => 
+              dispatch({ 
+                type: 'ADD_TASK', 
+                payload: { name, parentId, recurringOptions }, 
+                inScopeDay: false,
+                inScopeWeek: false,
+              })
+            }
+            onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
+            onToggleDay={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
+            onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
+            onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
+          />
           {renderTasks(task.id)}
         </View>
       ));
-    };
+  };
+  
     
     return (
       <View style={styles.container}>
@@ -80,6 +87,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  headerSpacing: {
+    marginTop: 20, // or any space you want
   },
   subtask: {
     marginLeft: 20,

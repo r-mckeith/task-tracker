@@ -87,7 +87,7 @@ const AddTask: React.FC<TaskProps> = ({
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{`New ${getTaskLevelName(depth + 1)}`}</Text>
             <TextInput
-              style={[styles.input, { marginBottom: 10 }]}
+              style={[styles.textInput, styles.input, { marginBottom: 10 }]}
               placeholder={`${getTaskLevelName(depth + 1)} Name`}
               value={newSubTaskName}
               onChangeText={setNewSubTaskName}
@@ -122,11 +122,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',  // Adding overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   modalView: {
     margin: 20,
-    width: '90%',  // sets the width to 90% of the screen width
+    width: '90%',
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -143,17 +143,21 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontWeight: 'bold',  // Bold for headers
+    fontWeight: 'bold',
   },
   input: {
     height: 40,
-    borderWidth: 0,  // Remove border
-    borderBottomWidth: 1,  // Add bottom border only
-    borderColor: '#bbb',   // Light grey border
-    marginBottom: 10,   // Reduce margin
-    paddingHorizontal: 0,   // Remove horizontal padding
-    paddingVertical: 10,   // Add vertical padding
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderColor: '#bbb',
+    marginBottom: 10,
+    paddingHorizontal: 0,
+    paddingVertical: 10,
   },
+  textInput: {
+    width: '100%',
+  },
+  
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
