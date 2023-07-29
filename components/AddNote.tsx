@@ -4,14 +4,23 @@ import { NoteContext } from '../src/contexts/NoteContext';
 import { NoteDataInterface } from '../src/types/NoteTypes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const AddNote: React.FC<NoteDataInterface> = ({
+interface AddNoteProps {
+  showModal: boolean;
+  onClose: () => void;
+  taskId: number;
+  setShowModal: (show: boolean) => void;
+}
+
+const AddNote: React.FC<AddNoteProps> = ({
+  showModal,
   taskId,
-  onAddNote,
+  onClose,
+  setShowModal,
 }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [noteText, setNoteText] = useState('');
 
   const context = useContext(NoteContext);
+
+  const [noteText, setNoteText] = useState('');
 
   if (!context) {
     return (
@@ -31,26 +40,23 @@ const AddNote: React.FC<NoteDataInterface> = ({
         id: state.length + 1,
         text: noteText, 
         taskId: taskId,
-     
       } ,
     }); 
-
+    
     setNoteText('');
-    setShowModal(false);
+    onClose();
   };
 
   return (
     <View>
-     <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
-      <MaterialCommunityIcons name="notebook" size={24} color="#000" />
-    </TouchableOpacity>
+      {/* <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
+        <MaterialCommunityIcons name="notebook" size={24} color="#000" />
+      </TouchableOpacity> */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={showModal}
-        onRequestClose={() => {
-          setShowModal(!showModal);
-        }}
+        onRequestClose={onClose}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -66,9 +72,9 @@ const AddNote: React.FC<NoteDataInterface> = ({
                 <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" /> 
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
-                <MaterialCommunityIcons name="cancel" size={24} color="#F44336" /> 
-              </TouchableOpacity>
+              <TouchableOpacity style={styles.iconButton} onPress={onClose}>
+          <MaterialCommunityIcons name="cancel" size={24} color="#F44336" /> 
+        </TouchableOpacity>
             </View>
           </View>
         </View>
