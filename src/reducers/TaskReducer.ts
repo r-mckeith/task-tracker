@@ -39,12 +39,29 @@ const findParentTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[
   
 
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
-  
   switch (action.type) {
     case 'TOGGLE_COMPLETED':
+      const taskForCompleted = state.find((task) => task.id === action.id);
+
+      if (!taskForCompleted) {
+        return state;
+      }
+
+      const descendantsCompleted = findChildTasks(action.id, state);
+      const ancestorsCompleted = findParentTasks(action.id, state);
+      const siblingsCompleted = taskForCompleted.parentId ? state.filter(task => task.parentId === taskForCompleted.parentId) : [];
+      
+      const newCompletedStatus = !taskForCompleted.completed;
+
       return state.map((task) => {
-        if (task.id === action.id) {
-          return { ...task, completed: !task.completed };
+        if (task.id === action.id || descendantsCompleted.some(descendant => descendant.id === task.id)) {
+          return { ...task, completed: newCompletedStatus };
+        }
+        if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
+          return { ...task, completed: newCompletedStatus };
+        }
+        if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
+          return { ...task, completed: newCompletedStatus };
         }
         return task;
       });
@@ -54,13 +71,12 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
         if (!taskForDay) {
           return state;
         }
-      
+
         const descendantsDay = findChildTasks(action.id, state);
         const ancestorsDay = findParentTasks(action.id, state);
         const siblingsDay = taskForDay.parentId ? state.filter(task => task.parentId === taskForDay.parentId) : [];
-      
         const newScopeDay = !taskForDay.inScopeDay;
-      
+
         return state.map((task) => {
           if (task.id === action.id || descendantsDay.some(descendant => descendant.id === task.id)) {
             return { ...task, inScopeDay: newScopeDay };
