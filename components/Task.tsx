@@ -50,38 +50,36 @@ const Task: React.FC<TaskInterface> = ({
   };
 
   return (
-        <View>
-        <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootRight={false}>     
-          <View style={[
-          styles.taskContainer, 
-          depth === 0 && styles.sectionLevel, 
-          depth === 1 && styles.objectiveLevel,
-          depth === 2 && styles.goalLevel,
-          depth === 3 && styles.taskLevel,
-          depth === 4 && styles.subtaskLevel,
-        ]}>
-        {parentId && planningScreen && 
-          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
+    <View>
+      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootRight={false}>     
+        <View style={[
+        styles.taskContainer, 
+        depth === 0 && styles.sectionLevel, 
+        depth === 1 && styles.objectiveLevel,
+        depth === 2 && styles.goalLevel,
+        depth === 3 && styles.taskLevel,
+        depth === 4 && styles.subtaskLevel,
+      ]}>
+      {parentId && planningScreen && 
+        <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
+      }
+      {parentId && !planningScreen && 
+          <ScopeTask 
+            id={id} 
+            inScopeDay={inScopeDay}
+            inScopeWeek={inScopeWeek}
+            currentTab={currentTab}
+            onToggleDay={onToggleDay ? onToggleDay : () => {}}
+            onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
+          />
         }
-         {parentId && !planningScreen && 
-            <ScopeTask 
-              id={id} 
-              inScopeDay={inScopeDay}
-              inScopeWeek={inScopeWeek}
-              currentTab={currentTab}
-              onToggleDay={onToggleDay ? onToggleDay : () => {}}
-              onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
-            />
-         }
-        <Text onPress={onPress} style={[styles.taskName]}>
-          {name}
-        </Text>
-        <AddTask id={id} depth={depth}/>
-      </View>
-    </Swipeable>  
-    {/* <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} /> */}
-    <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
-
+          <Text onPress={onPress} style={[styles.taskName]}>
+            {name}
+          </Text>
+          <AddTask id={id} depth={depth}/>
+        </View>
+      </Swipeable>  
+      <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
     </View>
   );
 };
