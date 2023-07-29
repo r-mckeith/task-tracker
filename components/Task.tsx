@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
+import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
 
 const Task: React.FC<TaskInterface> = ({
@@ -17,53 +19,68 @@ const Task: React.FC<TaskInterface> = ({
   planningScreen,
   currentTab,
   onPress,
-  onAddSubTask,
   onToggleCompleted,
   onToggleDay,
   onToggleWeek,
   onDelete,
 }) => {
 
+  const swipeableRow = useRef<Swipeable | null>(null);
+
+  const [showNoteModal, setShowNoteModal] = useState(false);
+
   const renderRightActions = () => {
     return (
       parentId !== null && (
-        <RectButton style={styles.rightSwipeItem} onPress={() => onDelete ? onDelete(id) : () => {}}>
-          <Text style={styles.deleteText}>Delete</Text>
-        </RectButton>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => onDelete ? onDelete(id) : () => {}}>
+            <MaterialCommunityIcons name="delete" size={30} color="white" />
+            <Text style={styles.deleteText}>Delete</Text>
+          </RectButton>
+          
+          <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
+            {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
+            <MaterialCommunityIcons name="note-outline" size={30} color="white" />
+            <Text style={styles.deleteText}>Add Note</Text>
+          </RectButton>
+          {/* Add more buttons here */}
+        </View>
       )
     );
   };
 
   return (
-    <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
-      <View style={[
-          styles.taskContainer, 
-          depth === 0 && styles.sectionLevel, 
-          depth === 1 && styles.objectiveLevel,
-          depth === 2 && styles.goalLevel,
-          depth === 3 && styles.taskLevel,
-          depth === 4 && styles.subtaskLevel,
-        ]}>
-        {parentId && planningScreen && 
-          <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
+    <View>
+      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootRight={false}>     
+        <View style={[
+        styles.taskContainer, 
+        depth === 0 && styles.sectionLevel, 
+        depth === 1 && styles.objectiveLevel,
+        depth === 2 && styles.goalLevel,
+        depth === 3 && styles.taskLevel,
+        depth === 4 && styles.subtaskLevel,
+      ]}>
+      {parentId && planningScreen && 
+        <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
+      }
+      {parentId && !planningScreen && 
+          <ScopeTask 
+            id={id} 
+            inScopeDay={inScopeDay}
+            inScopeWeek={inScopeWeek}
+            currentTab={currentTab}
+            onToggleDay={onToggleDay ? onToggleDay : () => {}}
+            onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
+          />
         }
-         {parentId && !planningScreen && 
-            <ScopeTask 
-              id={id} 
-              inScopeDay={inScopeDay}
-              inScopeWeek={inScopeWeek}
-              currentTab={currentTab}
-
-              onToggleDay={onToggleDay ? onToggleDay : () => {}}
-              onToggleWeek={onToggleDay ? onToggleDay : () => {}}
-            />
-         }
-        <Text onPress={onPress} style={[styles.taskName]}>
-          {name}
-        </Text>
-        <AddTask id={id} onAddSubTask={onAddSubTask? onAddSubTask : () => {}} depth={depth}/>
-      </View>
-    </Swipeable>  
+          <Text onPress={onPress} style={[styles.taskName]}>
+            {name}
+          </Text>
+          <AddTask id={id} depth={depth}/>
+        </View>
+      </Swipeable>  
+      <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
+    </View>
   );
 };
 
@@ -72,9 +89,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
-    backgroundColor: '#f9f9f9',
     padding: 10,
-    borderRadius: 10, // Rounded corners
+    backgroundColor: '#f9f9f9',
+    borderRadius: 0, // Square corners
     borderColor: 'lightgray',
     borderWidth: 1,
     shadowColor: '#000', // Shadow for depth
@@ -109,11 +126,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#D0021B',
   },
   rightSwipeItem: {
-    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
-    paddingLeft: 20,
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 15,
+    height: '100%',
+  },
+  deleteButton: {
     backgroundColor: 'red',
-    borderRadius: 10, // Rounded corners
+    marginRight: 10,
+  },
+  addNoteButton: {
+    backgroundColor: 'orange',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 10,
+  },
+  editButton: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 10,
   },
 });
 

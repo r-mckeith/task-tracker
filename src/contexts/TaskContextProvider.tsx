@@ -1,5 +1,5 @@
 import React, { useReducer, ReactNode } from 'react';
-import apiCall from '../api/ApiCall';
+import getTasks from '../api/getTasks';
 import { TaskContext } from './TaskContext';
 import { taskReducer } from '../reducers/TaskReducer';
 
@@ -8,7 +8,7 @@ interface TaskContextProviderProps {
 }
 
 const TaskContextProvider: React.FC<TaskContextProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(taskReducer, apiCall());
+  const [state, dispatch] = useReducer(taskReducer, getTasks());
 
   return (
     <TaskContext.Provider value={{ state, dispatch }}>

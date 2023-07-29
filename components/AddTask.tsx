@@ -1,23 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
 import { TaskContext } from '../src/contexts/TaskContext';
+import { TaskDataInterface } from '../src/types/TaskTypes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-interface TaskProps {
-  id: number;
-  onAddSubTask: (
-    name: string, 
-    parentId: number, 
-    recurringOptions: {
-      isRecurring: boolean, 
-      selectedDays: string, 
-      timesPerDay: string
-    }
-  ) => void;
-  depth: number;
-}
-
-const AddTask: React.FC<TaskProps> = ({
+const AddTask: React.FC<TaskDataInterface> = ({
   id,
   depth,
 }) => {

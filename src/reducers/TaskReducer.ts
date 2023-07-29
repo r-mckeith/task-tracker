@@ -139,8 +139,6 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
         const allChildIds = childTasks.map(task => task.id);
         return state.filter(task => task.id !== action.id && !allChildIds.includes(task.id));
       }
-        
-      
     default:
       return state;
   }

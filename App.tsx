@@ -7,6 +7,7 @@ import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Session } from '@supabase/supabase-js';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import TaskContextProvider from './src/contexts/TaskContextProvider';
+import NoteContextProvider from './src/contexts/NoteContextProvider';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -62,17 +63,19 @@ export default function App() {
 
   return (
     <TaskContextProvider>
-      <SafeAreaView style={styles.container}>
-        <GestureHandlerRootView style={{flex: 1}}>
-        <View style={styles.container}>
-          {session && session.user ?  
-            <NavigationContainer>
-              <MyTabs />
-            </NavigationContainer> : 
-            <Auth />}
-          </View>
-        </GestureHandlerRootView>
-      </SafeAreaView>
+      <NoteContextProvider>
+        <SafeAreaView style={styles.container}>
+          <GestureHandlerRootView style={{flex: 1}}>
+          <View style={styles.container}>
+            {session && session.user ?  
+              <NavigationContainer>
+                <MyTabs />
+              </NavigationContainer> : 
+              <Auth />}
+            </View>
+          </GestureHandlerRootView>
+        </SafeAreaView>
+      </NoteContextProvider>
     </TaskContextProvider>
   )
 }

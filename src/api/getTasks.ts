@@ -1,5 +1,5 @@
 import { TaskInterface } from "../types/TaskTypes";
-const apiCall = (): TaskInterface[] => [
+const getTasks = (): TaskInterface[] => [
   {
     id: 1,
     name: 'Health',
@@ -198,4 +198,4 @@ const apiCall = (): TaskInterface[] => [
   },
 ]
 
-export default apiCall;
+export default getTasks;

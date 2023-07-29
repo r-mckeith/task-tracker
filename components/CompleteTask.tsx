@@ -4,7 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 interface IconProps {
   id: number,
-  completed: boolean;
+  completed?: boolean;
   onToggleCompleted: (id: number) => void;
 }
 
