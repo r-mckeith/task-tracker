@@ -30,18 +30,21 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTa
           {...task} 
           planningScreen={planningScreen} 
           currentTab={currentTab}
-          onAddSubTask={(name, parentId, recurringOptions) => 
+          onAddTask={(name, parentId, recurringOptions) => 
             dispatch({ 
               type: 'ADD_TASK', 
-              payload: { name, parentId, recurringOptions }, 
-              inScopeDay: false,
-              inScopeWeek: false,
+              payload: { 
+                name, 
+                parentId, 
+                depth: 0,
+                recurringOptions,
+              }, 
             })
           }
           onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
           onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
           onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-          onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
+          // onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
         />
       </View>
     ));

@@ -1,5 +1,5 @@
-import React, { useReducer, ReactNode } from 'react';
-import getTasks from '../api/getTasks';
+import React, { useEffect, useReducer, ReactNode } from 'react';
+import { getTasks } from '../api/SupabaseTasks';
 import { TaskContext } from './TaskContext';
 import { taskReducer } from '../reducers/TaskReducer';
 
@@ -8,7 +8,16 @@ interface TaskContextProviderProps {
 }
 
 const TaskContextProvider: React.FC<TaskContextProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(taskReducer, getTasks());
+  const [state, dispatch] = useReducer(taskReducer, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const tasks = await getTasks();
+      dispatch({ type: 'INITIALIZE', payload: tasks });
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <TaskContext.Provider value={{ state, dispatch }}>

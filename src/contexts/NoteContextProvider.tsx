@@ -1,5 +1,5 @@
-import React, { useReducer, ReactNode } from 'react';
-import getNotes from '../api/getNotes';
+import React, { useEffect, useReducer, ReactNode } from 'react';
+import { getNotes } from '../api/SupabaseNotes';
 import { NoteContext } from './NoteContext';
 import { NoteReducer } from '../reducers/NoteReducer';
 
@@ -8,7 +8,16 @@ interface NoteContextProviderProps {
 }
 
 const NoteContextProvider: React.FC<NoteContextProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(NoteReducer, getNotes());
+  const [state, dispatch] = useReducer(NoteReducer, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const tasks = await getNotes();
+      dispatch({ type: 'INITIALIZE', payload: tasks });
+    };
+
+    fetchTasks();
+  }, []);
 
   return (
     <NoteContext.Provider value={{ state, dispatch }}>

@@ -1,8 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Modal, TouchableOpacity } from 'react-native';
-import { NoteContext } from '../src/contexts/NoteContext';
-import { NoteDataInterface } from '../src/types/NoteTypes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NoteContext } from '../src/contexts/NoteContext';
+import { NewNote } from '../src/types/NoteTypes';
+import { addNote } from '../src/api/SupabaseNotes';
+
 
 interface AddNoteProps {
   showModal: boolean;
@@ -30,22 +32,26 @@ const AddNote: React.FC<AddNoteProps> = ({
     );
   }
 
-  const { state, dispatch } = context;
-  console.log(state)
+  const handleAddNote = async (
+  ) => {
 
-  const handleAddNote = () => {
-    dispatch({ 
-      type: 'ADD_NOTE',
-      payload: { 
-        id: state.length + 1,
-        text: noteText, 
-        taskId: taskId,
-      } ,
-    }); 
-    
-    setNoteText('');
-    onClose();
+    const newNote: NewNote = {
+      text: noteText,
+      taskId: taskId,
+    };
+  
+    try {
+      await addNote(newNote);
+  
+      dispatch({ type: 'ADD_NOTE', payload: newNote });
+      setNoteText('');
+      setShowModal(false);
+    } catch (error) {
+      console.error('Failed to add note:', error);
+    }
   };
+
+  const { state, dispatch } = context;
 
   return (
     <View>
