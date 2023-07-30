@@ -1,7 +1,7 @@
 import React from 'react';
 import 'react-native-url-polyfill/auto';
 import { useState, useEffect } from 'react';
-import { supabase } from './lib/supabase';
+import { supabase } from './src/api/SupabaseClient';
 import Auth from './components/Auth';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Session } from '@supabase/supabase-js';

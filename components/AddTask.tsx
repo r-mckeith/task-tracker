@@ -1,15 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
-import { TaskContext } from '../src/contexts/TaskContext';
-import { TaskDataInterface } from '../src/types/TaskTypes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TaskContext } from '../src/contexts/TaskContext';
+import { NewTask, AddTaskProps } from '../src/types/TaskTypes';
+import { addTask } from '../src/api/SupabaseTasks';
 
-const AddTask: React.FC<TaskDataInterface> = ({
-  id,
+const AddTask: React.FC<AddTaskProps> = ({
+  parentId,
   depth,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [newSubTaskName, setNewSubTaskName] = useState('');
+  const [newTaskName, setNewTaskName] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedDays, setSelectedDays] = useState('');
   const [timesPerDay, setTimesPerDay] = useState('');
@@ -41,21 +42,35 @@ const AddTask: React.FC<TaskDataInterface> = ({
     }
   }
 
-  const handleAddSubTask = () => {
-    dispatch({ 
-      type: 'ADD_TASK', 
-      payload: { 
-        name: newSubTaskName, 
-        parentId: id, 
-        recurringOptions: {isRecurring, selectedDays, timesPerDay}
-      } ,
-      inScopeDay: false,
-      inScopeWeek: false,
-    }); 
-    setNewSubTaskName('');
+const handleAddTask = async (
+  newTaskName: string,
+  isRecurring: boolean | null = null,
+  selectedDays: string | null = null,
+  timesPerDay: string | null = null,
+) => {
+  // Create a new task object
+  const newTask: NewTask = {
+    name: newTaskName,
+    parentId: parentId,
+    depth: depth + 1,
+    recurringOptions: {
+      isRecurring: isRecurring,
+      selectedDays: selectedDays,
+      timesPerDay: timesPerDay,
+    },
+  };
+
+  try {
+    await addTask(newTask);
+
+    dispatch({ type: 'ADD_TASK', payload: newTask });
+    setNewTaskName('');
     setIsRecurring(false);
     setShowModal(false);
-  };
+  } catch (error) {
+    console.error('Failed to add task:', error);
+  }
+};
 
   return (
     <View>
@@ -72,12 +87,12 @@ const AddTask: React.FC<TaskDataInterface> = ({
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{`New ${getTaskLevelName(depth + 1)}`}</Text>
+            <Text style={styles.modalText}>{`New ${getTaskLevelName((depth ?? 0) + 1)}`}</Text>
             <TextInput
               style={[styles.textInput, styles.input, { marginBottom: 10 }]}
-              placeholder={`${getTaskLevelName(depth + 1)} Name`}
-              value={newSubTaskName}
-              onChangeText={setNewSubTaskName}
+              placeholder={`${getTaskLevelName((depth ?? 0) + 1)} Name`}
+              value={newTaskName}
+              onChangeText={setNewTaskName}
             />
             <View style={styles.switchRow}>
               <Text>Recurring: </Text>
@@ -89,7 +104,12 @@ const AddTask: React.FC<TaskDataInterface> = ({
               />
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.iconButton} onPress={handleAddSubTask}>
+            <TouchableOpacity 
+              style={styles.iconButton} 
+              onPress={() => {
+                handleAddTask(newTaskName, isRecurring, selectedDays, timesPerDay);
+              }}
+            >
                 <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" /> 
               </TouchableOpacity>
 

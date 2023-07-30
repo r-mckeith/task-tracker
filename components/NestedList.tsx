@@ -11,7 +11,6 @@ interface NestedListProps {
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
-
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -39,30 +38,32 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
             {...task} 
             planningScreen={planningScreen} 
             currentTab={currentTab}
-            onAddSubTask={(name, parentId, recurringOptions) => 
+            onAddTask={(name, parentId, recurringOptions) => 
               dispatch({ 
                 type: 'ADD_TASK', 
-                payload: { name, parentId, recurringOptions }, 
-                inScopeDay: false,
-                inScopeWeek: false,
+                payload: { 
+                  name, 
+                  parentId, 
+                  depth: 0,
+                  recurringOptions,
+                }, 
               })
             }
             onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
             onToggleDay={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
             onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-            onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
+            // onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
           />
           {renderTasks(task.id)}
         </View>
       ));
   };
   
-    
-    return (
-      <View style={styles.container}>
-        {renderTasks(null)}
-      </View>
-    );
+  return (
+    <View style={styles.container}>
+      {renderTasks(null)}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

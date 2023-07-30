@@ -1,8 +1,10 @@
-import React, {useState, useRef } from 'react';
+import React, {useContext, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
+import { TaskContext } from '../src/contexts/TaskContext';
+import { deleteTask } from '../src/api/SupabaseTasks';
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
@@ -22,18 +24,42 @@ const Task: React.FC<TaskInterface> = ({
   onToggleCompleted,
   onToggleDay,
   onToggleWeek,
-  onDelete,
+  // onDelete,
 }) => {
 
   const swipeableRow = useRef<Swipeable | null>(null);
 
   const [showNoteModal, setShowNoteModal] = useState(false);
 
+  const context = useContext(TaskContext);
+
+  if (!context) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  const { dispatch } = context;
+
+  const handleDelete = async (
+    ) => {
+    
+      try {
+        await deleteTask(id);
+    
+        dispatch({ type: 'DELETE_TASK', id });
+      } catch (error) {
+        console.error('Failed to delete task:', error);
+      }
+    };
+
   const renderRightActions = () => {
     return (
       parentId !== null && (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => onDelete ? onDelete(id) : () => {}}>
+          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete()}>
             <MaterialCommunityIcons name="delete" size={30} color="white" />
             <Text style={styles.deleteText}>Delete</Text>
           </RectButton>
@@ -76,7 +102,7 @@ const Task: React.FC<TaskInterface> = ({
           <Text onPress={onPress} style={[styles.taskName]}>
             {name}
           </Text>
-          <AddTask id={id} depth={depth}/>
+          <AddTask parentId={id} depth={depth}/>
         </View>
       </Swipeable>  
       <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
@@ -90,66 +116,73 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     padding: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 0, // Square corners
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    shadowColor: '#000', // Shadow for depth
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    backgroundColor: '#FFFFFF',
+    borderBottomColor: '#d3d3d3',
+    borderBottomWidth: 0.5,
   },
   taskName: {
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 10,
     flex: 1,
+    color: '#333',
   },
   deleteText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   sectionLevel: {
-    backgroundColor: '#4A90E2',
+    paddingLeft: 5,
+    borderLeftColor: '#d8d8d8',
+    borderLeftWidth: 2,
   },
   objectiveLevel: {
-    backgroundColor: '#50E3C2',
+    paddingLeft: 10,
+    borderLeftColor: '#c0c0c0',
+    borderLeftWidth: 2,
   },
   goalLevel: {
-    backgroundColor: '#B8E986',
+    paddingLeft: 15,
+    borderLeftColor: '#a8a8a8',
+    borderLeftWidth: 2,
   },
   taskLevel: {
-    backgroundColor: '#F5A623',
+    paddingLeft: 20,
+    borderLeftColor: '#909090',
+    borderLeftWidth: 2,
   },
   subtaskLevel: {
-    backgroundColor: '#D0021B',
+    paddingLeft: 25,
+    borderLeftColor: '#787878',
+    borderLeftWidth: 2,
   },
   rightSwipeItem: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 5,
     padding: 15,
     height: '100%',
   },
   deleteButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#b22222',
     marginRight: 10,
   },
   addNoteButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#696969',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '500',
     marginLeft: 10,
   },
   editButton: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '500',
     marginLeft: 10,
   },
 });
+
+
 
 
 export default Task;

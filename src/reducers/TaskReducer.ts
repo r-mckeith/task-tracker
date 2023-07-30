@@ -1,22 +1,12 @@
-import { TaskInterface } from '../types/TaskTypes'; 
+import { TaskInterface, NewTask } from '../types/TaskTypes'; 
 
 export type Action =
+  | { type: 'INITIALIZE'; payload: TaskInterface[] }
   | { type: 'TOGGLE_COMPLETED'; id: number }
   | { type: 'TOGGLE_DAY'; id: number }
   | { type: 'TOGGLE_WEEK'; id: number }
   | { type: 'DELETE_TASK'; id: number }
-  | { type: 'ADD_TASK'; payload: { 
-      name: string, 
-      parentId: number, 
-      recurringOptions: {
-        isRecurring: boolean, 
-        selectedDays: string, 
-        timesPerDay: string
-        } 
-      }, 
-      inScopeDay: boolean;
-      inScopeWeek: boolean;
-    };
+  | { type: 'ADD_TASK'; payload: NewTask }
 
 const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {
   const directChildren = tasks.filter(task => task.parentId === taskId);
@@ -40,6 +30,8 @@ const findParentTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[
 
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
   switch (action.type) {
+    case 'INITIALIZE':
+      return action.payload;
     case 'TOGGLE_COMPLETED':
       const taskForCompleted = state.find((task) => task.id === action.id);
 
@@ -128,8 +120,6 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
         completed: false,
         recurringOptions,
         depth,
-        inScopeDay: action.inScopeDay !== undefined ? action.inScopeDay : false,
-        inScopeWeek: parentTaskForAdd ? parentTaskForAdd.inScopeWeek : false,
       };
     
       return [...state, newTask];
