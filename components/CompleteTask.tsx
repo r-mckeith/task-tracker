@@ -22,9 +22,9 @@ const CompleteTask: React.FC<IconProps> = ({
   return (
       <View>
         <MaterialCommunityIcons 
-          name={completed ? "checkbox-marked-circle-outline" : "checkbox-blank-circle-outline"} 
+          name={completed ? "radiobox-marked" : "radiobox-blank"} 
           size={24} 
-          color={completed ? 'green' : 'black'}
+          color={completed ? 'blue' : 'black'}
           onPress={handleToggleCompleted}
         />
       </View>

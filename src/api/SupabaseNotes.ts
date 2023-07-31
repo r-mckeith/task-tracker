@@ -8,8 +8,6 @@ export const getNotes = async () => {
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 
   return data || [];
@@ -23,8 +21,6 @@ export const addNote = async (note: NewNote) => {
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 };
 
@@ -36,8 +32,6 @@ export const editNote = async (noteId: number, updatedFields: Partial<NewNote>) 
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 };
 
@@ -49,7 +43,5 @@ export const deleteNote = async (noteId: number) => {
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 };

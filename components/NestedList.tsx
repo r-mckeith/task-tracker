@@ -11,6 +11,7 @@ interface NestedListProps {
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
+  console.log(taskProps)
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -26,6 +27,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
   const renderTasks = (parentId: number | null) => {
     return taskProps
       .filter((task) => task.parentId === parentId)
+      .sort((a, b) => a.id - b.id)
       .map((task, index) => (
         <View 
           key={task.id} 
@@ -49,10 +51,8 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
                 }, 
               })
             }
-            onToggleCompleted={() => dispatch({ type: 'TOGGLE_COMPLETED', id: task.id })} 
-            onToggleDay={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
+            onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
             onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-            // onDelete={() => dispatch({ type: 'DELETE_TASK', id: task.id })}
           />
           {renderTasks(task.id)}
         </View>
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F5F5F5', // Light grey color for the background
+    backgroundColor: '#F5F5F5',
   },
   input: {
     height: 40,
@@ -78,9 +78,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     padding: 10,
-    borderRadius: 10, // Rounded corners
-    backgroundColor: 'white', // White color for input
-    shadowColor: "#000", // Shadow for depth
+    borderRadius: 10,
+    backgroundColor: 'white',
+    shadowColor: "#000",
     shadowOffset: {
         width: 0,
         height: 2,
@@ -90,22 +90,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   headerSpacing: {
-    marginTop: 20, // or any space you want
+    marginTop: 20,
   },
   subtask: {
     marginLeft: 20,
-    marginTop: 10, // Give some space for each subtask
-    padding: 10,
-    backgroundColor: 'white', // White color for subtask
-    borderRadius: 10, // Rounded corners
-    shadowColor: "#000", // Shadow for depth
-    shadowOffset: {
-        width: 0,
-        height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderRadius: 10,
   },
 });
 

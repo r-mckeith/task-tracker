@@ -53,9 +53,8 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Day" component={DailyStack} />
-        <Tab.Screen name="Week" component={WeeklyScreen} />
-        <Tab.Screen name="Plan" component={PlanningScreen} />
+        <Tab.Screen name="Do" component={DailyStack} />
+        <Tab.Screen name="Plan" component={WeeklyScreen} />
         <Tab.Screen name="Review" component={ReviewScreen} />
       </Tab.Navigator>
     );

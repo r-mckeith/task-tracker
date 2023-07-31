@@ -31,9 +31,9 @@ const ScopeTask: React.FC<ScopeProps> = ({
   return (
     <View>
       <MaterialCommunityIcons 
-        name={inScope ? "toggle-switch" : "toggle-switch-off"} 
+        name={inScope ? "radiobox-marked" : "radiobox-blank"} 
         size={24} 
-        color={color}
+        color={inScope ? 'blue' : 'black'}
         onPress={handleToggleScope}
       />
     </View>

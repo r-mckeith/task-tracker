@@ -4,7 +4,7 @@ import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
-import { deleteTask } from '../src/api/SupabaseTasks';
+import { deleteTask, toggleCompleted } from '../src/api/SupabaseTasks';
 import CompleteTask from './CompleteTask';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
@@ -20,11 +20,9 @@ const Task: React.FC<TaskInterface> = ({
   depth,
   planningScreen,
   currentTab,
-  onPress,
   onToggleCompleted,
   onToggleDay,
   onToggleWeek,
-  // onDelete,
 }) => {
 
   const swipeableRow = useRef<Swipeable | null>(null);
@@ -52,6 +50,18 @@ const Task: React.FC<TaskInterface> = ({
         dispatch({ type: 'DELETE_TASK', id });
       } catch (error) {
         console.error('Failed to delete task:', error);
+      }
+    };
+
+  const handleToggleCompleted = async (
+    ) => {
+    
+      try {
+        await toggleCompleted(id, !completed);
+    
+        dispatch({ type: 'TOGGLE_COMPLETED', id });
+      } catch (error) {
+        console.error('Failed to toggle task:', error);
       }
     };
 
@@ -84,7 +94,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 1 && styles.objectiveLevel,
         depth === 2 && styles.goalLevel,
         depth === 3 && styles.taskLevel,
-        depth === 4 && styles.subtaskLevel,
+        depth >= 4 && styles.subtaskLevel,
       ]}>
       {parentId && planningScreen && 
         <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
@@ -99,7 +109,7 @@ const Task: React.FC<TaskInterface> = ({
             onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
           />
         }
-          <Text onPress={onPress} style={[styles.taskName]}>
+          <Text onPress={handleToggleCompleted} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
             {name}
           </Text>
           <AddTask parentId={id} depth={depth}/>
@@ -114,11 +124,15 @@ const styles = StyleSheet.create({
   taskContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
     padding: 10,
     backgroundColor: '#FFFFFF',
-    borderBottomColor: '#d3d3d3',
-    borderBottomWidth: 0.5,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
   taskName: {
     fontSize: 16,
@@ -126,6 +140,9 @@ const styles = StyleSheet.create({
     flex: 1,
     color: '#333',
   },
+  completedTask: {
+    textDecorationLine: 'line-through',
+},
   deleteText: {
     color: 'white',
     fontSize: 16,
@@ -133,8 +150,10 @@ const styles = StyleSheet.create({
   },
   sectionLevel: {
     paddingLeft: 5,
-    borderLeftColor: '#d8d8d8',
+    borderLeftColor: '#4780E6',
     borderLeftWidth: 2,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   objectiveLevel: {
     paddingLeft: 10,
@@ -162,17 +181,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     padding: 15,
-    height: '100%',
+    height: '75%',
   },
   deleteButton: {
-    backgroundColor: '#b22222',
-    marginRight: 10,
+    backgroundColor: '#EE4B60',
   },
   addNoteButton: {
     backgroundColor: '#696969',
     fontSize: 16,
     fontWeight: '500',
-    marginLeft: 10,
   },
   editButton: {
     color: 'white',
@@ -181,8 +198,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
-
-
 
 export default Task;

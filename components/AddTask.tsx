@@ -75,7 +75,7 @@ const handleAddTask = async (
   return (
     <View>
      <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
-      <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#000" />
+      <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#767577" />
     </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   addButton: {
-    backgroundColor: '#4CAF50',
     borderRadius: 25, 
     padding: 2,
     elevation: 2,

@@ -8,8 +8,6 @@ export const getTasks = async () => {
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 
   return data || [];
@@ -35,8 +33,6 @@ export const editTask = async (taskId: number, updatedFields: Partial<NewTask>) 
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 };
 
@@ -48,7 +44,16 @@ export const deleteTask = async (taskId: number) => {
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
+  }
+};
+
+export const toggleCompleted = async (id: number, newCompletedStatus: boolean) => {
+  const { data, error } = await supabase
+    .from('tasks')
+    .update({ completed: newCompletedStatus })
+    .eq('id', id);
+
+  if (error) {
+    console.error(error);
   }
 };
