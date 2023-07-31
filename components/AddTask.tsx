@@ -8,6 +8,7 @@ import { addTask } from '../src/api/SupabaseTasks';
 const AddTask: React.FC<AddTaskProps> = ({
   parentId,
   depth,
+  currentTab,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
@@ -58,6 +59,8 @@ const handleAddTask = async (
       selectedDays: selectedDays,
       timesPerDay: timesPerDay,
     },
+    inScopeDay: currentTab === 'Daily' ? true : false,
+    inScopeWeek: currentTab === 'Daily' ? true : false,
   };
 
   try {

@@ -32,7 +32,7 @@ export default function HomeScreen() {
     <View style={[styles.container, { justifyContent: filteredTasks.length === 0 ? 'center' : 'flex-start' }]}>
       {filteredTasks.length > 0 &&
         <View style={styles.taskList}>
-          <FlatList taskProps={filteredTasks} planningScreen={true} />
+          <FlatList taskProps={filteredTasks} currentTab={'Daily'} />
         </View>
       }
       <View style={styles.addButtonContainer}>

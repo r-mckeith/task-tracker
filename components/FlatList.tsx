@@ -6,11 +6,10 @@ import Task from './Task'
 
 interface FlatListProps {
   taskProps: TaskInterface[];
-  planningScreen: boolean;
-  currentTab?: string;
+  currentTab: string;
 }
 
-const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTab}) => {
+const FlatList: React.FC<FlatListProps> = ({taskProps, currentTab}) => {
   const context = useContext(TaskContext);
 
   if (!context) {
@@ -28,7 +27,6 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, planningScreen, currentTa
       <View key={task.id}>
         <Task 
           {...task} 
-          planningScreen={planningScreen} 
           currentTab={currentTab}
           onAddTask={(name, parentId, recurringOptions) => 
             dispatch({ 

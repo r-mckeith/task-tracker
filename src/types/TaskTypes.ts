@@ -1,6 +1,7 @@
 export interface AddTaskProps {
   parentId: number;
   depth: number;
+  currentTab?: string;
 }
 
 export interface NewTask extends AddTaskProps {
@@ -10,6 +11,8 @@ export interface NewTask extends AddTaskProps {
     selectedDays?: string | null;
     timesPerDay?: string | null;
   };
+  inScopeDay?: boolean | null;
+  inScopeWeek?: boolean | null;
 }
 
 export interface TaskProps extends NewTask {
@@ -32,8 +35,8 @@ export interface TaskDataInterface {
     timesPerDay?: string | null;
   };
   depth: number;
-  inScopeDay?: boolean;
-  inScopeWeek?: boolean;
+  inScopeDay?: boolean | null;
+  inScopeWeek?: boolean | null;
   onAddTask?: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
   onAddNote?: (id: number, text: string, taskIdId: number) => void;
 }

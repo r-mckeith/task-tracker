@@ -109,7 +109,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
           return task;
         });
     case 'ADD_TASK':
-      const { name, parentId, recurringOptions } = action.payload;
+      const { name, parentId, recurringOptions, inScopeDay, inScopeWeek } = action.payload;
       const parentTaskForAdd = state.find((task) => task.id === parentId);
       const depth = parentTaskForAdd ? parentTaskForAdd.depth + 1 : 0;
     
@@ -120,6 +120,8 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
         completed: false,
         recurringOptions,
         depth,
+        inScopeDay,
+        inScopeWeek,
       };
     
       return [...state, newTask];

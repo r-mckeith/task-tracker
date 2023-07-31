@@ -4,8 +4,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 interface ScopeProps {
   id: number,
-  inScopeDay?: boolean;
-  inScopeWeek?: boolean;
+  inScopeDay?: boolean | null;
+  inScopeWeek?: boolean | null;
   currentTab?: string;
   onToggleDay: (id: number) => void;
   onToggleWeek: (id: number) => void;

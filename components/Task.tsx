@@ -102,7 +102,7 @@ const Task: React.FC<TaskInterface> = ({
       {parentId && !planningScreen && 
           <ScopeTask 
             id={id} 
-            inScopeDay={inScopeDay}
+            inScopeDay={inScopeDay ? inScopeDay : null}
             inScopeWeek={inScopeWeek}
             currentTab={currentTab}
             onToggleDay={onToggleDay ? onToggleDay : () => {}}
@@ -112,7 +112,7 @@ const Task: React.FC<TaskInterface> = ({
           <Text onPress={handleToggleCompleted} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
             {name}
           </Text>
-          <AddTask parentId={id} depth={depth}/>
+          <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
         </View>
       </Swipeable>  
       <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
