@@ -4,8 +4,7 @@ import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
-import { deleteTask, toggleCompleted } from '../src/api/SupabaseTasks';
-import CompleteTask from './CompleteTask';
+import { handleToggleCompleted, handleDelete } from '../helpers/taskHelpers';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
@@ -18,9 +17,7 @@ const Task: React.FC<TaskInterface> = ({
   inScopeDay,
   inScopeWeek,
   depth,
-  planningScreen,
   currentTab,
-  onToggleCompleted,
   onToggleDay,
   onToggleWeek,
 }) => {
@@ -41,35 +38,11 @@ const Task: React.FC<TaskInterface> = ({
 
   const { dispatch } = context;
 
-  const handleDelete = async (
-    ) => {
-    
-      try {
-        await deleteTask(id);
-    
-        dispatch({ type: 'DELETE_TASK', id });
-      } catch (error) {
-        console.error('Failed to delete task:', error);
-      }
-    };
-
-  const handleToggleCompleted = async (
-    ) => {
-    
-      try {
-        await toggleCompleted(id, !completed);
-    
-        dispatch({ type: 'TOGGLE_COMPLETED', id });
-      } catch (error) {
-        console.error('Failed to toggle task:', error);
-      }
-    };
-
   const renderRightActions = () => {
     return (
       parentId !== null && (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete()}>
+          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
             <MaterialCommunityIcons name="delete" size={30} color="white" />
             <Text style={styles.deleteText}>Delete</Text>
           </RectButton>
@@ -96,10 +69,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-      {parentId && planningScreen && 
-        <CompleteTask id={id} completed={completed} onToggleCompleted={onToggleCompleted ? onToggleCompleted : () => {}}/>
-      }
-      {parentId && !planningScreen && 
+      {parentId && currentTab !== "Daily" && 
           <ScopeTask 
             id={id} 
             inScopeDay={inScopeDay ? inScopeDay : null}
@@ -109,7 +79,7 @@ const Task: React.FC<TaskInterface> = ({
             onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
           />
         }
-          <Text onPress={handleToggleCompleted} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
+          <Text onPress={() => handleToggleCompleted(id, !completed, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
             {name}
           </Text>
           <AddTask parentId={id} depth={depth} currentTab={currentTab}/>

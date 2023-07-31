@@ -26,7 +26,7 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList taskProps={filteredTasks} planningScreen={false} currentTab={'Day'} />    
+      <FlatList taskProps={filteredTasks} currentTab={'Day'} />    
     </View>
   );
 }
