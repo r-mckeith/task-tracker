@@ -28,17 +28,6 @@ const FlatList: React.FC<FlatListProps> = ({taskProps, currentTab}) => {
         <Task 
           {...task} 
           currentTab={currentTab}
-          onAddTask={(name, parentId, recurringOptions) => 
-            dispatch({ 
-              type: 'ADD_TASK', 
-              payload: { 
-                name, 
-                parentId, 
-                depth: 0,
-                recurringOptions,
-              }, 
-            })
-          }
           onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
           onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
         />

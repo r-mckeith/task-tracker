@@ -36,24 +36,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task 
-            {...task} 
-            planningScreen={planningScreen} 
-            currentTab={currentTab}
-            onAddTask={(name, parentId, recurringOptions) => 
-              dispatch({ 
-                type: 'ADD_TASK', 
-                payload: { 
-                  name, 
-                  parentId, 
-                  depth: 0,
-                  recurringOptions,
-                }, 
-              })
-            }
-            onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
-            onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-          />
+          <Task {...task} currentTab={currentTab}/>
           {renderTasks(task.id)}
         </View>
       ));

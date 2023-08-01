@@ -46,6 +46,7 @@ export interface TaskInterface extends TaskDataInterface {
   onPress?: () => void;
   currentTab?: string;
   parentId: number;
+  id: number;
   onToggleCompleted?: (id: number) => void;
   onToggleDay?: (id: number) => void;
   onToggleWeek?: (id: number) => void;

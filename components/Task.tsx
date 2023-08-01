@@ -75,8 +75,6 @@ const Task: React.FC<TaskInterface> = ({
             inScopeDay={inScopeDay ? inScopeDay : null}
             inScopeWeek={inScopeWeek}
             currentTab={currentTab}
-            onToggleDay={onToggleDay ? onToggleDay : () => {}}
-            onToggleWeek={onToggleWeek ? onToggleWeek : () => {}}
           />
         }
           <Text onPress={() => handleToggleCompleted(id, !completed, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
