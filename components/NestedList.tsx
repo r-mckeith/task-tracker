@@ -10,9 +10,17 @@ interface NestedListProps {
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, currentTab}) => {
 
+  const findRootTasks = () => {
+    const allIds = new Set(taskProps.map(task => task.id));
+    return taskProps.filter(task => !task.parentId || !allIds.has(task.parentId));
+  };
+  
   const renderTasks = (parentId: number | null) => {
-    return taskProps
-      .filter((task) => task.parentId === parentId)
+    // Find root tasks if parentId is null, else find children of the current task
+    const tasksToRender = parentId === null ? findRootTasks() : taskProps.filter(task => task.parentId === parentId);
+    
+    // Sort and map through tasks to render them and their children (if any)
+    return tasksToRender
       .sort((a, b) => a.id - b.id)
       .map((task, index) => (
         <View 
@@ -27,6 +35,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, currentTab}) => {
         </View>
       ));
   };
+  
   
   return (
     <View style={styles.container}>

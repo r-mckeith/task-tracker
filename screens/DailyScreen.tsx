@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'
 import { TaskContext } from '../src/contexts/TaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
-import FlatList from '../components/FlatList';
+import NestedList from '../components/NestedList';
 
 export default function HomeScreen() {
   const context = useContext(TaskContext);
@@ -33,7 +33,7 @@ export default function HomeScreen() {
     <View style={[styles.container, { justifyContent: filteredTasks.length === 0 ? 'center' : 'flex-start' }]}>
       {filteredTasks.length > 0 &&
         <View style={styles.taskList}>
-          <FlatList taskProps={filteredTasks} currentTab={'Daily'} />
+          <NestedList taskProps={filteredTasks} currentTab={'Daily'} />
         </View>
       }
       <View style={styles.addButtonContainer}>

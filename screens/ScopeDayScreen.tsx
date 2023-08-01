@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes';
 import { TaskContext } from '../src/contexts/TaskContext';
-import FlatList from '../components/FlatList';
+import NestedList from '../components/NestedList';
 
 function HomeScreen() {
   const context = useContext(TaskContext);
@@ -26,7 +26,7 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList taskProps={filteredTasks} currentTab={'Day'} />    
+      <NestedList taskProps={filteredTasks} currentTab={'Day'} />    
     </View>
   );
 }
