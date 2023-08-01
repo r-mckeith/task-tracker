@@ -6,7 +6,7 @@ export type Action =
   | { type: 'TOGGLE_DAY'; id: number }
   | { type: 'TOGGLE_WEEK'; id: number }
   | { type: 'DELETE_TASK'; id: number }
-  | { type: 'ADD_TASK'; payload: NewTask }
+  | { type: 'ADD_TASK'; payload: TaskInterface }
 
 const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {
   const directChildren = tasks.filter(task => task.parentId === taskId);
@@ -108,23 +108,8 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
           }
           return task;
         });
-    case 'ADD_TASK':
-      const { name, parentId, recurringOptions, inScopeDay, inScopeWeek } = action.payload;
-      const parentTaskForAdd = state.find((task) => task.id === parentId);
-      const depth = parentTaskForAdd ? parentTaskForAdd.depth + 1 : 0;
-    
-      const newTask = {
-        id: state.length + 1,
-        name,
-        parentId,
-        completed: false,
-        recurringOptions,
-        depth,
-        inScopeDay,
-        inScopeWeek,
-      };
-    
-      return [...state, newTask];
+        case 'ADD_TASK':
+          return [...state, action.payload];
       
     case 'DELETE_TASK': {
         const childTasks = findChildTasks(action.id, state);

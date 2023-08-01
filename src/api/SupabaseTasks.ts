@@ -1,5 +1,7 @@
 import { NewTask } from '../types/TaskTypes'
 import { supabase } from './SupabaseClient'
+import { TaskInterface } from '../types/TaskTypes';
+
 
 export const getTasks = async () => {
   const { data, error } = await supabase
@@ -13,28 +15,27 @@ export const getTasks = async () => {
   return data || [];
 };
 
-export const addTask = async (task: NewTask) => {
+export async function addTask(newTask: NewTask): Promise<TaskInterface> {
   const { data, error } = await supabase
     .from('tasks')
-    .insert([task])
+    .insert([newTask])
+    .select();
+
 
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
+    throw new Error('Failed to add task');
   }
-};
 
-export const editTask = async (taskId: number, updatedFields: Partial<NewTask>) => {
-  const { data, error } = await supabase
-    .from('tasks')
-    .update(updatedFields)
-    .eq('id', taskId);
-
-  if (error) {
-    console.error(error);
+  if (!data || data.length === 0) {
+    throw new Error('No data returned after insert operation');
   }
-};
+
+  const task: TaskInterface = data[0]; // Extract the task from the data array
+
+  return task;
+}
+
 
 export const deleteTask = async (taskId: number) => {
   const { data, error } = await supabase

@@ -45,6 +45,7 @@ export interface TaskInterface extends TaskDataInterface {
   planningScreen?: boolean;
   onPress?: () => void;
   currentTab?: string;
+  parentId: number;
   onToggleCompleted?: (id: number) => void;
   onToggleDay?: (id: number) => void;
   onToggleWeek?: (id: number) => void;
