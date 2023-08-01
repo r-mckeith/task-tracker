@@ -1,28 +1,14 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { TaskContext } from '../src/contexts/TaskContext';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './Task';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
-  planningScreen: boolean;
   currentTab?: string;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
-  console.log(taskProps)
-  const context = useContext(TaskContext);
-
-  if (!context) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-  
-  const { dispatch } = context;
+const NestedList: React.FC<NestedListProps> = ({taskProps, currentTab}) => {
 
   const renderTasks = (parentId: number | null) => {
     return taskProps

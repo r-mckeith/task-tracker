@@ -42,7 +42,6 @@ export interface TaskDataInterface {
 }
 
 export interface TaskInterface extends TaskDataInterface {
-  planningScreen?: boolean;
   onPress?: () => void;
   currentTab?: string;
   parentId: number;

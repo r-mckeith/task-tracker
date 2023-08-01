@@ -12,7 +12,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import DailyScreen from './screens/DailyScreen';
-import PlanningScreen from './screens/PlanningScreen';
 import ReviewScreen from './screens/ReviewScreen';
 import WeeklyScreen from './screens/WeeklyScreen';
 import ScopeDayScreen from './screens/ScopeDayScreen';

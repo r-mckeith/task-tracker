@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TaskContext } from '../src/contexts/TaskContext';
-import { TaskInterface } from '../src/types/TaskTypes'
 import NestedList from '../components/NestedList';
 
 export default function HomeScreen() {
@@ -15,11 +14,11 @@ export default function HomeScreen() {
     );
   }
 
-  const { state, dispatch } = context;
+  const { state } = context;
 
   return (
     <View style={styles.container}>
-      <NestedList taskProps={state} planningScreen={true} />
+      <NestedList taskProps={state} />
     </View>
   );
 }

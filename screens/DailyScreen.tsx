@@ -19,6 +19,7 @@ export default function HomeScreen() {
   }
 
   const { state } = context;
+  
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
 
   useEffect(() => {

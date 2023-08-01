@@ -18,8 +18,6 @@ const Task: React.FC<TaskInterface> = ({
   inScopeWeek,
   depth,
   currentTab,
-  onToggleDay,
-  onToggleWeek,
 }) => {
 
   const swipeableRow = useRef<Swipeable | null>(null);
