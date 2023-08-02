@@ -1,32 +1,26 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { TaskContext } from '../src/contexts/TaskContext';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './Task';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
-  planningScreen: boolean;
-  currentTab?: string;
+  currentTab: string;
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, currentTab}) => {
-  console.log(taskProps)
-  const context = useContext(TaskContext);
+const NestedList: React.FC<NestedListProps> = ({taskProps, currentTab}) => {
 
-  if (!context) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+  const findRootTasks = () => {
+    const allIds = new Set(taskProps.map(task => task.id));
+    return taskProps.filter(task => !task.parentId || !allIds.has(task.parentId));
+  };
   
-  const { dispatch } = context;
-
   const renderTasks = (parentId: number | null) => {
-    return taskProps
-      .filter((task) => task.parentId === parentId)
+    // Find root tasks if parentId is null, else find children of the current task
+    const tasksToRender = parentId === null ? findRootTasks() : taskProps.filter(task => task.parentId === parentId);
+    
+    // Sort and map through tasks to render them and their children (if any)
+    return tasksToRender
       .sort((a, b) => a.id - b.id)
       .map((task, index) => (
         <View 
@@ -36,24 +30,7 @@ const NestedList: React.FC<NestedListProps> = ({taskProps, planningScreen, curre
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task 
-            {...task} 
-            planningScreen={planningScreen} 
-            currentTab={currentTab}
-            onAddTask={(name, parentId, recurringOptions) => 
-              dispatch({ 
-                type: 'ADD_TASK', 
-                payload: { 
-                  name, 
-                  parentId, 
-                  depth: 0,
-                  recurringOptions,
-                }, 
-              })
-            }
-            onToggleDay={() => dispatch({ type: 'TOGGLE_DAY', id: task.id })} 
-            onToggleWeek={() => dispatch({ type: 'TOGGLE_WEEK', id: task.id })} 
-          />
+          <Task {...task} currentTab={currentTab}/>
           {renderTasks(task.id)}
         </View>
       ));

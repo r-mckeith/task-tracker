@@ -33,9 +33,9 @@ const AddTask: React.FC<AddTaskProps> = ({
       case 0:
         return 'Section';
       case 1:
-        return 'Objective';
-      case 2:
         return 'Goal';
+      case 2:
+        return 'Objective';
       case 3:
         return 'Task';
       default:
@@ -43,37 +43,40 @@ const AddTask: React.FC<AddTaskProps> = ({
     }
   }
 
-const handleAddTask = async (
-  newTaskName: string,
-  isRecurring: boolean | null = null,
-  selectedDays: string | null = null,
-  timesPerDay: string | null = null,
-) => {
-  // Create a new task object
-  const newTask: NewTask = {
-    name: newTaskName,
-    parentId: parentId,
-    depth: depth + 1,
-    recurringOptions: {
-      isRecurring: isRecurring,
-      selectedDays: selectedDays,
-      timesPerDay: timesPerDay,
-    },
-    inScopeDay: currentTab === 'Daily' ? true : false,
-    inScopeWeek: currentTab === 'Daily' ? true : false,
+  const handleAddTask = async (
+    newTaskName: string,
+    isRecurring: boolean | null = null,
+    selectedDays: string | null = null,
+    timesPerDay: string | null = null,
+  ) => {
+    // Create a new task object
+    const newTask: NewTask = {
+      name: newTaskName,
+      parentId: parentId,
+      depth: depth + 1,
+      recurringOptions: {
+        isRecurring: isRecurring,
+        selectedDays: selectedDays,
+        timesPerDay: timesPerDay,
+      },
+      inScopeDay: currentTab === 'Daily' ? true : false,
+      inScopeWeek: currentTab === 'Daily' ? true : false,
+    };
+  
+    try {
+      // Wait for the server to respond with the created task
+      const createdTask = await addTask(newTask);
+  
+      // Dispatch the created task to your state
+      dispatch({ type: 'ADD_TASK', payload: createdTask });
+      setNewTaskName('');
+      setIsRecurring(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error('Failed to add task:', error);
+    }
   };
-
-  try {
-    await addTask(newTask);
-
-    dispatch({ type: 'ADD_TASK', payload: newTask });
-    setNewTaskName('');
-    setIsRecurring(false);
-    setShowModal(false);
-  } catch (error) {
-    console.error('Failed to add task:', error);
-  }
-};
+  
 
   return (
     <View>

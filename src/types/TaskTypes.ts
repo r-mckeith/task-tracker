@@ -42,12 +42,18 @@ export interface TaskDataInterface {
 }
 
 export interface TaskInterface extends TaskDataInterface {
-  planningScreen?: boolean;
   onPress?: () => void;
   currentTab?: string;
+  parentId: number;
+  id: number;
   onToggleCompleted?: (id: number) => void;
   onToggleDay?: (id: number) => void;
   onToggleWeek?: (id: number) => void;
   onDelete?: (id: number) => void;
   subTasks?: any;
 }
+
+type UseTaskContextReturn = {
+  loading: boolean;
+  state: TaskInterface[] | null;
+};

@@ -1,14 +1,17 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTaskContext } from '../src/contexts/UseTaskContext';
+import { TaskContext } from '../src/contexts/TaskContext';
+import { handleToggleScopeforDay, handleToggleScopeforWeek } from '../helpers/taskHelpers';
+
+
 
 interface ScopeProps {
   id: number,
   inScopeDay?: boolean | null;
   inScopeWeek?: boolean | null;
   currentTab?: string;
-  onToggleDay: (id: number) => void;
-  onToggleWeek: (id: number) => void;
 }
 
 const ScopeTask: React.FC<ScopeProps> = ({
@@ -16,17 +19,36 @@ const ScopeTask: React.FC<ScopeProps> = ({
   inScopeDay,
   inScopeWeek,
   currentTab,
-  onToggleDay,
-  onToggleWeek,
 }) => {
+
+  const context = useContext(TaskContext);
+
+  const { loading, state } = useTaskContext();
+
+  if (loading || !state) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!context) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  const { dispatch } = context;
+
   
   const handleToggleScope = () => {
-    currentTab === 'Day' ? onToggleDay(id) : onToggleWeek(id);
+    currentTab === 'Week' ? handleToggleScopeforDay(id, !inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, !inScopeWeek, state, dispatch);
   };
 
-  // Determine scope and color based on current tab
-  const inScope = currentTab === 'Day' ? inScopeDay : inScopeWeek;
-  const color = inScope ? 'green' : 'black';
+  const inScope = currentTab === 'Week' ? inScopeDay : inScopeWeek;
 
   return (
     <View>

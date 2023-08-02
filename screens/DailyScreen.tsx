@@ -1,16 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DoStackParamList } from '../src/types/StackTypes'
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'
-import { TaskContext } from '../src/contexts/TaskContext';
+import { useTaskContext } from '../src/contexts/UseTaskContext';
 import { TaskInterface } from '../src/types/TaskTypes'
-import FlatList from '../components/FlatList';
+import NestedList from '../components/NestedList';
 
 export default function HomeScreen() {
-  const context = useContext(TaskContext);
+  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
 
-  if (!context) {
+  const { loading, state } = useTaskContext();
+
+  if (loading || !state) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Loading...</Text>
@@ -18,25 +20,22 @@ export default function HomeScreen() {
     );
   }
 
-  const { state } = context;
-  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
-
   useEffect(() => {
     const tasks = state.filter(t => (t.recurringOptions?.isRecurring || t.inScopeDay));
     setFilteredTasks(tasks);
   }, [state]);
 
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList, 'Daily'>>();
+  const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
 
   return (
     <View style={[styles.container, { justifyContent: filteredTasks.length === 0 ? 'center' : 'flex-start' }]}>
       {filteredTasks.length > 0 &&
         <View style={styles.taskList}>
-          <FlatList taskProps={filteredTasks} currentTab={'Daily'} />
+          <NestedList taskProps={filteredTasks} currentTab={'Day'}/>
         </View>
       }
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ScopeDay')}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Week')}>
           <Text style={styles.addButtonText}>Add Tasks</Text>
         </TouchableOpacity>
       </View>
