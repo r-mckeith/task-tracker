@@ -5,7 +5,7 @@ import Task from './Task';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
-  currentTab?: string;
+  currentTab: string;
 }
 
 const NestedList: React.FC<NestedListProps> = ({taskProps, currentTab}) => {

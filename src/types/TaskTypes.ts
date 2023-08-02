@@ -52,3 +52,8 @@ export interface TaskInterface extends TaskDataInterface {
   onDelete?: (id: number) => void;
   subTasks?: any;
 }
+
+type UseTaskContextReturn = {
+  loading: boolean;
+  state: TaskInterface[] | null;
+};

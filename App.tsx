@@ -1,20 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, SafeAreaView, Text } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-url-polyfill/auto';
-import { useState, useEffect } from 'react';
 import { supabase } from './src/api/SupabaseClient';
 import Auth from './components/Auth';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import TaskContextProvider from './src/contexts/TaskContextProvider';
 import NoteContextProvider from './src/contexts/NoteContextProvider';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
 import DailyScreen from './screens/DailyScreen';
-import ReviewScreen from './screens/ReviewScreen';
-import WeeklyScreen from './screens/WeeklyScreen';
-import ScopeDayScreen from './screens/ScopeDayScreen';
+import QuarterlyScreen from './screens/QuarterlyScreen';
+import WeeklyScreen from './screens/WeeklyScreen'
 
 
 export default function App() {
@@ -30,17 +27,6 @@ export default function App() {
     })
   }, [])
 
-  const Stack = createStackNavigator();
-
-  function DailyStack() {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen name="Daily Screen" options={{ headerShown: false }} component={DailyScreen} />
-        <Stack.Screen name="ScopeDay" options={{ title: '' }} component={ScopeDayScreen} />
-      </Stack.Navigator>
-    );
-  }
-
   const Tab = createBottomTabNavigator();
  
   function MyTabs() {
@@ -52,9 +38,9 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Do" component={DailyStack} />
-        <Tab.Screen name="Plan" component={WeeklyScreen} />
-        <Tab.Screen name="Review" component={ReviewScreen} />
+        <Tab.Screen name="Day" component={DailyScreen}/>
+        <Tab.Screen name="Week" component={WeeklyScreen}/>
+        <Tab.Screen name="Quarter" component={QuarterlyScreen}/>
       </Tab.Navigator>
     );
   }

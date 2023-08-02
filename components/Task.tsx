@@ -34,7 +34,7 @@ const Task: React.FC<TaskInterface> = ({
     );
   }
 
-  const { dispatch } = context;
+  const { state, dispatch } = context;
 
   const renderRightActions = () => {
     return (
@@ -67,15 +67,15 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-      {parentId && currentTab !== "Daily" && 
+      {parentId && currentTab !== "Day" && 
           <ScopeTask 
             id={id} 
-            inScopeDay={inScopeDay ? inScopeDay : null}
+            inScopeDay={inScopeDay}
             inScopeWeek={inScopeWeek}
             currentTab={currentTab}
           />
         }
-          <Text onPress={() => handleToggleCompleted(id, !completed, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
+          <Text onPress={() => handleToggleCompleted(id, !completed, state, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
             {name}
           </Text>
           <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
