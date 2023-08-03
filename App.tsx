@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Text } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-url-polyfill/auto';
 import { supabase } from './src/api/SupabaseClient';
 import Auth from './components/Auth';
@@ -13,6 +14,18 @@ import DailyScreen from './screens/DailyScreen';
 import QuarterlyScreen from './screens/QuarterlyScreen';
 import WeeklyScreen from './screens/WeeklyScreen'
 
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function DayWeekStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Day" component={DailyScreen} options={{headerShown: false}} />
+      <Stack.Screen name="Week" component={WeeklyScreen} options={{title: 'Week'}}/>
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -27,8 +40,6 @@ export default function App() {
     })
   }, [])
 
-  const Tab = createBottomTabNavigator();
- 
   function MyTabs() {
     return (
       <Tab.Navigator
@@ -38,8 +49,8 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Day" component={DailyScreen}/>
-        <Tab.Screen name="Week" component={WeeklyScreen}/>
+        <Tab.Screen name="DayWeek" component={DayWeekStack} options={{title: 'Day'}}/>
+        <Tab.Screen name = "Week" component={WeeklyScreen}/>
         <Tab.Screen name="Quarter" component={QuarterlyScreen}/>
       </Tab.Navigator>
     );
@@ -50,12 +61,12 @@ export default function App() {
       <NoteContextProvider>
         <SafeAreaView style={styles.container}>
           <GestureHandlerRootView style={{flex: 1}}>
-          <View style={styles.container}>
-            {session && session.user ?  
-              <NavigationContainer>
-                <MyTabs />
-              </NavigationContainer> : 
-              <Auth />}
+            <View style={styles.container}>
+              {session && session.user ?  
+                <NavigationContainer>
+                  <MyTabs />
+                </NavigationContainer> : 
+                <Auth />}
             </View>
           </GestureHandlerRootView>
         </SafeAreaView>
