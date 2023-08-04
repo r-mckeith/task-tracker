@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { useTaskContext } from '../src/contexts/UseTaskContext';
+import { TaskInterface } from '../src/types/TaskTypes';
 import NestedList from '../components/NestedList';
 
 function HomeScreen() {
@@ -14,9 +15,16 @@ function HomeScreen() {
     );
   }
 
+  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+
+  useEffect(() => {
+    const tasks = state.filter(t => t.inScopeQuarter);
+    setFilteredTasks(tasks);
+  }, [state]);
+
   return (
     <View style={{flex: 1}}>
-      <NestedList taskProps={state} currentTab={'Quarter'} />    
+      <NestedList taskProps={filteredTasks} currentTab={'Quarter'} />    
     </View>
   );
 }
