@@ -1,15 +1,15 @@
 import React, {useContext, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
-import { handleToggleCompleted, handleDelete } from '../helpers/taskHelpers';
+import { handleDelete } from '../helpers/taskHelpers';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
 import PushTask from './PushTask'
+import CompleteTask from './CompleteTask';
 
 const Task: React.FC<TaskInterface> = ({
   id,
@@ -40,27 +40,28 @@ const Task: React.FC<TaskInterface> = ({
 
   const renderRightActions = () => {
     return (
-      parentId !== null && (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
-            <MaterialCommunityIcons name="delete" size={30} color="white" />
-            <Text style={styles.deleteText}>Delete</Text>
-          </RectButton>
-          
-          <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
-            {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
-            <MaterialCommunityIcons name="note-outline" size={30} color="white" />
-            <Text style={styles.deleteText}>Add Note</Text>
-          </RectButton>
-          {/* Add more buttons here */}
-        </View>
-      )
+      <View style={styles.rightActionContainer}>
+        <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
+          <MaterialCommunityIcons name="delete" size={30} color="white" />
+          <Text style={styles.deleteText}>Delete</Text>
+        </RectButton>
+        <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
+          {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
+          <MaterialCommunityIcons name="note-outline" size={30} color="white" />
+          <Text style={styles.deleteText}>Note</Text>
+        </RectButton>
+        <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
+          {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
+          <MaterialCommunityIcons name="note-outline" size={30} color="white" />
+          <Text style={styles.deleteText}>Push</Text>
+        </RectButton>
+      </View>
     );
   };
 
   return (
     <View>
-      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootRight={false}>     
+      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootLeft={false} rightThreshold={120}>     
         <View style={[
         styles.taskContainer, 
         depth === 0 && styles.sectionLevel, 
@@ -69,7 +70,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-      {parentId && (currentTab === "Week" || currentTab === 'Quarter') && 
+        {parentId && (currentTab === "Week" || currentTab === 'Quarter') && 
           <ScopeTask 
             id={id} 
             inScopeDay={inScopeDay}
@@ -77,40 +78,24 @@ const Task: React.FC<TaskInterface> = ({
             currentTab={currentTab}
           />
         }
-          <Text onPress={() => handleToggleCompleted(id, !completed, state, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
-            {name}
-          </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {currentTab !== 'ReviewDay' && 
-              <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
-            }
-            
-            <Menu>
-              <MenuTrigger>
-                <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={24} color="#767577" />
-              </MenuTrigger>
-              <MenuOptions>
-                <MenuOption onSelect={() => alert('Edit task')}>
-                  <Text style={styles.optionText}>Edit</Text>
-                </MenuOption>
-                <MenuOption onSelect={() => alert('Duplicate task')}>
-                  <Text style={styles.optionText}>Duplicate</Text>
-                </MenuOption>
-                {/* Add more options as needed */}
-              </MenuOptions>
-            </Menu>
-          </View>
-          {currentTab === 'ReviewDay' && !completed &&
-            <PushTask 
-              id={id} 
-              inScopeDay={inScopeDay}
-              inScopeWeek={inScopeWeek}
-              currentTab={currentTab}
-            />
-          }
+        <CompleteTask id={id} completed={completed} />
+        <Text style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
+          {name}
+        </Text>
+        {currentTab !== 'ReviewDay' && 
+          <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
+        }
+        <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
+        {currentTab === 'ReviewDay' && !completed &&
+          <PushTask 
+            id={id} 
+            inScopeDay={inScopeDay}
+            inScopeWeek={inScopeWeek}
+            currentTab={currentTab}
+          />
+        }
         </View>
       </Swipeable>  
-      <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
     </View>
   );
 };
@@ -119,15 +104,11 @@ const styles = StyleSheet.create({
   taskContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
     padding: 10,
+    height: 60,
+    borderRadius: 5,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
+    marginVertical: 5,
   },
   taskName: {
     fontSize: 16,
@@ -170,21 +151,23 @@ const styles = StyleSheet.create({
     borderLeftColor: '#787878',
     borderLeftWidth: 2,
   },
-  rightSwipeItem: {
+  rightActionContainer: {
     flexDirection: 'row',
+    height: 60,
+    width: 180,
+  },
+  rightSwipeItem: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    padding: 15,
-    height: '75%',
-  },
-  deleteButton: {
+    height: 60,
+    width: 60,
+    marginVertical: 5,
     backgroundColor: '#EE4B60',
   },
+  deleteButton: {},
   addNoteButton: {
     backgroundColor: '#696969',
-    fontSize: 16,
-    fontWeight: '500',
   },
   editButton: {
     color: 'white',

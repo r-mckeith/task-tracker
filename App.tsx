@@ -4,7 +4,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { StackScreenProps } from '@react-navigation/stack';
 import { MenuProvider } from 'react-native-popup-menu';
 import 'react-native-url-polyfill/auto';
 import { supabase } from './src/api/SupabaseClient';
@@ -12,17 +11,13 @@ import Auth from './components/Auth';
 import { Session } from '@supabase/supabase-js';
 import TaskContextProvider from './src/contexts/TaskContextProvider';
 import NoteContextProvider from './src/contexts/NoteContextProvider';
-import { DoStackParamList } from './src/types/StackTypes';
 import DailyScreen from './screens/DailyScreen';
 import ReviewDayScreen from './screens/ReviewDayScreen';
+import ReviewWeekScreen from './screens/ReviewWeekScreen';
+import ReviewQuarterScreen from './screens/ReviewQuarterScren';
 import QuarterlyScreen from './screens/QuarterlyScreen';
 import WeeklyScreen from './screens/WeeklyScreen'
 
-type ReviewDayScreenProps = StackScreenProps<DoStackParamList, 'ReviewDay'>;
-
-// const ReviewDayScreen: ComponentType<ReviewDayScreenProps> = ({ route }) => {
-//   // ...
-// }
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -46,6 +41,27 @@ export default function App() {
       <DailyStack.Navigator>
         <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ headerShown: false }}/>
         <DailyStack.Screen name="ReviewDay" component={ReviewDayScreen as ComponentType} options={{ title: '' }}/>
+        <DailyStack.Screen name="ScopeDay" component={WeeklyScreen as ComponentType} options={{ title: '' }}/>
+      </DailyStack.Navigator>
+    );
+  }
+
+  function WeeklyStackScreen() {
+    return (
+      <DailyStack.Navigator>
+        <DailyStack.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ headerShown: false }}/>
+        <DailyStack.Screen name="ReviewWeek" component={ReviewWeekScreen as ComponentType} options={{ title: '' }}/>
+        <DailyStack.Screen name="ScopeWeek" component={QuarterlyScreen as ComponentType} options={{ title: '' }}/>
+      </DailyStack.Navigator>
+    );
+  }
+
+  function QuarterlyStackScreen() {
+    return (
+      <DailyStack.Navigator>
+        <DailyStack.Screen name="QuarterlyScreen" component={QuarterlyScreen} options={{ headerShown: false }}/>
+        <DailyStack.Screen name="ReviewQuarter" component={ReviewQuarterScreen as ComponentType} options={{ title: '' }}/>
+        {/* <DailyStack.Screen name="ScopeWeek" component={QuarterlyScreen as ComponentType} options={{ title: '' }}/> */}
       </DailyStack.Navigator>
     );
   }
@@ -59,8 +75,8 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Quarter" component={QuarterlyScreen}/>
-        <Tab.Screen name="Week" component={WeeklyScreen}/>
+        <Tab.Screen name="Quarter" component={QuarterlyStackScreen}/>
+        <Tab.Screen name="Week" component={WeeklyStackScreen}/>
         <Tab.Screen name="Day" component={DailyStackScreen}/>
       </Tab.Navigator>
     );

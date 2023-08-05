@@ -1,8 +1,10 @@
-import { TaskInterface } from "./TaskTypes";
-
 export type DoStackParamList = {
   Daily: undefined;
   Week: undefined;
   Quarter: undefined;
-  ReviewDay: { tasks: TaskInterface[] };
+  ReviewDay: undefined;
+  ScopeDay: undefined;
+  ScopeWeek: undefined;
+  ReviewWeek: undefined;
+  ReviewQuarter: undefined;
 };

@@ -34,9 +34,12 @@ function HomeScreen() {
           <NestedList taskProps={filteredTasks} currentTab={'Week'}/>
         </View>
       }
-      <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Quarter')}>
+        <View style={styles.addButtonContainer}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ScopeWeek')}>
           <Text style={styles.addButtonText}>Add Tasks</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewWeek')}>
+          <Text style={styles.addButtonText}>Review</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -65,6 +68,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+    marginTop: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'
-import { DoStackParamList } from '../src/types/StackTypes'
-import { useTaskContext } from '../src/contexts/UseTaskContext';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes';
+import { useTaskContext } from '../src/contexts/UseTaskContext';
 import NestedList from '../components/NestedList';
 
-function HomeScreen() {
+
+
+
+
+export default function HomeScreen() {
+  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+
   const { loading, state } = useTaskContext();
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
 
   if (loading || !state) {
     return (
@@ -19,19 +22,21 @@ function HomeScreen() {
     );
   }
 
-  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
-
   useEffect(() => {
-    const tasks = state.filter(t => t.inScopeQuarter);
+    const tasks = state.filter(t => (t.recurringOptions?.isRecurring || t.inScopeWeek));
     setFilteredTasks(tasks);
   }, [state]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <NestedList taskProps={filteredTasks} currentTab={'Quarter'} />
+    <View style={[styles.container, { justifyContent: filteredTasks.length === 0 ? 'center' : 'flex-start' }]}>
+      {filteredTasks.length > 0 &&
+        <View style={styles.taskList}>
+          <NestedList taskProps={filteredTasks} currentTab={'ReviewWeek'}/>
+        </View>
+      }
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewQuarter')}>
-            <Text style={styles.addButtonText}>Review</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+          <Text style={styles.addButtonText}>Done</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -39,6 +44,13 @@ function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  taskList: {
+    flex: 1,
+  },
   addButtonContainer: {
     alignSelf: 'center',
     width: '90%',
@@ -64,5 +76,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default HomeScreen;

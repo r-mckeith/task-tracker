@@ -38,10 +38,10 @@ export default function HomeScreen() {
         </View>
       }
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Week')}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ScopeDay')}>
           <Text style={styles.addButtonText}>Add Tasks</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewDay', { tasks: filteredTasks })}>
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewDay')}>
           <Text style={styles.addButtonText}>Review</Text>
         </TouchableOpacity>
       </View>
