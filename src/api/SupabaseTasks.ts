@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns';
 import { NewTask } from '../types/TaskTypes'
 import { supabase } from './SupabaseClient'
 import { TaskInterface } from '../types/TaskTypes';
@@ -32,9 +33,7 @@ export const getTasks = async () => {
   return data || [];
 };
 
-export async function addTask(newTask: NewTask, newScope: any): Promise<TaskInterface> {
-  let task: TaskResponse;
-
+export async function addTask(newTask: NewTask): Promise<TaskInterface> {
   let { data: taskData, error: taskError } = await supabase
     .from('tasks')
     .insert([newTask])
@@ -45,42 +44,10 @@ export async function addTask(newTask: NewTask, newScope: any): Promise<TaskInte
     throw new Error('Failed to add task');
   }
 
-  if (!taskData || taskData.length === 0) {
+  if (!taskData) {
     throw new Error('No data returned after insert operation');
   } else {
-    task = taskData[0];
-  }
-
-  const taskId: number = Number(task.id);
-  const taskUserId: number = Number(task.userId);
-
-  let { data: scopeData, error: scopeError } = await supabase
-  .from('scopes')
-  .insert([{
-    taskId: taskId,
-    userId: taskUserId,
-    inScopeDay: newScope.inScopeDay ? new Date() : false,
-    inScopeWeek: newScope.inScopeWeek ? new Date() : false,
-    inScopeQuarter: newScope.inScopeQuarter ? new Date() : false,
-  }])
-  .select();
-
-  if (scopeError) {
-    console.error(scopeError);
-    throw new Error('Failed to create scope record');
-  }
-
-  if (scopeData && scopeData.length > 0) {
-    const completeTask: TaskInterface = { 
-      ...task, 
-      scope: scopeData[0],  // take the first element from the array
-      parentId: newTask.parentId, 
-      userId: newTask.userId,
-      id: taskId
-    };
-    return completeTask;
-  } else {
-    throw new Error('No data returned after scope creation');
+    return taskData[0];
   }
 }
 
@@ -177,42 +144,22 @@ export const toggleScopeForDay = async (id: number, newScope: boolean, tasks: Ta
 
   for (let task of childTasks) {
     await supabase
-      .from('scopes')
-      .insert([
-        { taskId: task.id, inScopeDay: newScope ? new Date() : false }
-      ]);
-    await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope })
+      .update({ inScopeDay: newScope ? new Date() : null })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
-      .from('scopes')
-      .insert([
-        { taskId: task.id, inScopeDay: newScope ? new Date() : false }
-      ]);
-    await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope })
+      .update({ inScopeDay: newScope ? new Date() : null })
       .eq('id', task.id);
   }
 
-  const { data, error } = await supabase
-    .from('scopes')
-    .insert([
-      { taskId: id, inScopeDay: newScope ? new Date() : false }
-    ]);
-
   await supabase
     .from('tasks')
-    .update({ inScopeDay: newScope })
+    .update({ inScopeDay: newScope ? new Date() : null })
     .eq('id', id);
-
-  if (error) {
-    console.error(error);
-  }
 };
 
 export const toggleScopeForWeek = async (id: number, newScope: boolean, tasks: TaskInterface[] = []) => {
@@ -221,40 +168,43 @@ export const toggleScopeForWeek = async (id: number, newScope: boolean, tasks: T
 
   for (let task of childTasks) {
     await supabase
-      .from('scopes')
-      .insert([
-        { taskId: task.id, inScopeWeek: newScope ? new Date() : false }
-      ]);
-    await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope })
+      .update({ inScopeWeek: newScope ? new Date() : null })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
-      .from('scopes')
-      .insert([
-        { taskId: task.id, inScopeWeek: newScope ? new Date() : false }
-      ]);
-    await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope })
+      .update({ inScopeWeek: newScope ? new Date() : null })
       .eq('id', task.id);
   }
 
-  const { data, error } = await supabase
-    .from('scopes')
-    .insert([
-      { taskId: id, inScopeWeek: newScope ? new Date() : false }
-    ]);
-
   await supabase
     .from('tasks')
-    .update({ inScopeWeek: newScope })
+    .update({ inScopeWeek: newScope ? new Date() : null })
+    .eq('id', id);
+};
+
+export const pushDay = async (id: number) => {
+  const tomorrow = addDays(new Date(), 1); // tomorrow's date
+
+  const { data: taskData, error: taskError } = await supabase
+    .from('tasks')
+    .update({ inScopeDay: tomorrow })
     .eq('id', id);
 
-  if (error) {
-    console.error(error);
+  const { data: scopeData, error: scopeError } = await supabase
+    .from('scopes')
+    .insert([
+      { taskId: id, inScopeDay: new Date() }
+    ]);
+
+  if (taskError) {
+    console.error(taskError);
+  }
+
+  if (scopeError) {
+    console.error(scopeError);
   }
 };

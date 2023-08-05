@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { DoStackParamList } from '../src/types/StackTypes'
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack'
+import { TaskInterface } from '../src/types/TaskTypes';
 import { useTaskContext } from '../src/contexts/UseTaskContext';
-import { TaskInterface } from '../src/types/TaskTypes'
 import NestedList from '../components/NestedList';
+
+
+
+
 
 export default function HomeScreen() {
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
@@ -20,29 +22,21 @@ export default function HomeScreen() {
     );
   }
 
-  const today = new Date().toISOString().split('T')[0]
-
   useEffect(() => {
-    // @ts-ignore
     const tasks = state.filter(t => (t.recurringOptions?.isRecurring || t.inScopeDay));
     setFilteredTasks(tasks);
   }, [state]);
-
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
 
   return (
     <View style={[styles.container, { justifyContent: filteredTasks.length === 0 ? 'center' : 'flex-start' }]}>
       {filteredTasks.length > 0 &&
         <View style={styles.taskList}>
-          <NestedList taskProps={filteredTasks} currentTab={'Day'}/>
+          <NestedList taskProps={filteredTasks} currentTab={'ReviewDay'}/>
         </View>
       }
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('Week')}>
-          <Text style={styles.addButtonText}>Add Tasks</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewDay', { tasks: filteredTasks })}>
-          <Text style={styles.addButtonText}>Review</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+          <Text style={styles.addButtonText}>Done</Text>
         </TouchableOpacity>
       </View>
     </View>

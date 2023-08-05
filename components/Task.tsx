@@ -1,6 +1,7 @@
 import React, {useContext, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
@@ -8,6 +9,7 @@ import { handleToggleCompleted, handleDelete } from '../helpers/taskHelpers';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
+import PushTask from './PushTask'
 
 const Task: React.FC<TaskInterface> = ({
   id,
@@ -67,7 +69,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-      {parentId && currentTab !== "Day" && 
+      {parentId && (currentTab === "Week" || currentTab === 'Quarter') && 
           <ScopeTask 
             id={id} 
             inScopeDay={inScopeDay}
@@ -78,7 +80,34 @@ const Task: React.FC<TaskInterface> = ({
           <Text onPress={() => handleToggleCompleted(id, !completed, state, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
             {name}
           </Text>
-          <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {currentTab !== 'ReviewDay' && 
+              <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
+            }
+            
+            <Menu>
+              <MenuTrigger>
+                <MaterialCommunityIcons name="dots-horizontal-circle-outline" size={24} color="#767577" />
+              </MenuTrigger>
+              <MenuOptions>
+                <MenuOption onSelect={() => alert('Edit task')}>
+                  <Text style={styles.optionText}>Edit</Text>
+                </MenuOption>
+                <MenuOption onSelect={() => alert('Duplicate task')}>
+                  <Text style={styles.optionText}>Duplicate</Text>
+                </MenuOption>
+                {/* Add more options as needed */}
+              </MenuOptions>
+            </Menu>
+          </View>
+          {currentTab === 'ReviewDay' && !completed &&
+            <PushTask 
+              id={id} 
+              inScopeDay={inScopeDay}
+              inScopeWeek={inScopeWeek}
+              currentTab={currentTab}
+            />
+          }
         </View>
       </Swipeable>  
       <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
@@ -162,6 +191,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     marginLeft: 10,
+  },
+  optionText: {
+    color: 'black',
+    fontSize: 16,
   },
 });
 

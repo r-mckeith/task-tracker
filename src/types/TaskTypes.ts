@@ -19,8 +19,6 @@ export interface AddTaskProps {
 export interface TaskProps extends NewTask {
   id: number;
   completed?: boolean;
-  inScopeDay?: boolean;
-  inScopeWeek?: boolean;
   onAddSubTask?: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
   onAddNote?: (id: number, text: string, taskIdId: number) => void;
 }
@@ -75,14 +73,15 @@ export interface NewTask {
     selectedDays: string | null;
     timesPerDay: string | null;
   };
-  inScopeQuarter?: boolean;
+  inScopeQuarter?: Date | null;
+  inScopeDay?: Date | null;
+  inScopeWeek?: Date | null;
 }
 
 export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
   scope: Scope;
-  scopes?: Scope[];
-  inScopeDay?: boolean;
-  inScopeWeek?: boolean;
+  currentTab?: string;
+  completed?: boolean;
 }

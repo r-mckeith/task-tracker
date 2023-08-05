@@ -50,7 +50,6 @@ const AddTask: React.FC<AddTaskProps> = ({
     selectedDays: string | null = null,
     timesPerDay: string | null = null,
   ) => {
-    // Create two separate objects for task and scope
     const newTask: NewTask = {
       name: newTaskName,
       parentId: parentId,
@@ -61,18 +60,15 @@ const AddTask: React.FC<AddTaskProps> = ({
         selectedDays: selectedDays,
         timesPerDay: timesPerDay,
       },
-      inScopeQuarter: true,
+      inScopeQuarter: new Date(),
+      inScopeWeek: currentTab === 'Week' || currentTab === 'Day' ? new Date() : null,
+      inScopeDay: currentTab === 'Day' ? new Date() : null,
     };
+    console.log("NEW TASK", newTask)
   
-    const newScope = {
-      inScopeDay: currentTab === 'Daily',
-      inScopeWeek: currentTab === 'Daily' || currentTab === 'Weekly',
-      inScopeQuarter: true,
-    };
-    
     try {
-      // Pass the task and scope objects to the addTask function
-      const createdTask = await addTask(newTask, newScope);
+      // Pass the newTask object to the addTask function
+      const createdTask = await addTask(newTask);
       
       dispatch({ type: 'ADD_TASK', payload: createdTask });
       setNewTaskName('');
@@ -81,9 +77,7 @@ const AddTask: React.FC<AddTaskProps> = ({
     } catch (error) {
       console.error('Failed to add task:', error);
     }
-  };
-  
-  
+  };  
 
   return (
     <View>
