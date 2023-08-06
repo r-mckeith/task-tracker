@@ -50,6 +50,7 @@ const AddTask: React.FC<AddTaskProps> = ({
     selectedDays: string | null = null,
     timesPerDay: string | null = null,
   ) => {
+    const currentDate = new Date();
     const newTask: NewTask = {
       name: newTaskName,
       parentId: parentId,
@@ -60,9 +61,9 @@ const AddTask: React.FC<AddTaskProps> = ({
         selectedDays: selectedDays,
         timesPerDay: timesPerDay,
       },
-      inScopeQuarter: new Date(),
-      inScopeWeek: currentTab === 'Week' || currentTab === 'Day' ? new Date() : null,
-      inScopeDay: currentTab === 'Day' ? new Date() : null,
+      inScopeQuarter: currentDate,
+      inScopeWeek: isRecurring || currentTab === 'Week' || currentTab === 'Day' ? currentDate : null,
+      inScopeDay: isRecurring || currentTab === 'Day' ? currentDate : null,
     };
     console.log("NEW TASK", newTask)
   

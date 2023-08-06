@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack'
 import { DoStackParamList } from '../src/types/StackTypes'
 import { useTaskContext } from '../src/contexts/UseTaskContext';
@@ -8,6 +8,7 @@ import { TaskInterface } from '../src/types/TaskTypes';
 import NestedList from '../components/NestedList';
 
 function HomeScreen() {
+  const route = useRoute();
   const { loading, state } = useTaskContext();
   const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
 
@@ -26,13 +27,19 @@ function HomeScreen() {
     setFilteredTasks(tasks);
   }, [state]);
 
+  function showReviewButton() {
+    return route.name === 'QuarterlyScreen' && filteredTasks.length > 3
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <NestedList taskProps={filteredTasks} currentTab={'Quarter'} />
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewQuarter')}>
-            <Text style={styles.addButtonText}>Review</Text>
-        </TouchableOpacity>
+        {showReviewButton() && 
+          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('ReviewQuarter')}>
+              <Text style={styles.addButtonText}>Review</Text>
+          </TouchableOpacity>
+        }
       </View>
     </View>
   );

@@ -1,6 +1,7 @@
 import React, {useContext, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { useRoute } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
@@ -8,7 +9,6 @@ import { handleDelete } from '../helpers/taskHelpers';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
-import PushTask from './PushTask'
 import CompleteTask from './CompleteTask';
 
 const Task: React.FC<TaskInterface> = ({
@@ -21,7 +21,7 @@ const Task: React.FC<TaskInterface> = ({
   depth,
   currentTab,
 }) => {
-
+  const route = useRoute();
   const swipeableRow = useRef<Swipeable | null>(null);
 
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -42,22 +42,53 @@ const Task: React.FC<TaskInterface> = ({
     return (
       <View style={styles.rightActionContainer}>
         <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
-          <MaterialCommunityIcons name="delete" size={30} color="white" />
-          <Text style={styles.deleteText}>Delete</Text>
+        <MaterialCommunityIcons 
+                name="cancel" 
+                size={24} 
+                color="red"
+              />
         </RectButton>
-        <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
+        <RectButton style={[styles.rightSwipeItem, styles.unscopeButton]} onPress={() => 
           {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
-          <MaterialCommunityIcons name="note-outline" size={30} color="white" />
-          <Text style={styles.deleteText}>Note</Text>
+            <MaterialCommunityIcons 
+                name="arrow-top-right" 
+                size={24} 
+                color="#4CAF50"
+              />
         </RectButton>
-        <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
+        <RectButton style={[styles.rightSwipeItem, styles.pushButton]} onPress={() => 
           {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
-          <MaterialCommunityIcons name="note-outline" size={30} color="white" />
-          <Text style={styles.deleteText}>Push</Text>
+                 <MaterialCommunityIcons 
+                name="arrow-right" 
+                size={24} 
+                color="orange"
+              />
         </RectButton>
       </View>
     );
   };
+
+  function scopeTask() {
+    return parentId && route.name === 'ScopeDay' && !completed ||
+    parentId && route.name === 'ScopeWeek' && !completed ||
+    parentId && route.name === 'ScopeQuarter' && !completed
+  }
+
+  function completeTask() {
+    return parentId && route.name === 'DailyScreen' ||
+    parentId && route.name === 'ScopeDay' && completed ||
+    parentId && route.name === 'ReviewDay' ||
+    parentId && route.name === 'WeeklyScreen' ||
+    parentId && route.name === 'ScopeWeek' && completed ||
+    parentId && route.name === 'ReviewWeek' ||
+    parentId && route.name === 'QuarterlyScreen'
+  }
+
+  function addTask() {
+    return route.name === 'DailyScreen' ||
+    route.name === 'WeeklyScreen' ||
+    route.name === 'QuarterlyScreen'
+  }
 
   return (
     <View>
@@ -70,7 +101,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-        {parentId && (currentTab === "Week" || currentTab === 'Quarter') && 
+        {scopeTask() && 
           <ScopeTask 
             id={id} 
             inScopeDay={inScopeDay}
@@ -78,22 +109,16 @@ const Task: React.FC<TaskInterface> = ({
             currentTab={currentTab}
           />
         }
-        <CompleteTask id={id} completed={completed} />
+        {completeTask() && 
+          <CompleteTask id={id} completed={completed} />
+        }
         <Text style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
           {name}
         </Text>
-        {currentTab !== 'ReviewDay' && 
+        {addTask() && 
           <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
         }
         <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
-        {currentTab === 'ReviewDay' && !completed &&
-          <PushTask 
-            id={id} 
-            inScopeDay={inScopeDay}
-            inScopeWeek={inScopeWeek}
-            currentTab={currentTab}
-          />
-        }
         </View>
       </Swipeable>  
     </View>
@@ -165,9 +190,17 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#EE4B60',
   },
-  deleteButton: {},
   addNoteButton: {
-    backgroundColor: '#696969',
+    backgroundColor: '#a8a8a8',
+  },
+  deleteButton: {
+    backgroundColor: '#c0c0c0',
+  },
+  unscopeButton: {
+    backgroundColor: '#a8a8a8',
+  },
+  pushButton: {
+    backgroundColor: '#909090',
   },
   editButton: {
     color: 'white',

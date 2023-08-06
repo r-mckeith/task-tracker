@@ -38,7 +38,11 @@ export default function App() {
   // 3. Use the Stack navigator as a screen for the Tab
   function DailyStackScreen() {
     return (
-      <DailyStack.Navigator>
+      <DailyStack.Navigator
+        screenOptions={{
+          headerBackTitle: 'Today',
+          headerTintColor: '#767577',
+      }}>
         <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ headerShown: false }}/>
         <DailyStack.Screen name="ReviewDay" component={ReviewDayScreen as ComponentType} options={{ title: '' }}/>
         <DailyStack.Screen name="ScopeDay" component={WeeklyScreen as ComponentType} options={{ title: '' }}/>
@@ -48,7 +52,11 @@ export default function App() {
 
   function WeeklyStackScreen() {
     return (
-      <DailyStack.Navigator>
+      <DailyStack.Navigator
+        screenOptions={{
+          headerBackTitle: 'Week',
+          headerTintColor: '#767577',
+      }}>
         <DailyStack.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ headerShown: false }}/>
         <DailyStack.Screen name="ReviewWeek" component={ReviewWeekScreen as ComponentType} options={{ title: '' }}/>
         <DailyStack.Screen name="ScopeWeek" component={QuarterlyScreen as ComponentType} options={{ title: '' }}/>
@@ -75,9 +83,9 @@ export default function App() {
           },
         }}
       >
-        <Tab.Screen name="Quarter" component={QuarterlyStackScreen}/>
-        <Tab.Screen name="Week" component={WeeklyStackScreen}/>
-        <Tab.Screen name="Day" component={DailyStackScreen}/>
+        <Tab.Screen name="Quarter" component={QuarterlyStackScreen} options={{ headerShown: false }}/>
+        <Tab.Screen name="Week" component={WeeklyStackScreen} options={{ headerShown: false }}/>
+        <Tab.Screen name="Day" component={DailyStackScreen} options={{ headerShown: false }}/>
       </Tab.Navigator>
     );
   }
@@ -107,5 +115,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
+    marginTop: 20,
   },
 });

@@ -55,7 +55,7 @@ const ScopeTask: React.FC<ScopeProps> = ({
       <MaterialCommunityIcons 
         name={inScope ? "radiobox-marked" : "radiobox-blank"} 
         size={24} 
-        color={inScope ? 'blue' : 'black'}
+        color={inScope ? '#767577' : '#767577'}
         onPress={handleToggleScope}
       />
     </View>

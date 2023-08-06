@@ -55,12 +55,6 @@ const ScopeTask: React.FC<PushTaskProps> = ({
         color={'orange'}
         onPress={handlePushTask}
       />
-      <MaterialCommunityIcons 
-        name={"arrow-right-thick"} 
-        size={24} 
-        color={'black'}
-        onPress={handlePushTask}
-      />
     </View>
   );
 };
