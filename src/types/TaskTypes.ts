@@ -1,87 +1,60 @@
-export interface AddTaskProps {
-  parentId: number;
-  depth: number;
-  currentTab?: string;
+// Scope Options
+export interface RecurringOptions {
+  isRecurring?: boolean | null;
+  selectedDays?: string | null;
+  timesPerDay?: string | null;
 }
 
-// export interface NewTask extends AddTaskProps {
-//   name: string;
-//   recurringOptions?: {
-//     isRecurring?: boolean | null;
-//     selectedDays?: string | null;
-//     timesPerDay?: string | null;
-//   };
-//   inScopeDay?: boolean | null;
-//   inScopeWeek?: boolean | null;
-//   inScopeQuarter?: boolean | null;
-// }
-
-export interface TaskProps extends NewTask {
-  id: number;
-  completed?: boolean;
-  onAddSubTask?: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
-  onAddNote?: (id: number, text: string, taskIdId: number) => void;
-}
-
-export interface TaskDataInterface {
+// Main Task Data
+export interface TaskData {
   id: number;
   name?: string;
   parentId?: number | null;
   completed?: boolean;
-  recurringOptions?: {
-    isRecurring?: boolean | null;
-    selectedDays?: string | null;
-    timesPerDay?: string | null;
-  };
+  recurringOptions?: RecurringOptions;
   depth: number;
   inScopeDay?: boolean | null;
   inScopeWeek?: boolean | null;
-  onAddTask?: (name: string, parentId: number, recurringOptions: {isRecurring: boolean, selectedDays: string, timesPerDay: string}) => void;
+  inScopeQuarter?: boolean | null;
+}
+
+// For Task Props
+export interface TaskProps extends TaskData {
+  onAddTask?: (name: string, parentId: number, recurringOptions: RecurringOptions) => void;
   onAddNote?: (id: number, text: string, taskIdId: number) => void;
 }
 
-// export interface TaskInterface extends TaskDataInterface {
-//   onPress?: () => void;
-//   currentTab?: string;
-//   parentId: number;
-//   id: number;
-//   onToggleCompleted?: (id: number) => void;
-//   onToggleDay?: (id: number) => void;
-//   onToggleWeek?: (id: number) => void;
-//   onDelete?: (id: number) => void;
-//   subTasks?: any;
-// }
-
-type UseTaskContextReturn = {
-  loading: boolean;
-  state: TaskInterface[] | null;
-};
-
-export interface Scope {
-  inScopeDay: string | number | Date;
-  inScopeWeek: string | number | Date;
-  inScopeQuarter: string | number | Date;
-}
-
+// For New Task
 export interface NewTask {
   name: string;
   parentId: number;
   depth: number;
   userId: string;
-  recurringOptions: {
-    isRecurring: boolean | null;
-    selectedDays: string | null;
-    timesPerDay: string | null;
-  };
+  recurringOptions: RecurringOptions;
   inScopeQuarter?: Date | null;
   inScopeDay?: Date | null;
   inScopeWeek?: Date | null;
 }
 
+// Complete Task Interface
 export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
   scope: Scope;
   currentTab?: string;
   completed?: boolean;
+}
+
+// Scope Definition
+export interface Scope {
+  inScopeDay: string | number | Date;
+  inScopeWeek: string | number | Date;
+  inScopeQuarter: string | number | Date;
+}
+
+// Add Task Props
+export interface AddTaskProps {
+  parentId: number;
+  depth: number;
+  currentTab?: string;
 }
