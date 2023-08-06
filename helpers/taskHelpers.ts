@@ -1,4 +1,4 @@
-import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek } from '../src/api/SupabaseTasks';
+import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay } from '../src/api/SupabaseTasks';
 import { TaskInterface } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, dispatch: React.Dispatch<any>) => {
@@ -44,6 +44,22 @@ export const handleToggleScopeforWeek = async (id: number, inScope: boolean, tas
 
     dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: !inScope });
   }
+};
+
+export const handlePushTaskForDay = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+  dispatch({ type: 'PUSH_DAY', id });
+
+  try {
+    await pushDay(id);
+  } catch (error) {
+    console.error('Failed to push task:', error);
+
+    dispatch({ type: 'PUSH_DAY', id });
+  }
+};
+
+export const handlePushTaskForWeek = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+
 };
 
 export const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {

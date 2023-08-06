@@ -1,3 +1,4 @@
+import addDays from 'date-fns/addDays';
 import { TaskInterface } from '../types/TaskTypes'; 
 import { findChildTasks, findParentTasks } from '../../helpers/taskHelpers';
 
@@ -8,6 +9,7 @@ export type Action =
   | { type: 'TOGGLE_WEEK'; id: number }
   | { type: 'DELETE_TASK'; id: number }
   | { type: 'ADD_TASK'; payload: TaskInterface }
+  | { type: 'PUSH_DAY'; id: number }
 
   const updateScopeDay = (
     state: TaskInterface[],
@@ -23,21 +25,22 @@ export type Action =
     const ancestorsDay = findParentTasks(actionId, state);
     const siblingsDay = taskForDay.parentId ? state.filter(task => task.parentId === taskForDay.parentId) : [];
   
-    const newScopeDay = !taskForDay.inScopeDay;
+    const newScopeDay = taskForDay.inScopeDay ? null : new Date();
   
     return state.map((task) => {
       if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
         return { ...task, inScopeDay: newScopeDay };
       }
-      if (!newScopeDay && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
+      if (newScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
         return { ...task, inScopeDay: newScopeDay };
       }
-      if (newScopeDay && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
+      if (newScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
         return { ...task, inScopeDay: newScopeDay };
       }
       return task;
     });
   };
+  
   
   const updateScopeWeek = (
     state: TaskInterface[],
@@ -53,23 +56,22 @@ export type Action =
     const ancestorsWeek = findParentTasks(actionId, state);
     const siblingsWeek = taskForWeek.parentId ? state.filter(task => task.parentId === taskForWeek.parentId) : [];
   
-    const newScopeWeek = !taskForWeek.inScopeWeek;
-    const newScopeDayFromWeek = newScopeWeek ? taskForWeek.inScopeDay : false;
+    const newScopeWeek = taskForWeek.inScopeWeek ? null : new Date();
   
     return state.map((task) => {
       if (task.id === actionId || descendantsWeek.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeWeek: newScopeWeek, inScopeDay: newScopeDayFromWeek };
+        return { ...task, inScopeWeek: newScopeWeek };
       }
-      if (!newScopeWeek && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeWeek: newScopeWeek, inScopeDay: newScopeDayFromWeek };
+      if (newScopeWeek === null && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
+        return { ...task, inScopeWeek: newScopeWeek };
       }
-      if (newScopeWeek && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
+      if (newScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
         return { ...task, inScopeWeek: newScopeWeek };
       }
       return task;
     });
   };
-
+  
   const updateCompletedStatus = (
     state: TaskInterface[],
     actionId: number
@@ -99,6 +101,18 @@ export type Action =
       return task;
     });
   };
+
+  const pushTaskToNextDay = (
+    state: TaskInterface[],
+    actionId: number
+  ): TaskInterface[] => {
+    return state.map((task) => {
+      if (task.id === actionId) {
+        return { ...task, inScopeDay: addDays(new Date(), 1) };
+      }
+      return task;
+    });
+  };
   
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
   switch (action.type) {
@@ -117,6 +131,8 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
       const allChildIds = childTasks.map(task => task.id);
       return state.filter(task => task.id !== action.id && !allChildIds.includes(task.id));
     }
+    case 'PUSH_DAY':
+      return pushTaskToNextDay(state, action.id);
     default:
       return state;
   }

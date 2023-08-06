@@ -1,13 +1,15 @@
 import React, {useContext, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { useRoute } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TaskInterface } from '../src/types/TaskTypes'
 import { TaskContext } from '../src/contexts/TaskContext';
-import { handleToggleCompleted, handleDelete } from '../helpers/taskHelpers';
+import { handleDelete } from '../helpers/taskHelpers';
 import AddTask from './AddTask';
 import AddNote from './AddNote';
 import ScopeTask from './ScopeTask'
+import CompleteTask from './CompleteTask';
 
 const Task: React.FC<TaskInterface> = ({
   id,
@@ -19,7 +21,7 @@ const Task: React.FC<TaskInterface> = ({
   depth,
   currentTab,
 }) => {
-
+  const route = useRoute();
   const swipeableRow = useRef<Swipeable | null>(null);
 
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -38,27 +40,59 @@ const Task: React.FC<TaskInterface> = ({
 
   const renderRightActions = () => {
     return (
-      parentId !== null && (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
-            <MaterialCommunityIcons name="delete" size={30} color="white" />
-            <Text style={styles.deleteText}>Delete</Text>
-          </RectButton>
-          
-          <RectButton style={[styles.rightSwipeItem, styles.addNoteButton]} onPress={() => 
-            {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
-            <MaterialCommunityIcons name="note-outline" size={30} color="white" />
-            <Text style={styles.deleteText}>Add Note</Text>
-          </RectButton>
-          {/* Add more buttons here */}
-        </View>
-      )
+      <View style={styles.rightActionContainer}>
+        <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
+        <MaterialCommunityIcons 
+                name="cancel" 
+                size={24} 
+                color="red"
+              />
+        </RectButton>
+        <RectButton style={[styles.rightSwipeItem, styles.unscopeButton]} onPress={() => 
+          {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
+            <MaterialCommunityIcons 
+                name="arrow-top-right" 
+                size={24} 
+                color="#4CAF50"
+              />
+        </RectButton>
+        <RectButton style={[styles.rightSwipeItem, styles.pushButton]} onPress={() => 
+          {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
+                 <MaterialCommunityIcons 
+                name="arrow-right" 
+                size={24} 
+                color="orange"
+              />
+        </RectButton>
+      </View>
     );
   };
 
+  function scopeTask() {
+    return parentId && route.name === 'ScopeDay' && !completed ||
+    parentId && route.name === 'ScopeWeek' && !completed ||
+    parentId && route.name === 'ScopeQuarter' && !completed
+  }
+
+  function completeTask() {
+    return parentId && route.name === 'DailyScreen' ||
+    parentId && route.name === 'ScopeDay' && completed ||
+    parentId && route.name === 'ReviewDay' ||
+    parentId && route.name === 'WeeklyScreen' ||
+    parentId && route.name === 'ScopeWeek' && completed ||
+    parentId && route.name === 'ReviewWeek' ||
+    parentId && route.name === 'QuarterlyScreen'
+  }
+
+  function addTask() {
+    return route.name === 'DailyScreen' ||
+    route.name === 'WeeklyScreen' ||
+    route.name === 'QuarterlyScreen'
+  }
+
   return (
     <View>
-      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootRight={false}>     
+      <Swipeable ref={swipeableRow} renderRightActions={renderRightActions} overshootLeft={false} rightThreshold={120}>     
         <View style={[
         styles.taskContainer, 
         depth === 0 && styles.sectionLevel, 
@@ -67,7 +101,7 @@ const Task: React.FC<TaskInterface> = ({
         depth === 3 && styles.taskLevel,
         depth >= 4 && styles.subtaskLevel,
       ]}>
-      {parentId && currentTab !== "Day" && 
+        {scopeTask() && 
           <ScopeTask 
             id={id} 
             inScopeDay={inScopeDay}
@@ -75,13 +109,18 @@ const Task: React.FC<TaskInterface> = ({
             currentTab={currentTab}
           />
         }
-          <Text onPress={() => handleToggleCompleted(id, !completed, state, dispatch)} style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
-            {name}
-          </Text>
+        {completeTask() && 
+          <CompleteTask id={id} completed={completed} />
+        }
+        <Text style={[styles.taskName, (parentId !== null && completed) && styles.completedTask]}>
+          {name}
+        </Text>
+        {addTask() && 
           <AddTask parentId={id} depth={depth} currentTab={currentTab}/>
+        }
+        <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
         </View>
       </Swipeable>  
-      <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
     </View>
   );
 };
@@ -90,15 +129,11 @@ const styles = StyleSheet.create({
   taskContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
     padding: 10,
+    height: 60,
+    borderRadius: 5,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
+    marginVertical: 5,
   },
   taskName: {
     fontSize: 16,
@@ -141,27 +176,41 @@ const styles = StyleSheet.create({
     borderLeftColor: '#787878',
     borderLeftWidth: 2,
   },
-  rightSwipeItem: {
+  rightActionContainer: {
     flexDirection: 'row',
+    height: 60,
+    width: 180,
+  },
+  rightSwipeItem: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-    padding: 15,
-    height: '75%',
-  },
-  deleteButton: {
+    height: 60,
+    width: 60,
+    marginVertical: 5,
     backgroundColor: '#EE4B60',
   },
   addNoteButton: {
-    backgroundColor: '#696969',
-    fontSize: 16,
-    fontWeight: '500',
+    backgroundColor: '#a8a8a8',
+  },
+  deleteButton: {
+    backgroundColor: '#c0c0c0',
+  },
+  unscopeButton: {
+    backgroundColor: '#a8a8a8',
+  },
+  pushButton: {
+    backgroundColor: '#909090',
   },
   editButton: {
     color: 'white',
     fontSize: 16,
     fontWeight: '500',
     marginLeft: 10,
+  },
+  optionText: {
+    color: 'black',
+    fontSize: 16,
   },
 });
 

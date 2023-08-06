@@ -18,7 +18,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <NestedList taskProps={state} />
+      <NestedList taskProps={state} currentTab={'Planning'} />
     </View>
   );
 }

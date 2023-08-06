@@ -3,18 +3,18 @@ import { View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTaskContext } from '../src/contexts/UseTaskContext';
 import { TaskContext } from '../src/contexts/TaskContext';
-import { handleToggleScopeforDay, handleToggleScopeforWeek } from '../helpers/taskHelpers';
+import { handlePushTaskForDay, handlePushTaskForWeek } from '../helpers/taskHelpers';
 
 
 
-interface ScopeProps {
+interface PushTaskProps {
   id: number,
   inScopeDay?: Date | null;
   inScopeWeek?: Date | null;
   currentTab?: string;
 }
 
-const ScopeTask: React.FC<ScopeProps> = ({
+const ScopeTask: React.FC<PushTaskProps> = ({
   id,
   inScopeDay,
   inScopeWeek,
@@ -43,20 +43,17 @@ const ScopeTask: React.FC<ScopeProps> = ({
 
   const { dispatch } = context;
 
-  
-  const handleToggleScope = () => {
-    currentTab === 'Week' ? handleToggleScopeforDay(id, !inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, !inScopeWeek, state, dispatch);
+  const handlePushTask = () => {
+    currentTab === 'ReviewDay' ? handlePushTaskForDay(id, !inScopeDay, state, dispatch) : handlePushTaskForWeek(id, !inScopeWeek, state, dispatch);
   };
-
-  const inScope = currentTab === 'Week' ? inScopeDay : inScopeWeek;
 
   return (
     <View>
       <MaterialCommunityIcons 
-        name={inScope ? "radiobox-marked" : "radiobox-blank"} 
+        name={"arrow-right"} 
         size={24} 
-        color={inScope ? '#767577' : '#767577'}
-        onPress={handleToggleScope}
+        color={'orange'}
+        onPress={handlePushTask}
       />
     </View>
   );

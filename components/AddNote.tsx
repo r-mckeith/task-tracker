@@ -55,9 +55,11 @@ const AddNote: React.FC<AddNoteProps> = ({
 
   return (
     <View>
-      {/* <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
-        <MaterialCommunityIcons name="notebook" size={24} color="#000" />
-      </TouchableOpacity> */}
+      <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
+        <View style={styles.iconCircle}>
+          <MaterialCommunityIcons name="menu" size={24} color="#767577" />
+        </View>
+      </TouchableOpacity>
       <Modal
         animationType="slide"
         transparent={true}
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   addButton: {
-    backgroundColor: '#4CAF50',
     borderRadius: 25, 
     padding: 2,
     elevation: 2,
@@ -146,6 +147,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 30,
     height: 30,
+  },
+  iconCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'black'
   },
 });
 

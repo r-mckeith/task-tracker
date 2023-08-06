@@ -18,6 +18,7 @@ const AddTask: React.FC<AddTaskProps> = ({
 
   const context = useContext(TaskContext);
 
+
   if (!context) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -49,25 +50,27 @@ const AddTask: React.FC<AddTaskProps> = ({
     selectedDays: string | null = null,
     timesPerDay: string | null = null,
   ) => {
-    // Create a new task object
+    const currentDate = new Date();
     const newTask: NewTask = {
       name: newTaskName,
       parentId: parentId,
       depth: depth + 1,
+      userId: '19ccea07-a8a2-4bde-a768-48bc9e8f775e',
       recurringOptions: {
         isRecurring: isRecurring,
         selectedDays: selectedDays,
         timesPerDay: timesPerDay,
       },
-      inScopeDay: currentTab === 'Daily' ? true : false,
-      inScopeWeek: currentTab === 'Daily' ? true : false,
+      inScopeQuarter: currentDate,
+      inScopeWeek: isRecurring || currentTab === 'Week' || currentTab === 'Day' ? currentDate : null,
+      inScopeDay: isRecurring || currentTab === 'Day' ? currentDate : null,
     };
+    console.log("NEW TASK", newTask)
   
     try {
-      // Wait for the server to respond with the created task
+      // Pass the newTask object to the addTask function
       const createdTask = await addTask(newTask);
-  
-      // Dispatch the created task to your state
+      
       dispatch({ type: 'ADD_TASK', payload: createdTask });
       setNewTaskName('');
       setIsRecurring(false);
@@ -75,8 +78,7 @@ const AddTask: React.FC<AddTaskProps> = ({
     } catch (error) {
       console.error('Failed to add task:', error);
     }
-  };
-  
+  };  
 
   return (
     <View>
