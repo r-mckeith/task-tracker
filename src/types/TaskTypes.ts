@@ -41,7 +41,6 @@ export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
   scope: Scope;
-  currentTab?: string;
   completed?: boolean;
 }
 
@@ -56,5 +55,17 @@ export interface Scope {
 export interface AddTaskProps {
   parentId: number;
   depth: number;
-  currentTab?: string;
 }
+
+// Review Actions
+export type Action = {
+  name: string;
+  size: number;
+  color: string;
+  actionType: ActionType;
+  onPress: () => void;
+};
+
+export type ActionType = 'delete' | 'complete';
+
+
