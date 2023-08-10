@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { TaskInterface, Action, ActionType } from '../../src/types/TaskTypes';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DoStackParamList } from '../../src/types/StackTypes';
 import styles from '../../styles/screens/reviewDayScreen'
 import NestedList from '../../components/list/NestedList';
-import ReviewModal from '../../components/modals/ReviewModal';
+import ReviewModal from '../../components/reviews/ReviewModal';
 import { addNote } from '../../src/api/SupabaseNotes';
 import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
 
@@ -43,8 +43,8 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
     moveToNextTask();
   };
 
-  const handleDelete = (task: TaskInterface) => {
-    handleDelete(task);
+  const handleDeleteTask = (task: TaskInterface) => {
+    handleDelete(task.id, dispatch);
     moveToNextTask();
   };
 
@@ -52,14 +52,7 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
     handleToggleScopeforDay(task.id, task.inScopeDay, filteredTasks, dispatch);
     moveToNextTask();
   }
-
-  // const handleToggleScope = async (id: number) => {
-  //   const inScope = reversedIncompleteTasks[currentTaskIndex]?.inScopeDay;
-  //   const newInScope = inScope ? null : new Date();
-  //   await handleToggleScopeforDay(id, newInScope, state, dispatch);
-  // };
   
-
   const handlePushTask = async (id: number, completed: boolean) => {
     await handlePushTaskForDay(id, completed, state, dispatch);
   };
@@ -98,8 +91,7 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
         visible={showModal}
         task={reversedIncompleteTasks[currentTaskIndex]}
         onComplete={handleComplete}
-        onDelete={handleDelete}
-        inScope={currentTask ? currentTask.inScopeDay : null}
+        onDelete={handleDeleteTask}
         onToggleScope={handleToggleScope}
         onPushTask={handlePushTask}
         onAddNote={handleAddNote}

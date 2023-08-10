@@ -8,7 +8,6 @@ import { Action, ActionType } from '../../src/types/TaskTypes';
 interface ReviewModalProps {
   visible: boolean;
   task: TaskInterface | null;
-  inScope: Date | null;
   onComplete: (task: TaskInterface) => void;
   onDelete: (task: TaskInterface) => void;
   onAddNote: (noteText: string, taskId: number) => void;
@@ -19,7 +18,6 @@ interface ReviewModalProps {
 const ReviewModal: React.FC<ReviewModalProps> = ({
   visible,
   task,
-  inScope,
   onComplete,
   onDelete,
   onAddNote,
