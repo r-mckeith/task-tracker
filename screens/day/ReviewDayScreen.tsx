@@ -48,6 +48,11 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
     moveToNextTask();
   };
 
+  const handleToggleScope = (task: TaskInterface) => {
+    handleToggleScopeforDay(task.id, task.inScopeDay, filteredTasks, dispatch);
+    moveToNextTask();
+  }
+
   // const handleToggleScope = async (id: number) => {
   //   const inScope = reversedIncompleteTasks[currentTaskIndex]?.inScopeDay;
   //   const newInScope = inScope ? null : new Date();
@@ -77,6 +82,8 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
     }
   };
 
+  const currentTask = reversedIncompleteTasks[currentTaskIndex];
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -92,8 +99,8 @@ export default function ReviewDayScreen({navigation, route}: ReviewDayScreenProp
         task={reversedIncompleteTasks[currentTaskIndex]}
         onComplete={handleComplete}
         onDelete={handleDelete}
-        // inScope={reversedIncompleteTasks[currentTaskIndex].inScopeDay}
-        // onToggleScope={handleToggleScope}
+        inScope={currentTask ? currentTask.inScopeDay : null}
+        onToggleScope={handleToggleScope}
         onPushTask={handlePushTask}
         onAddNote={handleAddNote}
       />

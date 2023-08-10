@@ -58,7 +58,7 @@ export const handleToggleCompleted = async (id: number, completed: boolean, task
   }
 };
 
-export const handleToggleScopeforDay = async (id: number, inScope: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforDay = async (id: number, inScope: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
 
   try {
@@ -70,7 +70,7 @@ export const handleToggleScopeforDay = async (id: number, inScope: boolean, task
   }
 };
 
-export const handleToggleScopeforWeek = async (id: number, inScope: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforWeek = async (id: number, inScope: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: inScope });
 
   try {

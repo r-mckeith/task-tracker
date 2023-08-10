@@ -8,23 +8,23 @@ import { Action, ActionType } from '../../src/types/TaskTypes';
 interface ReviewModalProps {
   visible: boolean;
   task: TaskInterface | null;
-  // inScope: Date;
+  inScope: Date | null;
   onComplete: (task: TaskInterface) => void;
   onDelete: (task: TaskInterface) => void;
   onAddNote: (noteText: string, taskId: number) => void;
-  // onToggleScope: (id: number, inScope: Date) => void;
+  onToggleScope: (task: TaskInterface) => void;
   onPushTask: (id: number, completed: boolean) => void;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
   visible,
   task,
-  // inScope,
+  inScope,
   onComplete,
   onDelete,
   onAddNote,
   onPushTask,
-  // onToggleScope,
+  onToggleScope,
 }) => {
   const [noteText, setNoteText] = useState('');
 
@@ -38,7 +38,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           onDelete(task);
           break;
         case 'scope':
-          // onToggleScope(task.id, inScope);
+          onToggleScope(task);
           break;
         case 'push':
           onPushTask(task.id, task.completed ?? false);

@@ -138,7 +138,7 @@ export const toggleCompleted = async (id: number, newStatus: boolean, tasks: Tas
   }
 };
 
-export const toggleScopeForDay = async (id: number, newScope: boolean, tasks: TaskInterface[] = []) => {
+export const toggleScopeForDay = async (id: number, newScope: Date | null, tasks: TaskInterface[] = []) => {
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
@@ -162,7 +162,7 @@ export const toggleScopeForDay = async (id: number, newScope: boolean, tasks: Ta
     .eq('id', id);
 };
 
-export const toggleScopeForWeek = async (id: number, newScope: boolean, tasks: TaskInterface[] = []) => {
+export const toggleScopeForWeek = async (id: number, newScope: Date | null, tasks: TaskInterface[] = []) => {
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 

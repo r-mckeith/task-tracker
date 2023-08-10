@@ -7,8 +7,8 @@ import { handleToggleScopeforDay, handleToggleScopeforWeek } from '../../helpers
 
 interface ScopeProps {
   id: number,
-  inScopeDay?: Date | null;
-  inScopeWeek?: Date | null;
+  inScopeDay: Date | null;
+  inScopeWeek: Date | null;
 }
 
 const ScopeTask: React.FC<ScopeProps> = ({
@@ -22,8 +22,7 @@ const ScopeTask: React.FC<ScopeProps> = ({
 
 
   const handleToggleScope = () => {
-    console.log("SCOPING")
-    route.name === 'ScopeDay' ? handleToggleScopeforDay(id, !inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, !inScopeWeek, state, dispatch);
+    route.name === 'ScopeDay' ? handleToggleScopeforDay(id, inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, inScopeWeek, state, dispatch);
   };
 
   const inScope = route.name === 'ScopeDay' ? inScopeDay : inScopeWeek;
