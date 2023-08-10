@@ -3,9 +3,10 @@ export type DoStackParamList = {
   WeeklyScreen: undefined;
   QuarterlyScreen: undefined;
   ReviewDay: undefined;
-  ScopeDay: undefined;
-  ScopeWeek: undefined;
   ReviewWeek: undefined;
   ReviewQuarter: undefined;
+  ScopeDay: undefined;
+  ScopeWeek: undefined;
+  ScopeQuarter: undefined;
   Review: undefined;
 };
