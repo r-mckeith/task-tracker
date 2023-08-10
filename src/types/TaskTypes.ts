@@ -66,6 +66,6 @@ export type Action = {
   onPress: () => void;
 };
 
-export type ActionType = 'delete' | 'complete';
+export type ActionType = 'delete' | 'complete' | 'push' | 'scope';
 
 
