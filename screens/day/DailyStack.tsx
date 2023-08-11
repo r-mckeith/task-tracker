@@ -13,7 +13,7 @@ export function DailyStackScreen() {
         headerBackTitle: 'Today',
         headerTintColor: '#767577',
     }}>
-      <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ headerShown: false }}/>
+      <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ title: '' }}/>
       <DailyStack.Screen name="ReviewDay" component={ReviewDayScreen} options={{ title: '' }}/>
       <DailyStack.Screen name="ScopeDay" component={WeeklyScreen} options={{ title: '' }}/>
     </DailyStack.Navigator>

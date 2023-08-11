@@ -18,10 +18,10 @@ const ScopeTask: React.FC<ScopeProps> = ({
 }) => {
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
-  console.log(route.name)
 
 
   const handleToggleScope = () => {
+    console.log(route.name)
     route.name === 'ScopeDay' ? handleToggleScopeforDay(id, inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, inScopeWeek, state, dispatch);
   };
 

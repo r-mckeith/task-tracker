@@ -25,7 +25,7 @@ const RenderRightActions: React.FC<RenderRightActionsProps> = ({
     <View style={styles.rightActionContainer}>
       <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
         <MaterialCommunityIcons 
-                name="cancel" 
+                name="close-circle" 
                 size={24} 
                 color="red"
               />
@@ -33,9 +33,9 @@ const RenderRightActions: React.FC<RenderRightActionsProps> = ({
       <RectButton style={[styles.rightSwipeItem, styles.unscopeButton]} onPress={() => 
         {setShowNoteModal(true); if (swipeableRow.current) {swipeableRow.current.close();}}}>
           <MaterialCommunityIcons 
-              name="arrow-top-right" 
+              name="eye-off" 
               size={24} 
-              color="#4CAF50"
+              color="blue"
             />
       </RectButton>
       <RectButton style={[styles.rightSwipeItem, styles.pushButton]} onPress={() => 

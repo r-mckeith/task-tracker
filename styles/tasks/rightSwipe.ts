@@ -9,7 +9,7 @@ export default StyleSheet.create({
   rightSwipeItem: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 0,
     height: 60,
     width: 60,
     marginVertical: 5,

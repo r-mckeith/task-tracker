@@ -5,8 +5,8 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { DoStackParamList } from '../../src/types/StackTypes';
 import styles from '../../styles/screens/reviewDayScreen'
-import NestedList from '../../components/list/NestedList';
-import ReviewModal from '../../components/reviews/ReviewModal';
+import NestedList from '../list/NestedList';
+import ReviewModal from './ReviewModal';
 import { addNote } from '../../src/api/SupabaseNotes';
 import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
 

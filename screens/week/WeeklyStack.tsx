@@ -13,7 +13,7 @@ export function WeeklyStackScreen() {
         headerBackTitle: 'Today',
         headerTintColor: '#767577',
     }}>
-      <WeeklyStack.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ headerShown: false }}/>
+      <WeeklyStack.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ title: '' }}/>
       <WeeklyStack.Screen name="ReviewWeek" component={ReviewWeekScreen} options={{ title: '' }}/>
       <WeeklyStack.Screen name="ScopeWeek" component={QuarterlyScreen} options={{ title: '' }}/>
     </WeeklyStack.Navigator>

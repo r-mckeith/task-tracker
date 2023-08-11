@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../styles/screens/dailyScreen'
+import { isRouteNameInScope } from '../../helpers/taskHelpers';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../list/NestedList';
@@ -23,6 +24,7 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
     setFilteredTasks(filterTasks(state));
   }, [state]);
 
+  const route = useRoute();
   const currentDate = new Date();
   const dateFormatted = currentDate.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -31,6 +33,10 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
   });
 
   const showReviewButton = filteredTasks.length > 0;
+  function showAddTasksButton() {
+    const scopeRoutes = ['DailyScreen', 'WeeklyScreen'];
+    return isRouteNameInScope(route.name, scopeRoutes);
+  }
 
   return (
     <View style={styles.container}>
@@ -45,10 +51,12 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
         <View style={styles.emptyContainer} />
       )}
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToAdd)}>
-          <Text style={styles.addButtonText}>Add Tasks</Text>
-        </TouchableOpacity>
-        {showReviewButton && (
+        {showAddTasksButton() &&
+          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToAdd)}>
+            <Text style={styles.addButtonText}>Add Tasks</Text>
+          </TouchableOpacity>
+        }
+        {showAddTasksButton() && showReviewButton && (
           <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToReview)}>
             <Text style={styles.addButtonText}>Review</Text>
           </TouchableOpacity>

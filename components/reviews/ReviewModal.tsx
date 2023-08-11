@@ -54,7 +54,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
   const actions: Action[] = [
     {
-      name: "cancel",
+      name: "close-circle",
       size: 30,
       color: "#F44336",
       actionType: 'delete',
@@ -75,7 +75,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       onPress: () => handleReviewAction('scope')
     },
     {
-      name: "arrow-right",
+      name: "arrow-right-box",
       size: 30,
       color: "orange",
       actionType: 'push',

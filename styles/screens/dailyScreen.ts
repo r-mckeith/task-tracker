@@ -13,7 +13,9 @@ export default StyleSheet.create({
   headerContainer: {
     backgroundColor: '#f5f5f5',
     padding: 15,
+    marginBottom: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

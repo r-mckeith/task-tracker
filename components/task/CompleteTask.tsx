@@ -17,13 +17,9 @@ const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed }) => {
   const reviewScreenNames = ['ReviewDay', 'ReviewWeek', 'ReviewQuarter'];
   const isReviewScreen = reviewScreenNames.includes(name);
 
-  const iconName = isReviewScreen
-    ? completed ? 'check-circle' : 'close-circle'
-    : completed ? 'check-circle' : 'circle-outline';
+  const iconName = completed ? 'checkbox-marked-outline' : 'checkbox-blank-outline';
 
-  const iconColor = isReviewScreen
-    ? completed ? 'green' : 'red'
-    : completed ? 'green' : 'black';
+  const iconColor = completed ? 'grey' : 'grey';
 
   return (
     <View>

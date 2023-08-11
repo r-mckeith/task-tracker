@@ -28,16 +28,17 @@ const Task: React.FC<TaskInterface> = ({
   const [showNoteModal, setShowNoteModal] = useState(false);
   
   function showScopeTaskToggle() {
-    if (!parentId || completed) return false;
+    if (!parentId) return false;
     const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeQuarter'];
     return isRouteNameInScope(route.name, scopeRoutes);
   }
   
   function showCompleteTaskToggle() {
     if (!parentId) return false;
-    const completeRoutes = completed ? ['ScopeDay', 'ScopeWeek'] : [];
-    const otherRoutes = ['DailyScreen', 'ReviewDay', 'WeeklyScreen', 'ReviewWeek', 'QuarterlyScreen'];
-    return isRouteNameInScope(route.name, [...completeRoutes, ...otherRoutes]);
+    return true
+    // const completeRoutes = completed ? ['ScopeDay', 'ScopeWeek'] : [];
+    // const otherRoutes = ['DailyScreen', 'ReviewDay', 'WeeklyScreen', 'ReviewWeek', 'QuarterlyScreen'];
+    // return isRouteNameInScope(route.name, [...completeRoutes, ...otherRoutes]);
   }
   
   function showAddTaskIcon() {
@@ -60,9 +61,11 @@ const Task: React.FC<TaskInterface> = ({
       <Swipeable ref={swipeableRow} renderRightActions={() => <RenderRightActions handleDelete={handleDelete} id={id} dispatch={dispatch} setShowNoteModal={setShowNoteModal} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
           {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
-          {showCompleteTaskToggle() && <CompleteTask id={id} completed={completed} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
-          {showAddTaskIcon() && <AddTask parentId={id} depth={depth} />}
+          {showCompleteTaskToggle() &&
+            <CompleteTask id={id} completed={completed} />
+          }
+          <AddTask parentId={id} depth={depth} />
           <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
         </View>
       </Swipeable>

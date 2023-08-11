@@ -13,7 +13,7 @@ export function QuarterlyStackScreen() {
         headerBackTitle: 'Today',
         headerTintColor: '#767577',
     }}>
-      <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ headerShown: false }}/>
+      <DailyStack.Screen name="QuarterlyScreen" component={DailyScreen} options={{ title: '' }}/>
       <DailyStack.Screen name="ReviewDay" component={ReviewQuarterScreen as ComponentType} options={{ title: '' }}/>
     </DailyStack.Navigator>
   );
