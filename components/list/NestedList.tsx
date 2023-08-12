@@ -15,10 +15,8 @@ const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
   };
   
   const renderTasks = (parentId: number | null) => {
-    // Find root tasks if parentId is null, else find children of the current task
     const tasksToRender = parentId === null ? findRootTasks() : taskProps.filter(task => task.parentId === parentId);
     
-    // Sort and map through tasks to render them and their children (if any)
     return tasksToRender
       .sort((a, b) => a.id - b.id)
       .map((task, index) => (

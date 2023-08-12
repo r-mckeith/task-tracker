@@ -42,8 +42,9 @@ const Task: React.FC<TaskInterface> = ({
   }
   
   function showAddTaskIcon() {
-    const addRoutes = ['DailyScreen', 'WeeklyScreen', 'QuarterlyScreen'];
-    return isRouteNameInScope(route.name, addRoutes);
+    route.name
+    const addRoutes = ['ReviewDayScreen', 'ReviewWeekScreen', 'ReviewQuarterScreen'];
+    return !isRouteNameInScope(route.name, addRoutes);
   }  
 
   function getDepthStyle() {
@@ -65,7 +66,9 @@ const Task: React.FC<TaskInterface> = ({
           {showCompleteTaskToggle() &&
             <CompleteTask id={id} completed={completed} />
           }
-          <AddTask parentId={id} depth={depth} />
+          {showAddTaskIcon() && 
+            <AddTask parentId={id} depth={depth} />
+          }
           <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
         </View>
       </Swipeable>

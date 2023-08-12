@@ -32,8 +32,8 @@ export const handleAddTask = async (
       timesPerDay: timesPerDay,
     },
     inScopeQuarter: currentDate,
-    inScopeWeek: isRecurring || routeName === 'Week' || routeName === 'Day' ? currentDate : null,
-    inScopeDay: isRecurring || routeName === 'Day' ? currentDate : null,
+    inScopeWeek: isRecurring || (routeName === 'WeeklyScreen' || routeName === 'DailyScreen') ? currentDate : null,
+    inScopeDay: isRecurring || routeName === 'DailyScreen' ? currentDate : null,
   };
 
   try {
@@ -58,7 +58,7 @@ export const handleToggleCompleted = async (id: number, completed: boolean, task
   }
 };
 
-export const handleToggleScopeforDay = async (id: number, inScope: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforDay = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
 
   try {
@@ -70,7 +70,7 @@ export const handleToggleScopeforDay = async (id: number, inScope: Date | null, 
   }
 };
 
-export const handleToggleScopeforWeek = async (id: number, inScope: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforWeek = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: inScope });
 
   try {
@@ -125,3 +125,6 @@ export const findParentTasks = (taskId: number, tasks: TaskInterface[]): TaskInt
 export function isRouteNameInScope(routeName: string, scopeRoutes: string[]) {
   return scopeRoutes.includes(routeName);
 }
+
+const today = new Date
+export const todayFormatted = today.toISOString().split('T')[0];

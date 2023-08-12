@@ -16,7 +16,6 @@ const AddTask: React.FC<AddTaskProps> = ({
   const [isRecurring, setIsRecurring] = useState(false);
   const [selectedDays, setSelectedDays] = useState('');
   const [timesPerDay, setTimesPerDay] = useState('');
-
   const route = useRoute();
   const { dispatch } = useTaskContext();
 
@@ -80,11 +79,10 @@ const AddTask: React.FC<AddTaskProps> = ({
             <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.iconButton} 
-              onPress={() => {onAddTask}}
+              onPress={onAddTask}
             >
                 <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" /> 
               </TouchableOpacity>
-
               <TouchableOpacity style={styles.iconButton} onPress={() => setShowModal(false)}>
                 <MaterialCommunityIcons name="cancel" size={24} color="#F44336" /> 
               </TouchableOpacity>

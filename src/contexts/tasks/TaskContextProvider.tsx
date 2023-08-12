@@ -13,6 +13,7 @@ const TaskContextProvider: React.FC<TaskContextProviderProps> = ({ children }) =
   useEffect(() => {
     const fetchTasks = async () => {
       const tasks = await getTasks();
+      console.log("Current tasks state:", state);
       dispatch({ type: 'INITIALIZE', payload: tasks });
     };
 

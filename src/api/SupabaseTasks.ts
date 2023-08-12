@@ -138,51 +138,53 @@ export const toggleCompleted = async (id: number, newStatus: boolean, tasks: Tas
   }
 };
 
-export const toggleScopeForDay = async (id: number, newScope: Date | null, tasks: TaskInterface[] = []) => {
+export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
+  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
   for (let task of childTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope ? new Date() : null })
+      .update({ inScopeDay: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope ? new Date() : null })
+      .update({ inScopeDay: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   await supabase
     .from('tasks')
-    .update({ inScopeDay: newScope ? new Date() : null })
+    .update({ inScopeDay: currentScope ? null : new Date() })
     .eq('id', id);
 };
 
-export const toggleScopeForWeek = async (id: number, newScope: Date | null, tasks: TaskInterface[] = []) => {
+export const toggleScopeForWeek = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
+  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
   for (let task of childTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope ? new Date() : null })
+      .update({ inScopeWeek: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope ? new Date() : null })
+      .update({ inScopeWeek: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   await supabase
     .from('tasks')
-    .update({ inScopeWeek: newScope ? new Date() : null })
+    .update({ inScopeWeek: currentScope ? null : new Date() })
     .eq('id', id);
 };
 
