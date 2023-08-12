@@ -7,6 +7,7 @@ import { DoStackParamList } from '../../src/types/StackTypes';
 import styles from '../../styles/screens/reviewDayScreen'
 import NestedList from '../list/NestedList';
 import ReviewModal from './ReviewModal';
+import Header from '../Header';
 import { addNote } from '../../src/api/SupabaseNotes';
 import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
 
@@ -88,7 +89,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Review</Text>
+        <Header />
       </View>
       {filteredTasks.length > 0 &&
         <View style={styles.taskList}>

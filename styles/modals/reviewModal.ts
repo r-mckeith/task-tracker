@@ -48,7 +48,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
   },
   addNoteText: {
-    color: 'blue',
+    color: 'grey',
     fontSize: 16,
   },
 });

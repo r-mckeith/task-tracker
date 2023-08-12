@@ -54,30 +54,30 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
   const actions: Action[] = [
     {
-      name: "close-circle",
+      name: "cancel",
       size: 30,
-      color: "#F44336",
+      color: "grey",
       actionType: 'delete',
       onPress: () => handleReviewAction('delete')
     },
     {
-      name: "check-circle",
+      name: "check-circle-outline",
       size: 30,
-      color: "green",
+      color: "grey",
       actionType: 'complete',
       onPress: () => handleReviewAction('complete')
     },
     {
       name: 'eye-off',
       size: 30,
-      color: 'blue',
+      color: 'grey',
       actionType: 'scope',
       onPress: () => handleReviewAction('scope')
     },
     {
-      name: "arrow-right-box",
+      name: "arrow-right",
       size: 30,
-      color: "orange",
+      color: "grey",
       actionType: 'push',
       onPress: () => handleReviewAction('push')
     }
@@ -108,7 +108,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             style={styles.textInput}
             onChangeText={text => setNoteText(text)}
             value={noteText}
-            placeholder="Add a note"
+            placeholder="Add a note..."
           />
           <TouchableOpacity onPress={handleAddNotePress}>
             <Text style={styles.addNoteText}>Add Note</Text>

@@ -8,6 +8,7 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../list/NestedList';
 import { DoStackParamList } from '../../src/types/StackTypes';
+import Header from '../Header';
 
 type TaskScreenProps = {
   filterTasks: (tasks: TaskInterface[]) => TaskInterface[];
@@ -25,12 +26,6 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
   }, [state]);
 
   const route = useRoute();
-  const currentDate = new Date();
-  const dateFormatted = currentDate.toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  });
 
   const showReviewButton = filteredTasks.length > 0;
   function showAddTasksButton() {
@@ -41,7 +36,7 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{dateFormatted}</Text>
+        <Header />
       </View>
       {filteredTasks.length > 0 ? (
         <View style={styles.taskList}>
