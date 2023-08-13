@@ -10,7 +10,7 @@ export interface TaskData {
   id: number;
   name?: string;
   parentId?: number | null;
-  completed?: boolean;
+  completed?: Date | null;
   recurringOptions?: RecurringOptions;
   depth: number;
   inScopeDay: Date | string | null;
@@ -41,7 +41,7 @@ export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
   scope: Scope;
-  completed?: boolean;
+  completed: Date | null;
 }
 
 // Scope Definition

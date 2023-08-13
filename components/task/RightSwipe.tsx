@@ -3,11 +3,13 @@ import { View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Swipeable } from 'react-native-gesture-handler';
+import { TaskInterface } from '../../src/types/TaskTypes';
 import styles from '../../styles/tasks/rightSwipe'
 
 type RenderRightActionsProps = {
-  handleDelete: (id: number, dispatch: React.Dispatch<any>) => Promise<void>;
+  handleDelete: (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => Promise<void>;
   id: number;
+  tasks: TaskInterface[];
   dispatch: React.Dispatch<any>;
   setShowNoteModal: (show: boolean) => void;
   swipeableRow: React.RefObject<Swipeable | null>;
@@ -16,14 +18,15 @@ type RenderRightActionsProps = {
 const RenderRightActions: React.FC<RenderRightActionsProps> = ({
   handleDelete,
   id,
+  tasks,
   dispatch,
   setShowNoteModal,
   swipeableRow
 }) => {
-
+  console.log(tasks)
   return (
     <View style={styles.rightActionContainer}>
-      <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
+      <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, tasks, dispatch)}>
         <MaterialCommunityIcons 
                 name="close-circle" 
                 size={24} 

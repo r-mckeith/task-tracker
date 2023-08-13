@@ -51,7 +51,7 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
             <Text style={styles.addButtonText}>Add Tasks</Text>
           </TouchableOpacity>
         }
-        {showAddTasksButton() && showReviewButton && (
+        {showReviewButton && (
           <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToReview)}>
             <Text style={styles.addButtonText}>Review</Text>
           </TouchableOpacity>

@@ -12,7 +12,7 @@ interface ReviewModalProps {
   onDelete: (task: TaskInterface) => void;
   onAddNote: (noteText: string, taskId: number) => void;
   onToggleScope: (task: TaskInterface) => void;
-  onPushTask: (id: number, completed: boolean) => void;
+  onPushTask: (id: number, completed: Date | null) => void;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
@@ -39,7 +39,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
           onToggleScope(task);
           break;
         case 'push':
-          onPushTask(task.id, task.completed ?? false);
+          onPushTask(task.id, task.completed);
         break;
       }
     }

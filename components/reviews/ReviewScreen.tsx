@@ -50,12 +50,12 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   }, [state, timeFrame]);
 
    const handleComplete = (task: TaskInterface) => {
-    handleToggleCompleted(task.id, !task.completed, state, dispatch);
+    handleToggleCompleted(task.id, task.completed, state, dispatch);
     moveToNextTask();
   };
 
   const handleDeleteTask = (task: TaskInterface) => {
-    handleDelete(task.id, dispatch);
+    handleDelete(task.id, state, dispatch);
     moveToNextTask();
   };
 
@@ -64,7 +64,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
     moveToNextTask();
   }
   
-  const handlePushTask = async (id: number, completed: boolean) => {
+  const handlePushTask = async (id: number, completed: Date | null) => {
     await handlePushTaskForDay(id, completed, state, dispatch);
   };
 

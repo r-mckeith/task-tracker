@@ -14,9 +14,9 @@ export function MyTabs() {
         },
       }}
     >
-      <Tab.Screen name="Quarter" component={QuarterlyStackScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Week" component={WeeklyStackScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Day" component={DailyStackScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Week" component={WeeklyStackScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Quarter" component={QuarterlyStackScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }

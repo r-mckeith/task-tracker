@@ -10,7 +10,7 @@ export function QuarterlyStackScreen() {
   return (
     <DailyStack.Navigator
       screenOptions={{
-        headerBackTitle: 'Today',
+        headerBackTitle: 'This quarter',
         headerTintColor: '#767577',
     }}>
       <DailyStack.Screen name="QuarterlyScreen" component={DailyScreen} options={{ title: '' }}/>

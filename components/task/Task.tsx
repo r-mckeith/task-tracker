@@ -22,7 +22,7 @@ const Task: React.FC<TaskInterface> = ({
   depth,
 }) => {
   const route = useRoute();
-  const { dispatch } = useTaskContext();
+  const { state, dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
 
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -59,7 +59,7 @@ const Task: React.FC<TaskInterface> = ({
 
   return (
     <View>
-      <Swipeable ref={swipeableRow} renderRightActions={() => <RenderRightActions handleDelete={handleDelete} id={id} dispatch={dispatch} setShowNoteModal={setShowNoteModal} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
+      <Swipeable ref={swipeableRow} renderRightActions={() => <RenderRightActions handleDelete={handleDelete} id={id} tasks={state} dispatch={dispatch} setShowNoteModal={setShowNoteModal} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
           {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>

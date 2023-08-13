@@ -7,7 +7,7 @@ import { handleToggleCompleted } from '../../helpers/taskHelpers';
 
 interface CompleteTaskProps {
   id: number;
-  completed?: boolean;
+  completed: Date | null;
 }
 
 const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed }) => {
@@ -27,7 +27,7 @@ const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed }) => {
         name={iconName}
         size={24}
         color={iconColor}
-        onPress={() => handleToggleCompleted(id, !completed, state, dispatch)}
+        onPress={() => handleToggleCompleted(id, completed, state, dispatch)}
       />
     </View>
   );

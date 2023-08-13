@@ -10,7 +10,7 @@ export function WeeklyStackScreen() {
   return (
     <WeeklyStack.Navigator
       screenOptions={{
-        headerBackTitle: 'Today',
+        headerBackTitle: 'This week',
         headerTintColor: '#767577',
     }}>
       <WeeklyStack.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ title: '' }}/>

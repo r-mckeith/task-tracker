@@ -7,8 +7,8 @@ import { handlePushTaskForDay, handlePushTaskForWeek } from '../../helpers/taskH
 
 interface PushTaskProps {
   id: number,
-  inScopeDay?: Date | null;
-  inScopeWeek?: Date | null;
+  inScopeDay: Date | null;
+  inScopeWeek: Date | null;
 }
 
 const ScopeTask: React.FC<PushTaskProps> = ({
@@ -21,7 +21,7 @@ const ScopeTask: React.FC<PushTaskProps> = ({
   const route = useRoute();
 
   const handlePushTask = () => {
-    route.name === 'ReviewDay' ? handlePushTaskForDay(id, !inScopeDay, state, dispatch) : handlePushTaskForWeek(id, !inScopeWeek, state, dispatch);
+    route.name === 'ReviewDay' ? handlePushTaskForDay(id, inScopeDay, state, dispatch) : handlePushTaskForWeek(id, inScopeWeek, state, dispatch);
   };
 
   return (

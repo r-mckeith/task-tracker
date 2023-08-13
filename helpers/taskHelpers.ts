@@ -1,9 +1,11 @@
+import addDays from 'date-fns/addDays';
 import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
 import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
-export const handleDelete = async (id: number, dispatch: React.Dispatch<any>) => {
+export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+  console.log(tasks)
   try {
-    await deleteTask(id);
+    await deleteTask(id, tasks);
     dispatch({ type: 'DELETE_TASK', id });
   } catch (error) {
     console.error('Failed to delete task:', error);
@@ -46,7 +48,7 @@ export const handleAddTask = async (
   }
 };
 
-export const handleToggleCompleted = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleCompleted = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_COMPLETED', id });
 
   try {
@@ -82,7 +84,7 @@ export const handleToggleScopeforWeek = async (id: number, inScope: Date | strin
   }
 };
 
-export const handlePushTaskForDay = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handlePushTaskForDay = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'PUSH_DAY', id });
 
   try {
@@ -94,7 +96,7 @@ export const handlePushTaskForDay = async (id: number, completed: boolean, tasks
   }
 };
 
-export const handlePushTaskForWeek = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handlePushTaskForWeek = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
 
 };
 
@@ -128,3 +130,5 @@ export function isRouteNameInScope(routeName: string, scopeRoutes: string[]) {
 
 const today = new Date
 export const todayFormatted = today.toISOString().split('T')[0];
+const tomorrow = addDays(new Date(), 1);
+export const tomorrowFormatted = tomorrow.toISOString().split('T')[0];

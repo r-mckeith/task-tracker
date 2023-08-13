@@ -18,7 +18,6 @@ const dateFormattedForWeek = currentDate.toLocaleDateString('en-US', {
 
 const Header: React.FC = () => {
   const route = useRoute();
-  console.log(route.name)
 
   return (
     <View>

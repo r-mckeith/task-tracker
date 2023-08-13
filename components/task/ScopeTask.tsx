@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { handleToggleScopeforDay, handleToggleScopeforWeek } from '../../helpers/taskHelpers';
+import { todayFormatted } from '../../helpers/taskHelpers';
 
 interface ScopeProps {
   id: number,
@@ -21,11 +22,10 @@ const ScopeTask: React.FC<ScopeProps> = ({
 
 
   const handleToggleScope = () => {
-    console.log(inScopeDay, inScopeWeek)
     route.name === 'ScopeDay' ? handleToggleScopeforDay(id, inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, inScopeWeek, state, dispatch);
   };
 
-  const inScope = route.name === 'ScopeDay' ? inScopeDay : inScopeWeek;
+  const inScope = route.name === 'ScopeDay' ? inScopeDay === todayFormatted : inScopeWeek;
 
   return (
     <View>
