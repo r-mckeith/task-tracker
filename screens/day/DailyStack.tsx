@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { CommonActions } from '@react-navigation/native';
-import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { DoStackParamList } from '../../src/types/StackTypes';
 import DailyScreen from './DailyScreen';
 import ReviewDayScreen from './ReviewDayScreen';
@@ -8,9 +9,9 @@ import WeeklyScreen from '../week/WeeklyScreen';
 
 const DailyStack = createStackNavigator<DoStackParamList>();
 
-type DailyStackScreenProps = StackScreenProps<DoStackParamList>;
+export function DailyStackScreen() {
+  const navigation = useNavigation();
 
-export function DailyStackScreen({ navigation }: DailyStackScreenProps) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
         navigation.dispatch(
@@ -22,7 +23,7 @@ export function DailyStackScreen({ navigation }: DailyStackScreenProps) {
     });
 
     return unsubscribe;
-}, [navigation]);
+  }, [navigation]);
 
   return (
     <DailyStack.Navigator
