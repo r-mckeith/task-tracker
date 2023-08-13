@@ -1,4 +1,6 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { useEffect } from 'react';
+import { CommonActions } from '@react-navigation/native';
+import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
 import { DoStackParamList } from '../../src/types/StackTypes';
 import WeeklyScreen from './WeeklyScreen';
 import ReviewWeekScreen from './ReviewWeekScreen';
@@ -6,7 +8,21 @@ import QuarterlyScreen from '../quarter/QuarterlyScreen'
 
 const WeeklyStack = createStackNavigator<DoStackParamList>();
 
-export function WeeklyStackScreen() {
+type WeeklyStackScreenProps = StackScreenProps<DoStackParamList>;
+
+export function WeeklyStackScreen({ navigation }: WeeklyStackScreenProps) {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'WeeklyScreen' }],
+            })
+        );
+    });
+
+    return unsubscribe;
+}, [navigation]);
   return (
     <WeeklyStack.Navigator
       screenOptions={{
