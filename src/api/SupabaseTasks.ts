@@ -51,138 +51,105 @@ export async function addTask(newTask: NewTask): Promise<TaskInterface> {
   }
 }
 
-export const deleteTask = async (taskId: number) => {
+export const deleteTask = async (taskId: number, tasks: TaskInterface[]) => {
+  const childTasks = findChildTasks(taskId, tasks);
+
+  const allTaskIdsToDelete = [taskId, ...childTasks.map(task => task.id)];
+
   const { data, error } = await supabase
     .from('tasks')
     .delete()
-    .eq('id', taskId);
+    .in('id', allTaskIdsToDelete); 
 
   if (error) {
     console.error(error);
   }
 };
 
-export const toggleCompleted = async (id: number, newStatus: boolean, tasks: TaskInterface[] = []) => {
-  const childTasks = findChildTasks(id, tasks);
-  const parentTasks = findParentTasks(id, tasks);
 
-  for (let task of childTasks) {
+export const toggleCompleted = async (id: number, currentScope: Date | null, tasks: TaskInterface[] = []) => {
+  const updateCompletionStatus = async (taskId: number, completionDate: Date | null) => {
     const { data: currentTask, error } = await supabase
       .from('tasks')
       .select("completed")
-      .eq('id', task.id)
+      .eq('id', taskId)
       .single();
 
     if (error) {
       console.error(error);
     }
 
-    if (currentTask && currentTask.completed !== newStatus) {
-      await supabase
-        .from('scopes')
-        .insert([
-          { taskId: task.id, completed: newStatus ? new Date() : false }
-        ]);
+    if (currentTask && currentTask.completed !== completionDate) {
       await supabase
         .from('tasks')
-        .update({ completed: newStatus })
-        .eq('id', task.id);
+        .update({ completed: completionDate })
+        .eq('id', taskId);
     }
+  };
+
+  const completionDate = currentScope ? null : new Date();
+
+  const childTasks = findChildTasks(id, tasks);
+  for (let task of childTasks) {
+    await updateCompletionStatus(task.id, completionDate);
   }
 
+  const parentTasks = findParentTasks(id, tasks);
   for (let task of parentTasks) {
-    const { data: currentTask, error } = await supabase
-      .from('tasks')
-      .select("completed")
-      .eq('id', task.id)
-      .single();
-
-    if (error) {
-      console.error(error);
-    }
-
-    if (currentTask && currentTask.completed !== newStatus) {
-      await supabase
-        .from('scopes')
-        .insert([
-          { taskId: task.id, completed: newStatus ? new Date() : false }
-        ]);
-      await supabase
-        .from('tasks')
-        .update({ completed: newStatus })
-        .eq('id', task.id);
-    }
+    await updateCompletionStatus(task.id, completionDate);
   }
 
-  const { data: currentTask, error } = await supabase
-    .from('tasks')
-    .select("completed")
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    console.error(error);
-  }
-
-  if (currentTask && currentTask.completed !== newStatus) {
-    await supabase
-      .from('scopes')
-      .insert([
-        { taskId: id, completed: newStatus ? new Date() : false }
-      ]);
-
-    await supabase
-      .from('tasks')
-      .update({ completed: newStatus })
-      .eq('id', id);
-  }
+  await updateCompletionStatus(id, completionDate);
 };
 
-export const toggleScopeForDay = async (id: number, newScope: boolean, tasks: TaskInterface[] = []) => {
+
+export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
+  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
   for (let task of childTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope ? new Date() : null })
+      .update({ inScopeDay: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: newScope ? new Date() : null })
+      .update({ inScopeDay: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   await supabase
     .from('tasks')
-    .update({ inScopeDay: newScope ? new Date() : null })
+    .update({ inScopeDay: currentScope ? null : new Date() })
     .eq('id', id);
 };
 
-export const toggleScopeForWeek = async (id: number, newScope: boolean, tasks: TaskInterface[] = []) => {
+export const toggleScopeForWeek = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
+  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
   for (let task of childTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope ? new Date() : null })
+      .update({ inScopeWeek: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeWeek: newScope ? new Date() : null })
+      .update({ inScopeWeek: currentScope ? null : new Date() })
       .eq('id', task.id);
   }
 
   await supabase
     .from('tasks')
-    .update({ inScopeWeek: newScope ? new Date() : null })
+    .update({ inScopeWeek: currentScope ? null : new Date() })
     .eq('id', id);
 };
 

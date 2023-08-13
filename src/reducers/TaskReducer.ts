@@ -1,6 +1,6 @@
 import addDays from 'date-fns/addDays';
 import { TaskInterface } from '../types/TaskTypes'; 
-import { findChildTasks, findParentTasks } from '../../helpers/taskHelpers';
+import { findChildTasks, findParentTasks, todayFormatted, tomorrowFormatted } from '../../helpers/taskHelpers';
 
 export type Action =
   | { type: 'INITIALIZE'; payload: TaskInterface[] }
@@ -25,22 +25,21 @@ export type Action =
     const ancestorsDay = findParentTasks(actionId, state);
     const siblingsDay = taskForDay.parentId ? state.filter(task => task.parentId === taskForDay.parentId) : [];
   
-    const newScopeDay = taskForDay.inScopeDay ? null : new Date();
+    const currentScopeDay = taskForDay.inScopeDay ? null : todayFormatted;
   
     return state.map((task) => {
       if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeDay: newScopeDay };
+        return { ...task, inScopeDay: currentScopeDay };
       }
-      if (newScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeDay: newScopeDay };
+      if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
+        return { ...task, inScopeDay: currentScopeDay };
       }
-      if (newScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
-        return { ...task, inScopeDay: newScopeDay };
+      if (currentScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
+        return { ...task, inScopeDay: currentScopeDay };
       }
       return task;
     });
   };
-  
   
   const updateScopeWeek = (
     state: TaskInterface[],
@@ -56,51 +55,51 @@ export type Action =
     const ancestorsWeek = findParentTasks(actionId, state);
     const siblingsWeek = taskForWeek.parentId ? state.filter(task => task.parentId === taskForWeek.parentId) : [];
   
-    const newScopeWeek = taskForWeek.inScopeWeek ? null : new Date();
+    const currentScopeWeek = taskForWeek.inScopeWeek ? null : todayFormatted;
   
     return state.map((task) => {
       if (task.id === actionId || descendantsWeek.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeWeek: newScopeWeek };
+        return { ...task, inScopeWeek: currentScopeWeek };
       }
-      if (newScopeWeek === null && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeWeek: newScopeWeek };
+      if (currentScopeWeek === null && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
+        return { ...task, inScopeWeek: currentScopeWeek };
       }
-      if (newScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
-        return { ...task, inScopeWeek: newScopeWeek };
+      if (currentScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
+        return { ...task, inScopeWeek: currentScopeWeek };
       }
       return task;
     });
   };
+
   
   const updateCompletedStatus = (
     state: TaskInterface[],
     actionId: number
-  ): TaskInterface[] => {
+): TaskInterface[] => {
     const taskForCompleted = state.find((task) => task.id === actionId);
-  
     if (!taskForCompleted) {
-      return state;
+        return state;
     }
-  
     const descendantsCompleted = findChildTasks(actionId, state);
     const ancestorsCompleted = findParentTasks(actionId, state);
-    const siblingsCompleted = taskForCompleted.parentId ? state.filter(task => task.parentId === taskForCompleted.parentId) : [];
-    
-    const newCompletedStatus = !taskForCompleted.completed;
-  
+    const siblingsCompleted = taskForCompleted.parentId 
+        ? state.filter(task => task.parentId === taskForCompleted.parentId) 
+        : [];
+    const newCompletedStatus = taskForCompleted.completed ? null : new Date();
     return state.map((task) => {
-      if (task.id === actionId || descendantsCompleted.some(descendant => descendant.id === task.id)) {
-        return { ...task, completed: newCompletedStatus };
-      }
-      if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
-        return { ...task, completed: newCompletedStatus };
-      }
-      if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, completed: newCompletedStatus };
-      }
-      return task;
+        if (task.id === actionId || descendantsCompleted.some(descendant => descendant.id === task.id)) {
+            return { ...task, completed: newCompletedStatus };
+        }
+        if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
+            return { ...task, completed: newCompletedStatus };
+        }
+        if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
+            return { ...task, completed: newCompletedStatus };
+        }
+        return task;
     });
-  };
+};
+
 
   const pushTaskToNextDay = (
     state: TaskInterface[],
@@ -108,8 +107,10 @@ export type Action =
   ): TaskInterface[] => {
     return state.map((task) => {
       if (task.id === actionId) {
-        return { ...task, inScopeDay: addDays(new Date(), 1) };
+        console.log("DATE", new Date(), 1)
+        return { ...task, inScopeDay: tomorrowFormatted };
       }
+      console.log(task)
       return task;
     });
   };

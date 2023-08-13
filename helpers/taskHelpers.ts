@@ -1,16 +1,54 @@
-import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay } from '../src/api/SupabaseTasks';
-import { TaskInterface } from '../src/types/TaskTypes';
+import addDays from 'date-fns/addDays';
+import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
+import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
-export const handleDelete = async (id: number, dispatch: React.Dispatch<any>) => {
+export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+  console.log(tasks)
   try {
-    await deleteTask(id);
+    await deleteTask(id, tasks);
     dispatch({ type: 'DELETE_TASK', id });
   } catch (error) {
     console.error('Failed to delete task:', error);
   }
 };
 
-export const handleToggleCompleted = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleAddTask = async (
+  newTaskName: string,
+  parentId: number,
+  depth: number,
+  isRecurring: boolean | null = null,
+  selectedDays: string | null = null,
+  timesPerDay: string | null = null,
+  routeName: string,
+  dispatch: React.Dispatch<any>
+): Promise<boolean> => {
+  const currentDate = new Date();
+  const newTask: NewTask = {
+    name: newTaskName,
+    parentId: parentId,
+    depth: depth + 1,
+    userId: '19ccea07-a8a2-4bde-a768-48bc9e8f775e',
+    recurringOptions: {
+      isRecurring: isRecurring,
+      selectedDays: selectedDays,
+      timesPerDay: timesPerDay,
+    },
+    inScopeQuarter: currentDate,
+    inScopeWeek: isRecurring || (routeName === 'WeeklyScreen' || routeName === 'DailyScreen') ? currentDate : null,
+    inScopeDay: isRecurring || routeName === 'DailyScreen' ? currentDate : null,
+  };
+
+  try {
+    const createdTask = await addTask(newTask);
+    dispatch({ type: 'ADD_TASK', payload: createdTask });
+    return true;
+  } catch (error) {
+    console.error('Failed to add task:', error);
+    return false;
+  }
+};
+
+export const handleToggleCompleted = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_COMPLETED', id });
 
   try {
@@ -22,7 +60,7 @@ export const handleToggleCompleted = async (id: number, completed: boolean, task
   }
 };
 
-export const handleToggleScopeforDay = async (id: number, inScope: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforDay = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
 
   try {
@@ -34,7 +72,7 @@ export const handleToggleScopeforDay = async (id: number, inScope: boolean, task
   }
 };
 
-export const handleToggleScopeforWeek = async (id: number, inScope: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleScopeforWeek = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: inScope });
 
   try {
@@ -46,7 +84,7 @@ export const handleToggleScopeforWeek = async (id: number, inScope: boolean, tas
   }
 };
 
-export const handlePushTaskForDay = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handlePushTaskForDay = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'PUSH_DAY', id });
 
   try {
@@ -58,7 +96,7 @@ export const handlePushTaskForDay = async (id: number, completed: boolean, tasks
   }
 };
 
-export const handlePushTaskForWeek = async (id: number, completed: boolean, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handlePushTaskForWeek = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
 
 };
 
@@ -85,3 +123,12 @@ export const findParentTasks = (taskId: number, tasks: TaskInterface[]): TaskInt
     ? [...findParentTasks(parentTask.parentId, tasks), parentTask]
     : [];
 };
+
+export function isRouteNameInScope(routeName: string, scopeRoutes: string[]) {
+  return scopeRoutes.includes(routeName);
+}
+
+const today = new Date
+export const todayFormatted = today.toISOString().split('T')[0];
+const tomorrow = addDays(new Date(), 1);
+export const tomorrowFormatted = tomorrow.toISOString().split('T')[0];

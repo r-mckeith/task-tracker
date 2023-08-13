@@ -10,12 +10,12 @@ export interface TaskData {
   id: number;
   name?: string;
   parentId?: number | null;
-  completed?: boolean;
+  completed?: Date | null;
   recurringOptions?: RecurringOptions;
   depth: number;
-  inScopeDay?: boolean | null;
-  inScopeWeek?: boolean | null;
-  inScopeQuarter?: boolean | null;
+  inScopeDay: Date | string | null;
+  inScopeWeek: Date | string | null;
+  inScopeQuarter?: boolean | string | null;
 }
 
 // For Task Props
@@ -31,9 +31,9 @@ export interface NewTask {
   depth: number;
   userId: string;
   recurringOptions: RecurringOptions;
-  inScopeQuarter?: Date | null;
-  inScopeDay?: Date | null;
-  inScopeWeek?: Date | null;
+  inScopeQuarter: Date | string | null;
+  inScopeDay: Date | string | null;
+  inScopeWeek: Date | string | null;
 }
 
 // Complete Task Interface
@@ -41,20 +41,31 @@ export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
   scope: Scope;
-  currentTab?: string;
-  completed?: boolean;
+  completed: Date | null;
 }
 
 // Scope Definition
 export interface Scope {
-  inScopeDay: string | number | Date;
-  inScopeWeek: string | number | Date;
-  inScopeQuarter: string | number | Date;
+  inScopeDay: Date | string | null;
+  inScopeWeek: Date | string | null;
+  inScopeQuarter: Date | string | null;
 }
 
 // Add Task Props
 export interface AddTaskProps {
   parentId: number;
   depth: number;
-  currentTab?: string;
 }
+
+// Review Actions
+export type Action = {
+  name: string;
+  size: number;
+  color: string;
+  actionType: ActionType;
+  onPress: () => void;
+};
+
+export type ActionType = 'delete' | 'complete' | 'push' | 'scope';
+
+
