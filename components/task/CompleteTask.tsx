@@ -8,18 +8,24 @@ import { handleToggleCompleted } from '../../helpers/taskHelpers';
 interface CompleteTaskProps {
   id: number;
   completed: Date | null;
+  pushed: Date | null;
 }
 
-const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed }) => {
+const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed, pushed }) => {
   const { name } = useRoute();
   const { state, dispatch } = useTaskContext();
 
   const reviewScreenNames = ['ReviewDay', 'ReviewWeek', 'ReviewQuarter'];
   const isReviewScreen = reviewScreenNames.includes(name);
 
-  const iconName = completed ? 'checkbox-marked-outline' : 'checkbox-blank-outline';
+  let iconName = 'checkbox-blank-outline';
+  if (completed) {
+    iconName = 'checkbox-marked-outline';
+  } else if (pushed) {
+    iconName = 'arrow-right';
+  }
 
-  const iconColor = completed ? 'grey' : 'grey';
+  const iconColor = 'grey';
 
   return (
     <View>
@@ -34,4 +40,3 @@ const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed }) => {
 };
 
 export default CompleteTask;
-

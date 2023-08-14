@@ -9,7 +9,7 @@ import NestedList from '../list/NestedList';
 import ReviewModal from './ReviewModal';
 import Header from '../Header';
 import { addNote } from '../../src/api/SupabaseNotes';
-import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
+import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay, todayFormatted } from '../../helpers/taskHelpers';
 
 type ReviewComponentProps = {
   timeFrame: 'day' | 'week' | 'quarter';
@@ -20,7 +20,9 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const [incompleteTasks, setIncompleteTasks] = useState<TaskInterface[]>([]);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [currentTask, setCurrentTask] = useState<TaskInterface | null>(null);
+
 
   const { state, dispatch } = useTaskContext();
 
@@ -30,7 +32,8 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
     let tasks;
     switch (timeFrame) {
       case 'day':
-        tasks = state.filter(t => t.inScopeDay);
+        state.map(t => t.unScoped)
+        tasks = state.filter(t => (t.inScopeDay === todayFormatted || (t.pushed === todayFormatted) || (t.unScoped === todayFormatted)));
         break;
       case 'week':
         tasks = state.filter(t => t.inScopeWeek);
@@ -39,7 +42,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
         tasks = state.filter(t => t.inScopeQuarter);
         break;
     }
-
+  
     const incomplete = tasks.filter(t => !t.completed);
     setFilteredTasks(tasks);
     setIncompleteTasks(incomplete);
@@ -47,7 +50,14 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
     if (incomplete.length === 0) {
       setShowModal(false);
     }
+    setCurrentTask(incomplete[incomplete.length - 1]);
   }, [state, timeFrame]);
+
+  const handleDoneButtonPress = () => {
+    if (incompleteTasks.length > 0) {
+      setShowModal(true);
+    }
+  };
 
    const handleComplete = (task: TaskInterface) => {
     handleToggleCompleted(task.id, task.completed, state, dispatch);
@@ -96,18 +106,18 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
           <NestedList taskProps={filteredTasks} />
         </View>
       }
-       <ReviewModal
+      <ReviewModal
         visible={showModal}
-        task={reversedIncompleteTasks[currentTaskIndex]}
+        task={currentTask}
         onComplete={handleComplete}
         onDelete={handleDeleteTask}
         onToggleScope={handleToggleScope}
         onPushTask={handlePushTask}
         onAddNote={handleAddNote}
-      />
+    />
 
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.addButton} onPress={handleDoneButtonPress}>
           <Text style={styles.addButtonText}>Done</Text>
         </TouchableOpacity>
       </View>

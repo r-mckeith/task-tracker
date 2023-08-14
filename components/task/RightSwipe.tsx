@@ -23,7 +23,6 @@ const RenderRightActions: React.FC<RenderRightActionsProps> = ({
   setShowNoteModal,
   swipeableRow
 }) => {
-  console.log(tasks)
   return (
     <View style={styles.rightActionContainer}>
       <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, tasks, dispatch)}>
