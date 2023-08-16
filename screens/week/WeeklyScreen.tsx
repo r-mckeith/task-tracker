@@ -10,8 +10,20 @@ export default function WeeklyScreen() {
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
 
+  function isTaskForThisWeek(task: TaskInterface) {
+    return task.inScopeWeek && isInCurrentWeek(task.inScopeWeek);
+  }
+  
+  function isTaskCompleted(task: TaskInterface) {
+    return task.completed;
+  }
+
+  function isTaskRecurring(task: TaskInterface) {
+    return task.recurringOptions && task.recurringOptions.isRecurring
+  }
+
   useEffect(() => {
-    const weeklyTasks = tasks.filter((t) => isInCurrentWeek(t.inScopeWeek));
+    const weeklyTasks = tasks.filter((t) => (isTaskForThisWeek(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
     setFilteredTasks(weeklyTasks);
   }, [tasks]);
 

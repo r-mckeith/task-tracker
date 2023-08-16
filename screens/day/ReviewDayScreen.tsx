@@ -1,12 +1,27 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { DoStackParamList } from '../../src/types/StackTypes';
-import ReviewComponent from '../../components/reviews/ReviewScreen';
+import React, { useState, useEffect } from 'react';
+import { TaskInterface } from '../../src/types/TaskTypes';
+import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
+import { todayFormatted } from '../../helpers/dateHelpers';
+import ReviewContainer from '../../components/reviews/ReviewContainer';
 
 export default function ReviewDayScreen() {
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList, 'ReviewDay'>>();
+  const { state: tasks } = useTaskContext();
+  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+
+  function isTaskForToday(task: TaskInterface) {
+    return task.inScopeDay && task.inScopeDay.toString() === todayFormatted;
+  }
+
+  function isTaskRecurring(task: TaskInterface) {
+    return task.recurringOptions && task.recurringOptions.isRecurring
+  }
+
+  useEffect(() => {
+    const dailyTasks = tasks.filter((t) => isTaskForToday(t) || isTaskRecurring(t));
+    setFilteredTasks(dailyTasks);
+  }, [tasks]);
+
   return (
-    <ReviewComponent timeFrame="day" navigation={navigation} />
+    <ReviewContainer tasks={filteredTasks} />
   );
 }

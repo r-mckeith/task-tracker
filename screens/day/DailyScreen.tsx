@@ -21,7 +21,7 @@ export default function DailyScreen() {
   }
 
   useEffect(() => {
-    const dailyTasks = tasks.filter((t) => isTaskForToday(t) && !isTaskCompleted(t) || isTaskRecurring(t));
+    const dailyTasks = tasks.filter((t) => (isTaskForToday(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
     setFilteredTasks(dailyTasks);
   }, [tasks]);
 
