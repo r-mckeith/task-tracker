@@ -21,14 +21,11 @@ const Header: React.FC = () => {
 
   return (
     <View>
-    {route.name === 'DailyScreen' &&
+    {(route.name === 'DailyScreen' || route.name === 'ReviewDay') &&
       <Text style={styles.headerText}>{dateFormatted}</Text>
     }
     {route.name === 'ScopeDay' && 
       <Text style={styles.headerText}>Add tasks to your day</Text>
-    }
-    {route.name === 'ReviewDay' &&
-      <Text style={styles.headerText}>Review your day</Text>
     }
     {route.name === 'WeeklyScreen' &&
       <Text style={styles.headerText}>Week of {dateFormattedForWeek}</Text>

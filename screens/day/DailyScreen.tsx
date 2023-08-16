@@ -4,7 +4,7 @@ import TaskScreen from '../../components/task/TaskScreen';
 import { todayFormatted } from '../../helpers/taskHelpers';
 
 export default function DailyScreen() {
-  const filterTasks = (tasks: TaskInterface[]) => tasks.filter((t) => t.inScopeDay && t.inScopeDay.toString() === todayFormatted);
+  const filterTasks = (tasks: TaskInterface[]) => tasks.filter((t) => t.inScopeDay && t.inScopeDay.toString() === todayFormatted && !t.completed);
 
   return (
     <TaskScreen

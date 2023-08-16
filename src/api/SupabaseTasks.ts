@@ -2,7 +2,7 @@ import { addDays } from 'date-fns';
 import { NewTask } from '../types/TaskTypes'
 import { supabase } from './SupabaseClient'
 import { TaskInterface } from '../types/TaskTypes';
-import { findChildTasks, findParentTasks } from '../../helpers/taskHelpers';
+import { findChildTasks, findParentTasks, todayFormatted, tomorrowFormatted } from '../../helpers/taskHelpers';
 
 interface TaskResponse {
   id: bigint;
@@ -104,29 +104,35 @@ export const toggleCompleted = async (id: number, currentScope: Date | null, tas
 
 
 export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
-  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
+  console.log("Toggle Scope for Day is being called with id:", id, "and currentScope:", currentScope);
+  
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
+
+  const updatedValues = currentScope 
+    ? { inScopeDay: null, unScoped: todayFormatted }
+    : { inScopeDay: todayFormatted };
 
   for (let task of childTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: currentScope ? null : new Date() })
+      .update(updatedValues)
       .eq('id', task.id);
   }
 
   for (let task of parentTasks) {
     await supabase
       .from('tasks')
-      .update({ inScopeDay: currentScope ? null : new Date() })
+      .update(updatedValues)
       .eq('id', task.id);
   }
 
   await supabase
     .from('tasks')
-    .update({ inScopeDay: currentScope ? null : new Date() })
+    .update(updatedValues)
     .eq('id', id);
 };
+
 
 export const toggleScopeForWeek = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
   console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
@@ -154,24 +160,16 @@ export const toggleScopeForWeek = async (id: number, currentScope: Date | string
 };
 
 export const pushDay = async (id: number) => {
-  const tomorrow = addDays(new Date(), 1); // tomorrow's date
 
   const { data: taskData, error: taskError } = await supabase
     .from('tasks')
-    .update({ inScopeDay: tomorrow })
+    .update({ 
+      inScopeDay: tomorrowFormatted,
+      pushed: todayFormatted
+    })
     .eq('id', id);
-
-  const { data: scopeData, error: scopeError } = await supabase
-    .from('scopes')
-    .insert([
-      { taskId: id, inScopeDay: new Date() }
-    ]);
 
   if (taskError) {
     console.error(taskError);
   }
-
-  if (scopeError) {
-    console.error(scopeError);
-  }
-};
+}

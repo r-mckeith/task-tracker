@@ -42,6 +42,8 @@ export interface TaskInterface extends NewTask {
   created_at: string;
   scope: Scope;
   completed: Date | null;
+  pushed: Date | string | null;
+  unScoped: Date | string | null;
 }
 
 // Scope Definition

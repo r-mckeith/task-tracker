@@ -26,13 +26,14 @@ export type Action =
     const siblingsDay = taskForDay.parentId ? state.filter(task => task.parentId === taskForDay.parentId) : [];
   
     const currentScopeDay = taskForDay.inScopeDay ? null : todayFormatted;
+    const currentUnScoped = currentScopeDay ? todayFormatted : taskForDay.unScoped;  // if inScopeDay is set to null, set unScoped to today. Otherwise, keep the existing value.
   
     return state.map((task) => {
       if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeDay: currentScopeDay };
+        return { ...task, inScopeDay: currentScopeDay, unScoped: currentUnScoped };
       }
       if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeDay: currentScopeDay };
+        return { ...task, inScopeDay: currentScopeDay, unScoped: currentUnScoped };
       }
       if (currentScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
         return { ...task, inScopeDay: currentScopeDay };
@@ -71,7 +72,6 @@ export type Action =
     });
   };
 
-  
   const updateCompletedStatus = (
     state: TaskInterface[],
     actionId: number
@@ -100,21 +100,22 @@ export type Action =
     });
 };
 
-
-  const pushTaskToNextDay = (
-    state: TaskInterface[],
-    actionId: number
-  ): TaskInterface[] => {
-    return state.map((task) => {
-      if (task.id === actionId) {
-        console.log("DATE", new Date(), 1)
-        return { ...task, inScopeDay: tomorrowFormatted };
-      }
-      console.log(task)
-      return task;
-    });
-  };
+const pushTaskToNextDay = (
+  state: TaskInterface[],
+  actionId: number
+): TaskInterface[] => {
+  const today = new Date();
+  const pushedDate = todayFormatted
   
+  return state.map((task) => {
+    if (task.id === actionId) {
+      console.log("DATE", today, 1)
+      return { ...task, inScopeDay: tomorrowFormatted, pushed: pushedDate };
+    }
+    return task;
+  });
+};
+
 export const taskReducer = (state: TaskInterface[], action: Action): TaskInterface[] => {
   switch (action.type) {
     case 'INITIALIZE':

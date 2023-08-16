@@ -16,7 +16,7 @@ type TaskScreenProps = {
   navigateToReview: keyof DoStackParamList;
 };
 
-export default function TaskScreen({ filterTasks, navigateToAdd, navigateToReview }: TaskScreenProps) {
+export default function TaskScreen({ filterTasks, navigateToAdd }: TaskScreenProps) {
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const { state } = useTaskContext();
   const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
@@ -27,7 +27,6 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
 
   const route = useRoute();
 
-  const showReviewButton = filteredTasks.length > 0;
   function showAddTasksButton() {
     const scopeRoutes = ['DailyScreen', 'WeeklyScreen'];
     return isRouteNameInScope(route.name, scopeRoutes);
@@ -51,11 +50,6 @@ export default function TaskScreen({ filterTasks, navigateToAdd, navigateToRevie
             <Text style={styles.addButtonText}>Add Tasks</Text>
           </TouchableOpacity>
         }
-        {showReviewButton && (
-          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToReview)}>
-            <Text style={styles.addButtonText}>Review</Text>
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );

@@ -1,20 +1,30 @@
 import { ComponentType } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import DailyScreen from './QuarterlyScreen';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import QuarterlyScreen from './QuarterlyScreen';
 import ReviewQuarterScreen from './ReviewQuarterScreen';
-import WeeklyScreen from '../week/WeeklyScreen'
+
+const QuarterlyStack = createStackNavigator();
+const TopTab = createMaterialTopTabNavigator();
+
+function QuarterlyTopTabs() {
+  return (
+    <TopTab.Navigator>
+      <TopTab.Screen name="QuarterlyScreen" component={QuarterlyScreen} options={{ title: 'Quarter' }} />
+      <TopTab.Screen name="ReviewQuarter" component={ReviewQuarterScreen} options={{ title: 'Review' }} />
+    </TopTab.Navigator>
+  );
+}
 
 export function QuarterlyStackScreen() {
-  const DailyStack = createStackNavigator();
-
   return (
-    <DailyStack.Navigator
+    <QuarterlyStack.Navigator
       screenOptions={{
         headerBackTitle: 'This quarter',
         headerTintColor: '#767577',
     }}>
-      <DailyStack.Screen name="QuarterlyScreen" component={DailyScreen} options={{ title: '' }}/>
-      <DailyStack.Screen name="ReviewDay" component={ReviewQuarterScreen as ComponentType} options={{ title: '' }}/>
-    </DailyStack.Navigator>
+      <QuarterlyStack.Screen name="QuarterlyDuo" component={QuarterlyTopTabs} options={{ title: '' }}/>
+      <QuarterlyStack.Screen name="ReviewQuarter" component={ReviewQuarterScreen as ComponentType} options={{ title: '' }}/>
+    </QuarterlyStack.Navigator>
   );
 }

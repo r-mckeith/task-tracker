@@ -3,7 +3,6 @@ import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pus
 import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-  console.log(tasks)
   try {
     await deleteTask(id, tasks);
     dispatch({ type: 'DELETE_TASK', id });
@@ -61,6 +60,7 @@ export const handleToggleCompleted = async (id: number, completed: Date | null, 
 };
 
 export const handleToggleScopeforDay = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+  console.log("HELPER")
   dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
 
   try {

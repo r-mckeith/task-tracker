@@ -11,4 +11,7 @@ export type DoStackParamList = {
   Review: undefined;
   Day: undefined;
   Week: undefined;
+  DailyDuo: undefined;
+  WeeklyDuo: undefined;
+  QuarterlyDuo: undefined;
 };
