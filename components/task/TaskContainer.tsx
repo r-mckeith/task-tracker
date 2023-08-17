@@ -7,7 +7,6 @@ import { isRouteNameInScope } from '../../helpers/taskHelpers';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../list/NestedList';
 import { DoStackParamList } from '../../src/types/StackTypes';
-import Header from '../Header';
 
 type TaskContainerProps = {
   tasks: TaskInterface[];
@@ -26,9 +25,6 @@ export default function TaskContainer({ tasks, navigateToAdd }: TaskContainerPro
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Header />
-      </View>
       {tasks.length > 0 ? (
         <View style={styles.taskList}>
           <NestedList taskProps={tasks} />
