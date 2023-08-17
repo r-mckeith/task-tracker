@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { stripTimeFromDate } from '../../helpers/dateHelpers';
+import { isSelectedDate } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
 import HeaderNew from '../../components/HeaderNew';
 
@@ -19,18 +19,11 @@ export default function DailyScreen() {
   }
 
   function isTaskForSelectedDate(task: TaskInterface) {
-    if (task.inScopeDay) {
-        const taskDateStripped = stripTimeFromDate(new Date(task.inScopeDay));
-        const selectedDateStripped = stripTimeFromDate(selectedDate);
-        return taskDateStripped.getTime() === selectedDateStripped.getTime();
-    }
-    return false;
-}
+    return task.inScopeDay && isSelectedDate(task.inScopeDay, selectedDate);
+  }
 
   useEffect(() => {
-    console.log("Tasks or selectedDate has changed");
     const dailyTasks = tasks.filter((t) => (isTaskForSelectedDate(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
-    console.log("Number of tasks after filter: ", dailyTasks.length);
     setFilteredTasks(dailyTasks);
 }, [tasks, selectedDate]);
 
