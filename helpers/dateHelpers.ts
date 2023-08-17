@@ -67,7 +67,21 @@ export function isInSelectedWeek(date: string | Date, referenceDate: Date): bool
   return startOfWeek <= strippedDate && strippedDate <= endOfWeek;
 }
 
+export function isInSelectedMonth(date: string | Date, referenceDate: Date): boolean {
+  let d: Date;
 
+  if (typeof date === 'string') {
+    if (!date.includes("T")) {
+      d = new Date(date + "T00:00:00Z");
+    } else {
+      d = new Date(date);
+    }
+  } else {
+    d = date;
+  }
+
+  return d.getUTCMonth() === referenceDate.getUTCMonth() && d.getUTCFullYear() === referenceDate.getUTCFullYear();
+}
 
 function getStartOfWeek(date: Date): Date {
   const day = date.getUTCDay();
@@ -81,28 +95,28 @@ function getEndOfWeek(date: Date): Date {
 
 
 
-export function isInCurrentWeek(date: string | Date | null): boolean {
-  if (!date) {
-    return false;
-  }
-  const inputDate = new Date(`${date}T12:00:00`);
-  const localInputDate = stripTimeFromDate(inputDate);
+// export function isInCurrentWeek(date: string | Date | null): boolean {
+//   if (!date) {
+//     return false;
+//   }
+//   const inputDate = new Date(`${date}T12:00:00`);
+//   const localInputDate = stripTimeFromDate(inputDate);
 
-  const now = new Date();
-  const localStartOfWeek = stripTimeFromDate(startOfWeek(now, { weekStartsOn: 1 }));
-  const localEndOfWeek = stripTimeFromDate(endOfWeek(now, { weekStartsOn: 1 }));
+//   const now = new Date();
+//   const localStartOfWeek = stripTimeFromDate(startOfWeek(now, { weekStartsOn: 1 }));
+//   const localEndOfWeek = stripTimeFromDate(endOfWeek(now, { weekStartsOn: 1 }));
   
-  return isWithinInterval(localInputDate, { start: localStartOfWeek, end: localEndOfWeek });
-};
+//   return isWithinInterval(localInputDate, { start: localStartOfWeek, end: localEndOfWeek });
+// };
 
-export function isInCurrentMonth(date: string | Date | null): boolean {
-  if (!date) {
-    return false;
-  }
+// export function isInCurrentMonth(date: string | Date | null): boolean {
+//   if (!date) {
+//     return false;
+//   }
   
-  const inputDate = new Date(`${date}T12:00:00`);
+//   const inputDate = new Date(`${date}T12:00:00`);
 
-  const now = new Date();
+//   const now = new Date();
 
-  return (inputDate.getMonth() === now.getMonth()) && (inputDate.getFullYear() === now.getFullYear());
-}
+//   return (inputDate.getMonth() === now.getMonth()) && (inputDate.getFullYear() === now.getFullYear());
+// }
