@@ -1,9 +1,11 @@
 // Scope Options
 export interface RecurringOptions {
   isRecurring?: boolean | null;
-  selectedDays?: string | null;
+  selectedDays?: { [key in DayName]?: boolean } | null;
   timesPerDay?: string | null;
 }
+
+export type DayName = "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat";
 
 // Main Task Data
 export interface TaskData {

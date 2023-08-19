@@ -27,6 +27,18 @@ export default StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
     fontWeight: 'bold',
+    fontSize: 20,
+    color: '#757575'
+  },
+  buttonStyle: {
+    padding: 10,
+    width: 100,
+    height: 40,
+    justifyContent: 'center', 
+    alignItems: 'center',
+    backgroundColor: '#bbb', 
+    borderRadius: 5,
+    margin: 5,
   },
   input: {
     height: 40,
@@ -40,7 +52,11 @@ export default StyleSheet.create({
   textInput: {
     width: '100%',
   },
-  
+  labelStyle: {
+    color: '#bbb',
+    fontSize: 16,
+    alignSelf: 'flex-start',
+  },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -64,4 +80,40 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
   },
+  buttonColumn: {
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
+},
+button: {
+    padding: 10,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
+    margin: 5,
+    textAlign: 'center',
+},
+checkedBox: {
+  width: 40,
+  height: 40,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#000',
+  backgroundColor: '#bbb',
+  borderRadius: 4,
+  margin: 3,
+},
+uncheckedBox: {
+  width: 40,
+  height: 40,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#000',
+  borderRadius: 4,
+  margin: 3,
+},
+
+
 });

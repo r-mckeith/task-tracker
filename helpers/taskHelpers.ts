@@ -1,6 +1,6 @@
 import addDays from 'date-fns/addDays';
 import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
-import { TaskInterface, NewTask } from '../src/types/TaskTypes';
+import { TaskInterface, NewTask, DayName } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
   try {
@@ -16,7 +16,7 @@ export const handleAddTask = async (
   parentId: number,
   depth: number,
   isRecurring: boolean | null = null,
-  selectedDays: string | null = null,
+  selectedDays: { [key in DayName]?: boolean } | null = null,
   timesPerDay: string | null = null,
   routeName: string,
   dispatch: React.Dispatch<any>
