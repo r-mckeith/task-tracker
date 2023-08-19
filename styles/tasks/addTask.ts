@@ -32,7 +32,7 @@ export default StyleSheet.create({
   },
   buttonStyle: {
     padding: 10,
-    width: 100,
+    width: 110,
     height: 40,
     justifyContent: 'center', 
     alignItems: 'center',
