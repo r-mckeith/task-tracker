@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type DatePickerProps = {
   selectedDate: Date;
@@ -8,15 +9,19 @@ type DatePickerProps = {
 };
 
 const DatePickerComponent: React.FC<DatePickerProps> = ({ selectedDate, onDateChange }) => {
-  const [show, setShow] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const onChangeDate = (event: DateTimePickerEvent, selectedDateValue?: Date) => {
-    if (selectedDateValue) {
-      onDateChange(selectedDateValue);
-      setShow(false);
-    } else {
-      setShow(false);
-    }
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    onDateChange(date);
+    hideDatePicker();
   };
 
   const formattedDate = selectedDate.toLocaleDateString('en-US', {
@@ -27,22 +32,24 @@ const DatePickerComponent: React.FC<DatePickerProps> = ({ selectedDate, onDateCh
 
   return (
     <>
-      <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setShow(true)}>
+      <TouchableOpacity 
+        style={{ flexDirection: 'row', alignItems: 'center' }}
+        onPress={showDatePicker}
+      >
         <Text style={{ color: '#767577', fontSize: 20, fontWeight: 'bold' }}>
           {formattedDate}
         </Text>
-        <Text style={{ marginLeft: 5 }}>v</Text>
+        <MaterialCommunityIcons name="menu-down" size={30} color="#767577" /> 
       </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={selectedDate}
-          mode="date"
-          display="default"
-          onChange={onChangeDate}
-          maximumDate={new Date()}
-        />
-      )}
+
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        maximumDate={new Date()}
+        display={'inline'}
+      />
     </>
   );
 };
