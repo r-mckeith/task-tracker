@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 import { useRoute } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DayName } from '../../src/types/TaskTypes';
@@ -47,13 +48,23 @@ const AddTask: React.FC<AddTaskProps> = ({
 
   const onAddTask = async () => {
     const success = await handleAddTask(newTaskName, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
+    
     if (success) {
       setNewTaskName('');
       setIsRecurring(false);
       setShowModal(false);
+      setShowDailyCheckboxes(false);
+      setTimesPerDay('');
     } else {
-        console.error('Failed to add task');
+      console.error('Failed to add task');
     }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setShowDailyCheckboxes(false);
+    setIsRecurring(false);
+    setTimesPerDay('');
   };
 
   return (
@@ -156,14 +167,39 @@ const AddTask: React.FC<AddTaskProps> = ({
               </View>
             }
             {showDailyCheckboxes && (
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: 10 }}>
-                {Object.keys(selectedDays).map((day, index) => (
-                  <TouchableOpacity key={index} style={selectedDays[day as DayName] ? styles.checkedBox : styles.uncheckedBox} onPress={() => {
-                    setSelectedDays(prev => ({ ...prev, [day]: !prev[day as DayName] }));
-                  }}>
-                    <Text>{day}</Text>
-                  </TouchableOpacity>
-                ))}
+              <View style={{ marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: 10 }}>
+                  {Object.keys(selectedDays).map((day, index) => (
+                    <TouchableOpacity key={index} style={selectedDays[day as DayName] ? styles.checkedBox : styles.uncheckedBox} onPress={() => {
+                      setSelectedDays(prev => ({ ...prev, [day]: !prev[day as DayName] }));
+                    }}>
+                      <Text>{day}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <ModalDropdown 
+                  options={['1', '2', '3', '4', '5']}
+                  defaultValue={timesPerDay || 'Select...'}
+                  onSelect={(index, value) => setTimesPerDay(value)}
+                  
+                  style={{
+                    height: 30,
+                    width: 80,
+                    borderWidth: 1, 
+                    borderColor: "#ddd", 
+                    borderRadius: 8, 
+                    justifyContent: 'center'
+                  }} 
+                  textStyle={{
+                    textAlign: 'center',
+                    fontSize: 14
+                  }}
+                  dropdownStyle={{ width: 80 }}
+                />
+
+                  <Text style={{ marginLeft: 10 }}>time per day</Text>
+                </View>
               </View>
             )}
             <View style={styles.buttonContainer}>
@@ -176,7 +212,7 @@ const AddTask: React.FC<AddTaskProps> = ({
 
             <TouchableOpacity 
               style={styles.buttonStyle} 
-              onPress={() => setShowModal(false)}
+              onPress={() => closeModal()}
             >
               <Text>Cancel</Text>
             </TouchableOpacity>

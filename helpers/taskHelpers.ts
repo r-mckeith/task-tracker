@@ -36,6 +36,7 @@ export const handleAddTask = async (
     inScopeWeek: isRecurring || (routeName === 'WeeklyScreen' || routeName === 'DailyScreen') ? currentDate : null,
     inScopeDay: isRecurring || routeName === 'DailyScreen' ? currentDate : null,
   };
+  console.log(newTask)
 
   try {
     const createdTask = await addTask(newTask);
