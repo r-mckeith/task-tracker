@@ -33,14 +33,6 @@ const Task: React.FC<TaskInterface> = ({
     return isRouteNameInScope(route.name, scopeRoutes);
   }
   
-  function showCompleteTaskToggle() {
-    if (!parentId) return false;
-    return true
-    // const completeRoutes = completed ? ['ScopeDay', 'ScopeWeek'] : [];
-    // const otherRoutes = ['DailyScreen', 'DailyReviewScreen', 'WeeklyScreen', 'WeeklyReviewScreen', 'MonthlyScreen'];
-    // return isRouteNameInScope(route.name, [...completeRoutes, ...otherRoutes]);
-  }
-  
   function showAddTaskIcon() {
     route.name
     const addRoutes = ['DailyReviewScreen', 'WeeklyReviewScreen', 'MonthlyReviewScreen'];
@@ -63,9 +55,7 @@ const Task: React.FC<TaskInterface> = ({
         <View style={[styles.taskContainer, getDepthStyle()]}>
           {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
-          {showCompleteTaskToggle() &&
-            <CompleteTask id={id} completed={completed} />
-          }
+          <CompleteTask id={id} completed={completed} />
           {showAddTaskIcon() && 
             <AddTask parentId={id} depth={depth} />
           }
