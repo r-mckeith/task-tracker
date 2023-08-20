@@ -15,7 +15,7 @@ const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed, pushed }) =>
   const { name } = useRoute();
   const { state, dispatch } = useTaskContext();
 
-  const reviewScreenNames = ['ReviewDay', 'ReviewWeek', 'ReviewQuarter'];
+  const reviewScreenNames = ['DailyReviewScreen', 'WeeklyReviewScreen', 'MonthlyReviewScreen'];
   const isReviewScreen = reviewScreenNames.includes(name);
 
   let iconName = 'checkbox-blank-outline';

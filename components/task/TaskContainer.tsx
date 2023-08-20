@@ -11,7 +11,6 @@ import { DoStackParamList } from '../../src/types/StackTypes';
 type TaskContainerProps = {
   tasks: TaskInterface[];
   navigateToAdd: keyof DoStackParamList;
-  navigateToReview: keyof DoStackParamList;
 };
 
 export default function TaskContainer({ tasks, navigateToAdd }: TaskContainerProps) {

@@ -109,7 +109,6 @@ const pushTaskToNextDay = (
   
   return state.map((task) => {
     if (task.id === actionId) {
-      console.log("DATE", today, 1)
       return { ...task, inScopeDay: tomorrowFormatted, pushed: pushedDate };
     }
     return task;

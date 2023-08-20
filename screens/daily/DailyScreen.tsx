@@ -2,15 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isSelectedDate } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/tasks/TaskContainer';
+import TaskContainer from '../../components/task/TaskContainer';
 import Header from '../../components/Header';
 
 export default function DailyScreen() {
   const { state: tasks } = useTaskContext();
+  console.log(tasks)
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  
+  function isTaskCompleted(task: TaskInterface) {
+    return task.completed;
+  }
 
   function isTaskRecurring(task: TaskInterface) {
+    console.log(task.recurringOptions && task.recurringOptions.isRecurring)
     return task.recurringOptions && task.recurringOptions.isRecurring;
   }
 
@@ -19,22 +25,21 @@ export default function DailyScreen() {
   }
 
   useEffect(() => {
-    const dailyTasks = tasks.filter((t) => isTaskForSelectedDate(t) || isTaskRecurring(t));
+    const dailyTasks = tasks.filter((t) => (isTaskForSelectedDate(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
     setFilteredTasks(dailyTasks);
 }, [tasks, selectedDate]);
 
 
   return (
     <>
-       <Header
-       title={''}
+      <Header
+        title={''}
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
       <TaskContainer
         tasks={filteredTasks}
         navigateToAdd="ScopeDay"
-        navigateToReview="ReviewDay"
       />
     </>
   );

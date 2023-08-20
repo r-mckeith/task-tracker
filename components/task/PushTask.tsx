@@ -21,7 +21,7 @@ const ScopeTask: React.FC<PushTaskProps> = ({
   const route = useRoute();
 
   const handlePushTask = () => {
-    route.name === 'ReviewDay' ? handlePushTaskForDay(id, inScopeDay, state, dispatch) : handlePushTaskForWeek(id, inScopeWeek, state, dispatch);
+    route.name === 'DailyReviewScreen' ? handlePushTaskForDay(id, inScopeDay, state, dispatch) : handlePushTaskForWeek(id, inScopeWeek, state, dispatch);
   };
 
   return (

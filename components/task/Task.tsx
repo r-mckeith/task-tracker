@@ -8,7 +8,7 @@ import styles from '../../styles/tasks/task'
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
-import AddNote from '../notes/AddNote';
+import AddNote from '../note/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 
@@ -29,21 +29,13 @@ const Task: React.FC<TaskInterface> = ({
   
   function showScopeTaskToggle() {
     if (!parentId) return false;
-    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeQuarter'];
+    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
     return isRouteNameInScope(route.name, scopeRoutes);
-  }
-  
-  function showCompleteTaskToggle() {
-    if (!parentId) return false;
-    return true
-    // const completeRoutes = completed ? ['ScopeDay', 'ScopeWeek'] : [];
-    // const otherRoutes = ['DailyScreen', 'ReviewDay', 'WeeklyScreen', 'ReviewWeek', 'QuarterlyScreen'];
-    // return isRouteNameInScope(route.name, [...completeRoutes, ...otherRoutes]);
   }
   
   function showAddTaskIcon() {
     route.name
-    const addRoutes = ['ReviewDayScreen', 'ReviewWeekScreen', 'ReviewQuarterScreen'];
+    const addRoutes = ['DailyReviewScreen', 'WeeklyReviewScreen', 'MonthlyReviewScreen'];
     return !isRouteNameInScope(route.name, addRoutes);
   }  
 
@@ -63,9 +55,7 @@ const Task: React.FC<TaskInterface> = ({
         <View style={[styles.taskContainer, getDepthStyle()]}>
           {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
-          {showCompleteTaskToggle() &&
-            <CompleteTask id={id} completed={completed} />
-          }
+          <CompleteTask id={id} completed={completed} />
           {showAddTaskIcon() && 
             <AddTask parentId={id} depth={depth} />
           }

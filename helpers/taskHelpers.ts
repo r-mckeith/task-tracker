@@ -32,7 +32,7 @@ export const handleAddTask = async (
       selectedDays: selectedDays,
       timesPerDay: timesPerDay,
     },
-    inScopeQuarter: currentDate,
+    inScopeMonth: currentDate,
     inScopeWeek: isRecurring || (routeName === 'WeeklyScreen' || routeName === 'DailyScreen') ? currentDate : null,
     inScopeDay: isRecurring || routeName === 'DailyScreen' ? currentDate : null,
   };
@@ -60,7 +60,6 @@ export const handleToggleCompleted = async (id: number, completed: Date | null, 
 };
 
 export const handleToggleScopeforDay = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-  console.log("HELPER")
   dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
 
   try {

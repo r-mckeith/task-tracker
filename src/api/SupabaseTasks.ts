@@ -104,7 +104,6 @@ export const toggleCompleted = async (id: number, currentScope: Date | null, tas
 
 
 export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
-  console.log("Toggle Scope for Day is being called with id:", id, "and currentScope:", currentScope);
   
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
@@ -135,7 +134,6 @@ export const toggleScopeForDay = async (id: number, currentScope: Date | string 
 
 
 export const toggleScopeForWeek = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
-  console.log("Toggle Scope for Week is being called with id:", id, "and currentScope:", currentScope);
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 

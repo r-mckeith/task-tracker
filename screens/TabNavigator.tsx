@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DailyStackScreen } from './day/DailyStack';
+import { DailyStackScreen } from './daily/DailyStackScreen';
 import { WeeklyStackScreen } from './week/WeeklyStack';
-import { QuarterlyStackScreen }  from './quarter/QuarterlyStack';
+import { MonthlyStackScreen }  from './month/MonthlyStackScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +16,7 @@ export function MyTabs() {
     >
       <Tab.Screen name="Day" component={DailyStackScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Week" component={WeeklyStackScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Quarter" component={QuarterlyStackScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Plan" component={MonthlyStackScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }

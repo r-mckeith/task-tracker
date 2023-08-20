@@ -15,7 +15,7 @@ export interface TaskData {
   depth: number;
   inScopeDay: Date | string | null;
   inScopeWeek: Date | string | null;
-  inScopeQuarter?: boolean | string | null;
+  inScopeMonth?: boolean | string | null;
 }
 
 // For Task Props
@@ -31,7 +31,7 @@ export interface NewTask {
   depth: number;
   userId: string;
   recurringOptions: RecurringOptions;
-  inScopeQuarter: Date | string | null;
+  inScopeMonth: Date | string | null;
   inScopeDay: Date | string | null;
   inScopeWeek: Date | string | null;
 }
@@ -50,7 +50,7 @@ export interface TaskInterface extends NewTask {
 export interface Scope {
   inScopeDay: Date | string | null;
   inScopeWeek: Date | string | null;
-  inScopeQuarter: Date | string | null;
+  inScopeMonth: Date | string | null;
 }
 
 // Add Task Props

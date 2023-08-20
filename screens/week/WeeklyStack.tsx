@@ -4,8 +4,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 import { DoStackParamList } from '../../src/types/StackTypes';
 import WeeklyScreen from './WeeklyScreen';
-import ReviewWeekScreen from './ReviewWeekScreen';
-import QuarterlyScreen from '../quarter/QuarterlyScreen'
+import WeeklyReviewScreen from './WeeklyReviewScreen';
+import MonthlyScreen from '../month/MonthlyScreen'
 
 const WeeklyStack = createStackNavigator<DoStackParamList>();
 const TopTab = createMaterialTopTabNavigator();
@@ -14,7 +14,7 @@ function WeeklyTopTabs() {
   return (
     <TopTab.Navigator>
       <TopTab.Screen name="WeeklyScreen" component={WeeklyScreen} options={{ title: 'Week' }} />
-      <TopTab.Screen name="ReviewWeek" component={ReviewWeekScreen} options={{ title: 'Review' }} />
+      <TopTab.Screen name="WeeklyReviewScreen" component={WeeklyReviewScreen} options={{ title: 'Review' }} />
     </TopTab.Navigator>
   );
 }
@@ -42,8 +42,8 @@ export function WeeklyStackScreen() {
         headerTintColor: '#767577',
     }}>
       <WeeklyStack.Screen name="WeeklyDuo" component={WeeklyTopTabs} options={{ title: '' }}/>
-      <WeeklyStack.Screen name="ReviewWeek" component={ReviewWeekScreen} options={{ title: '' }}/>
-      <WeeklyStack.Screen name="ScopeWeek" component={QuarterlyScreen} options={{ title: '' }}/>
+      <WeeklyStack.Screen name="WeeklyReviewScreen" component={WeeklyReviewScreen} options={{ title: '' }}/>
+      <WeeklyStack.Screen name="ScopeWeek" component={MonthlyScreen} options={{ title: '' }}/>
     </WeeklyStack.Navigator>
   );
 }

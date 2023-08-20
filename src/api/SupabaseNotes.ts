@@ -14,7 +14,6 @@ export const getNotes = async () => {
 };
 
 export const addNote = async (note: NewNote) => {
-  console.log(note)
   const { data, error } = await supabase
     .from('notes')
     .insert([note])
