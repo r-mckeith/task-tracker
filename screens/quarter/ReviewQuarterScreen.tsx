@@ -3,7 +3,7 @@ import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedMonth } from '../../helpers/dateHelpers';
 import ReviewContainer from '../../components/reviews/ReviewContainer';
-import HeaderNew from '../../components/HeaderNew'; // Import the Header
+import Header from '../../components/Header';
 
 export default function QuarterlyScreen() {
   const { state: tasks } = useTaskContext();
@@ -25,7 +25,7 @@ export default function QuarterlyScreen() {
 
   return (
     <>
-      <HeaderNew
+      <Header
         title={''}
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}

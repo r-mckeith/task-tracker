@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../styles/screens/dailyScreen'
 import { isRouteNameInScope } from '../../helpers/taskHelpers';
 import { TaskInterface } from '../../src/types/TaskTypes';
-import NestedList from '../list/NestedList';
+import NestedList from '../NestedList';
 import { DoStackParamList } from '../../src/types/StackTypes';
 
 type TaskContainerProps = {

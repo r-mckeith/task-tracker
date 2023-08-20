@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isSelectedDate } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/task/TaskContainer';
-import HeaderNew from '../../components/HeaderNew';
+import TaskContainer from '../../components/tasks/TaskContainer';
+import Header from '../../components/Header';
 
 export default function DailyScreen() {
   const { state: tasks } = useTaskContext();
@@ -30,7 +30,7 @@ export default function DailyScreen() {
 
   return (
     <>
-       <HeaderNew
+       <Header
        title={''}
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}

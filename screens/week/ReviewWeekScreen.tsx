@@ -3,7 +3,7 @@ import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedWeek } from '../../helpers/dateHelpers';
 import ReviewContainer from '../../components/reviews/ReviewContainer';
-import HeaderNew from '../../components/HeaderNew';
+import Header from '../../components/Header';
 
 export default function WeeklyScreen() {
   const { state: tasks } = useTaskContext();
@@ -20,15 +20,13 @@ export default function WeeklyScreen() {
   }
 
   useEffect(() => {
-    console.log("Tasks or selectedDate has changed");
     const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)));
-    console.log("Number of tasks after filter: ", weeklyTasks.length);
     setFilteredTasks(weeklyTasks);
   }, [tasks, selectedDate]);
 
   return (
     <>
-      <HeaderNew
+      <Header
         title={''}
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}

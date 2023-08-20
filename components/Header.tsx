@@ -1,74 +1,24 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import styles from '../styles/screens/dailyScreen';
+import { View, Text } from 'react-native';
+import DatePicker from './DatePicker';
+import styles from '../styles/screens/dailyScreen'
 
 type HeaderProps = {
   title: string;
-  children?: React.ReactNode;
-}
+  selectedDate: Date;
+  onDateChange: (date: Date) => void;
+};
 
-const Header: React.FC<HeaderProps> = ({ title, children }) => {
+const Header: React.FC<HeaderProps> = ({ title, selectedDate, onDateChange }) => {
   return (
-    <View>
-      <Text style={styles.headerText}>DATE</Text>
-      {children}
-    </View>
+    <View style={styles.headerContainer}>
+      <Text style={styles.headerText}>{title}</Text>
+      <DatePicker
+        selectedDate={selectedDate}
+        onDateChange={onDateChange}
+      />
+    </View>  
   );
 };
 
 export default Header;
-
-
-// import React from 'react';
-// import { Text, View } from 'react-native';
-// import { useRoute } from '@react-navigation/native';
-// import styles from '../styles/screens/dailyScreen'
-
-// const currentDate = new Date();
-
-// const dateFormatted = currentDate.toLocaleDateString('en-US', {
-//   weekday: 'long',
-//   month: 'long',
-//   day: 'numeric',
-// });
-
-// const dateFormattedForWeek = currentDate.toLocaleDateString('en-US', {
-//   month: 'long',
-//   day: 'numeric',
-// });
-
-// const Header: React.FC = () => {
-//   const route = useRoute();
-
-//   return (
-//     <View>
-//     {(route.name === 'DailyScreen' || route.name === 'ReviewDay') &&
-//       <Text style={styles.headerText}>{dateFormatted}</Text>
-//     }
-//     {route.name === 'ScopeDay' && 
-//       <Text style={styles.headerText}>Add tasks to your day</Text>
-//     }
-//     {route.name === 'WeeklyScreen' &&
-//       <Text style={styles.headerText}>Week of {dateFormattedForWeek}</Text>
-//     }
-//     {route.name === 'ScopeWeek' && 
-//       <Text style={styles.headerText}>Add tasks to your week</Text>
-//     }
-//     {route.name === 'ReviewWeek' &&
-//       <Text style={styles.headerText}>Review your week</Text>
-//     }
-//       {route.name === 'QuarterlyScreen' &&
-//       <Text style={styles.headerText}>Quarter of {dateFormattedForWeek}</Text>
-//     }
-//     {route.name === 'ScopeQuarter' && 
-//       <Text style={styles.headerText}>Add tasks to your quarter</Text>
-//     }
-//     {route.name === 'ReviewQuarter' &&
-//       <Text style={styles.headerText}>Review your quarter</Text>
-//     }
-//     </View>
-  
-//   );
-// };
-
-// export default Header;

@@ -3,9 +3,8 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import styles from '../../styles/screens/reviewDayScreen'
-import NestedList from '../list/NestedList';
+import NestedList from '../NestedList';
 import ReviewModal from './ReviewModal';
-import Header from '../Header';
 import { addNote } from '../../src/api/SupabaseNotes';
 import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
 
@@ -81,7 +80,6 @@ const ReviewContainer: React.FC<ReviewContainerProps> = ({tasks }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Header />
       </View>
       {tasks.length > 0 &&
         <View style={styles.taskList}>

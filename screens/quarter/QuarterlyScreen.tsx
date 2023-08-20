@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedMonth } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/task/TaskContainer';
-import HeaderNew from '../../components/HeaderNew'; // Import the Header
+import TaskContainer from '../../components/tasks/TaskContainer';
+import Header from '../../components/Header'; // Import the Header
 
 export default function QuarterlyScreen() {
   const { state: tasks } = useTaskContext();
@@ -29,7 +29,7 @@ export default function QuarterlyScreen() {
 
   return (
     <>
-      <HeaderNew
+      <Header
         title={''}
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}

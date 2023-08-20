@@ -8,7 +8,7 @@ import styles from '../../styles/tasks/task'
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
-import AddNote from '../note/AddNote';
+import AddNote from '../notes/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 

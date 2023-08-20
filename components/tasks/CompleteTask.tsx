@@ -8,7 +8,7 @@ import { handleToggleCompleted } from '../../helpers/taskHelpers';
 interface CompleteTaskProps {
   id: number;
   completed: Date | null;
-  pushed: Date | null;
+  pushed?: Date | null;
 }
 
 const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed, pushed }) => {
