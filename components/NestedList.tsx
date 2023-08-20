@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TaskInterface } from '../../src/types/TaskTypes'
-import Task from '../task/Task';
+import { TaskInterface } from '../src/types/TaskTypes'
+import Task from './tasks/Task';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
@@ -32,7 +32,6 @@ const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
         </View>
       ));
   };
-  
   
   return (
     <View style={styles.container}>

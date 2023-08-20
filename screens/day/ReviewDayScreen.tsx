@@ -1,12 +1,41 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { DoStackParamList } from '../../src/types/StackTypes';
-import ReviewComponent from '../../components/reviews/ReviewScreen';
+import React, { useState, useEffect } from 'react';
+import { TaskInterface } from '../../src/types/TaskTypes';
+import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
+import { isSelectedDate } from '../../helpers/dateHelpers';
+import TaskContainer from '../../components/tasks/TaskContainer';
+import Header from '../../components/Header';
 
-export default function ReviewDayScreen() {
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList, 'ReviewDay'>>();
+export default function DailyScreen() {
+  const { state: tasks } = useTaskContext();
+  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  function isTaskRecurring(task: TaskInterface) {
+    return task.recurringOptions && task.recurringOptions.isRecurring;
+  }
+
+  function isTaskForSelectedDate(task: TaskInterface) {
+    return task.inScopeDay && isSelectedDate(task.inScopeDay, selectedDate);
+  }
+
+  useEffect(() => {
+    const dailyTasks = tasks.filter((t) => isTaskForSelectedDate(t) || isTaskRecurring(t));
+    setFilteredTasks(dailyTasks);
+}, [tasks, selectedDate]);
+
+
   return (
-    <ReviewComponent timeFrame="day" navigation={navigation} />
+    <>
+       <Header
+       title={''}
+        selectedDate={selectedDate} 
+        onDateChange={setSelectedDate}
+      />
+      <TaskContainer
+        tasks={filteredTasks}
+        navigateToAdd="ScopeDay"
+        navigateToReview="ReviewDay"
+      />
+    </>
   );
 }

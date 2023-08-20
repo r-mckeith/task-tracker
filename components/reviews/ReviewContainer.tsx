@@ -2,56 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { DoStackParamList } from '../../src/types/StackTypes';
 import styles from '../../styles/screens/reviewDayScreen'
-import NestedList from '../list/NestedList';
+import NestedList from '../NestedList';
 import ReviewModal from './ReviewModal';
-import Header from '../Header';
 import { addNote } from '../../src/api/SupabaseNotes';
-import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay, todayFormatted } from '../../helpers/taskHelpers';
+import { handleToggleCompleted, handleDelete, handlePushTaskForDay, handleToggleScopeforDay } from '../../helpers/taskHelpers';
 
-type ReviewComponentProps = {
-  timeFrame: 'day' | 'week' | 'quarter';
-  navigation: StackNavigationProp<DoStackParamList>;
+type ReviewContainerProps = {
+  tasks: TaskInterface[];
 };
 
-const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation }) => {
-  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+const ReviewContainer: React.FC<ReviewContainerProps> = ({tasks }) => {
   const [incompleteTasks, setIncompleteTasks] = useState<TaskInterface[]>([]);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [currentTask, setCurrentTask] = useState<TaskInterface | null>(null);
 
 
-  const { state, dispatch } = useTaskContext();
+  const { dispatch } = useTaskContext();
 
   const reversedIncompleteTasks = [...incompleteTasks].reverse();
 
   useEffect(() => {
-    let tasks;
-    switch (timeFrame) {
-      case 'day':
-        state.map(t => t.unScoped)
-        tasks = state.filter(t => (t.inScopeDay === todayFormatted || (t.pushed === todayFormatted) || (t.unScoped === todayFormatted)));
-        break;
-      case 'week':
-        tasks = state.filter(t => t.inScopeWeek);
-        break;
-      case 'quarter':
-        tasks = state.filter(t => t.inScopeQuarter);
-        break;
-    }
-  
     const incomplete = tasks.filter(t => !t.completed);
-    setFilteredTasks(tasks);
     setIncompleteTasks(incomplete);
   
     if (incomplete.length === 0) {
       setShowModal(false);
     }
     setCurrentTask(incomplete[incomplete.length - 1]);
-  }, [state, timeFrame]);
+  }, [tasks]);
+  
 
   const handleDoneButtonPress = () => {
     if (incompleteTasks.length > 0) {
@@ -60,22 +41,22 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   };
 
    const handleComplete = (task: TaskInterface) => {
-    handleToggleCompleted(task.id, task.completed, state, dispatch);
+    handleToggleCompleted(task.id, task.completed, tasks, dispatch);
     moveToNextTask();
   };
 
   const handleDeleteTask = (task: TaskInterface) => {
-    handleDelete(task.id, state, dispatch);
+    handleDelete(task.id, tasks, dispatch);
     moveToNextTask();
   };
 
   const handleToggleScope = (task: TaskInterface) => {
-    handleToggleScopeforDay(task.id, task.inScopeDay, filteredTasks, dispatch);
+    handleToggleScopeforDay(task.id, task.inScopeDay, tasks, dispatch);
     moveToNextTask();
   }
   
   const handlePushTask = async (id: number, completed: Date | null) => {
-    await handlePushTaskForDay(id, completed, state, dispatch);
+    await handlePushTaskForDay(id, completed, tasks, dispatch);
   };
 
   const handleAddNote = async (noteText: string, taskId: number) => {
@@ -99,11 +80,10 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Header />
       </View>
-      {filteredTasks.length > 0 &&
+      {tasks.length > 0 &&
         <View style={styles.taskList}>
-          <NestedList taskProps={filteredTasks} />
+          <NestedList taskProps={tasks} />
         </View>
       }
       <ReviewModal
@@ -114,7 +94,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
         onToggleScope={handleToggleScope}
         onPushTask={handlePushTask}
         onAddNote={handleAddNote}
-    />
+      />
 
       <View style={styles.addButtonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleDoneButtonPress}>
@@ -125,4 +105,4 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({ timeFrame, navigation
   );
 };
 
-export default ReviewComponent;
+export default ReviewContainer;
