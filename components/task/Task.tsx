@@ -28,7 +28,6 @@ const Task: React.FC<TaskInterface> = ({
   const [showNoteModal, setShowNoteModal] = useState(false);
   
   function showScopeTaskToggle() {
-    if (!parentId) return false;
     const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
     return isRouteNameInScope(route.name, scopeRoutes);
   }
