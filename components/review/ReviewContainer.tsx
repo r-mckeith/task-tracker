@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import styles from '../../styles/screens/reviewDayScreen'
+import styles from '../../styles/screens/dailyReviewScreen'
 import NestedList from '../NestedList';
 import ReviewModal from './ReviewModal';
 import { addNote } from '../../src/api/SupabaseNotes';
@@ -79,13 +79,14 @@ const ReviewContainer: React.FC<ReviewContainerProps> = ({tasks }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-      </View>
-      {tasks.length > 0 &&
+      {tasks.length > 0 ? (
         <View style={styles.taskList}>
           <NestedList taskProps={tasks} />
         </View>
-      }
+      ) : (
+        <View style={styles.emptyContainer} />
+      )}
+
       <ReviewModal
         visible={showModal}
         task={currentTask}

@@ -8,7 +8,7 @@ import styles from '../../styles/tasks/task'
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
-import AddNote from '../notes/AddNote';
+import AddNote from '../note/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 
@@ -29,7 +29,7 @@ const Task: React.FC<TaskInterface> = ({
   
   function showScopeTaskToggle() {
     if (!parentId) return false;
-    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeQuarter'];
+    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
     return isRouteNameInScope(route.name, scopeRoutes);
   }
   
@@ -37,13 +37,13 @@ const Task: React.FC<TaskInterface> = ({
     if (!parentId) return false;
     return true
     // const completeRoutes = completed ? ['ScopeDay', 'ScopeWeek'] : [];
-    // const otherRoutes = ['DailyScreen', 'ReviewDay', 'WeeklyScreen', 'ReviewWeek', 'QuarterlyScreen'];
+    // const otherRoutes = ['DailyScreen', 'DailyReviewScreen', 'WeeklyScreen', 'WeeklyReviewScreen', 'MonthlyScreen'];
     // return isRouteNameInScope(route.name, [...completeRoutes, ...otherRoutes]);
   }
   
   function showAddTaskIcon() {
     route.name
-    const addRoutes = ['ReviewDayScreen', 'ReviewWeekScreen', 'ReviewQuarterScreen'];
+    const addRoutes = ['DailyReviewScreen', 'WeeklyReviewScreen', 'MonthlyReviewScreen'];
     return !isRouteNameInScope(route.name, addRoutes);
   }  
 

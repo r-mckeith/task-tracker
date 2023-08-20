@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { isInSelectedWeek } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/task/TaskContainer';
+import { isInSelectedMonth } from '../../helpers/dateHelpers';
+import ReviewContainer from '../../components/review/ReviewContainer';
 import Header from '../../components/Header';
 
-export default function WeeklyScreen() {
+export default function MonthlyReviewScreen() {
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  function isTaskForSelectedWeek(task: TaskInterface) {
-    return task.inScopeWeek && isInSelectedWeek(task.inScopeWeek, selectedDate);
-  }
-
-  function isTaskCompleted(task: TaskInterface) {
-    return task.completed;
+  function isTaskForSelectedMonth(task: TaskInterface) {
+    return task.inScopeMonth && isInSelectedMonth(task.inScopeMonth, selectedDate);
   }
 
   function isTaskRecurring(task: TaskInterface) {
@@ -23,8 +19,8 @@ export default function WeeklyScreen() {
   }
 
   useEffect(() => {
-    const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
-    setFilteredTasks(weeklyTasks);
+    const monthlyTasks = tasks.filter((t) => isTaskForSelectedMonth(t) || isTaskRecurring(t));
+    setFilteredTasks(monthlyTasks);
   }, [tasks, selectedDate]);
 
   return (
@@ -34,10 +30,8 @@ export default function WeeklyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
-      <TaskContainer
-        tasks={filteredTasks}
-        navigateToAdd="ScopeWeek"
-      />
+      <ReviewContainer tasks={filteredTasks} />
     </>
   );
 }
+

@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedMonth } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/tasks/TaskContainer';
-import Header from '../../components/Header'; // Import the Header
+import TaskContainer from '../../components/task/TaskContainer';
+import Header from '../../components/Header';
 
-export default function QuarterlyScreen() {
+export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   function isTaskForSelectedMonth(task: TaskInterface) {
-    return task.inScopeQuarter && isInSelectedMonth(task.inScopeQuarter, selectedDate);
+    return task.inScopeMonth && isInSelectedMonth(task.inScopeMonth, selectedDate);
   }
 
   function isTaskCompleted(task: TaskInterface) {
@@ -23,8 +23,8 @@ export default function QuarterlyScreen() {
   }
 
   useEffect(() => {
-    const quarterlyTasks = tasks.filter((t) => (isTaskForSelectedMonth(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
-    setFilteredTasks(quarterlyTasks);
+    const monthlyTasks = tasks.filter((t) => (isTaskForSelectedMonth(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
+    setFilteredTasks(monthlyTasks);
   }, [tasks, selectedDate]);
 
   return (
@@ -36,8 +36,7 @@ export default function QuarterlyScreen() {
       />
       <TaskContainer
         tasks={filteredTasks}
-        navigateToAdd="ScopeQuarter"
-        navigateToReview="ReviewQuarter"
+        navigateToAdd="ScopeMonth"
       />
     </>
   );

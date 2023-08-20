@@ -20,6 +20,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    marginBottom: 5,
   },
   headerText: {
     color: '#000',
@@ -49,5 +50,10 @@ export default StyleSheet.create({
   addButtonText: {
     color: '#000',
     fontSize: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

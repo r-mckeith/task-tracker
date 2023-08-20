@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedWeek } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/task/TaskContainer';
+import ReviewContainer from '../../components/review/ReviewContainer';
 import Header from '../../components/Header';
 
-export default function WeeklyScreen() {
+export default function WeeklyReviewScreen() {
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -14,16 +14,12 @@ export default function WeeklyScreen() {
     return task.inScopeWeek && isInSelectedWeek(task.inScopeWeek, selectedDate);
   }
 
-  function isTaskCompleted(task: TaskInterface) {
-    return task.completed;
-  }
-
   function isTaskRecurring(task: TaskInterface) {
     return task.recurringOptions && task.recurringOptions.isRecurring;
   }
 
   useEffect(() => {
-    const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
+    const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)));
     setFilteredTasks(weeklyTasks);
   }, [tasks, selectedDate]);
 
@@ -34,10 +30,7 @@ export default function WeeklyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
-      <TaskContainer
-        tasks={filteredTasks}
-        navigateToAdd="ScopeWeek"
-      />
+      <ReviewContainer tasks={filteredTasks} />
     </>
   );
 }
