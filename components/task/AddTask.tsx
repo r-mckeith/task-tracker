@@ -19,7 +19,9 @@ const AddTask: React.FC<AddTaskProps> = ({
   const [isRecurring, setIsRecurring] = useState(false);
   const [timesPerDay, setTimesPerDay] = useState('');
   const [timesPerWeek, setTimesPerWeek] = useState('');
+  const [timesPerMonth, setTimesPerMonth] = useState('');
   const [showDailyCheckboxes, setShowDailyCheckboxes] = useState(false);
+  const [showRecurrenceDropdown, setShowRecurrenceDropdown] = useState(false);
   const [selectedDays, setSelectedDays] = useState<{ [key in DayName]: boolean }>({
     Sun: true,
     Mon: true,
@@ -75,6 +77,7 @@ const AddTask: React.FC<AddTaskProps> = ({
 
   useEffect(() => {
     if (recurrenceType === 'daily') {
+      resetStates();
       setShowDailyCheckboxes(true);
       setSelectedDays({
         Sun: true,
@@ -86,6 +89,7 @@ const AddTask: React.FC<AddTaskProps> = ({
         Sat: true,
       });
     } else if (recurrenceType === 'specificDays') {
+      resetStates();
       setShowDailyCheckboxes(true);
       setSelectedDays({
         Sun: false,
@@ -97,8 +101,8 @@ const AddTask: React.FC<AddTaskProps> = ({
         Sat: false,
       });
     } else if (recurrenceType === 'weekly') {
-      resetStates()
-
+      resetStates();
+      setShowRecurrenceDropdown(true);
     } else {
       setShowDailyCheckboxes(false);
     }
@@ -107,7 +111,9 @@ const AddTask: React.FC<AddTaskProps> = ({
   const resetStates = () => {
     setTimesPerDay('');
     setTimesPerWeek('');
+    setTimesPerMonth('');
     setShowDailyCheckboxes(false);
+    setShowRecurrenceDropdown(false);
     setSelectedDays({
       Sun: false,
       Mon: false,
@@ -148,6 +154,7 @@ const AddTask: React.FC<AddTaskProps> = ({
                     setIsRecurring(newValue);
                     if (!newValue) {
                       setShowDailyCheckboxes(false);
+                      setShowRecurrenceDropdown(false);
                       setSelectedDays({
                         Sun: false,
                         Mon: false,
@@ -176,8 +183,8 @@ const AddTask: React.FC<AddTaskProps> = ({
                   <TouchableOpacity style={styles.button} onPress={() => toggleRecurrence('daily')}>
                     <Text>Daily</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button} onPress={() => {/* Handle Monthly */}}>
-                      <Text>Monthly</Text>
+                  <TouchableOpacity style={styles.button} onPress={() => toggleRecurrence('monthly')}>
+                    <Text>Monthly</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.button} onPress={() => {/* Handle Periodic */}}>
                       <Text>Periodic</Text>
@@ -231,7 +238,7 @@ const AddTask: React.FC<AddTaskProps> = ({
                 </View>
               </View>
             )}
-            {recurrenceType === 'weekly' && (
+            {showRecurrenceDropdown && recurrenceType === 'weekly' && (
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
               <ModalDropdown 
                 options={['1', '2', '3', '4', '5']}
@@ -252,7 +259,31 @@ const AddTask: React.FC<AddTaskProps> = ({
                 }}
                 dropdownStyle={{ width: 80 }}
               />
-                <Text style={{ marginLeft: 10 }}>{timesPerWeek === '1' ? 'time per week' : 'times per week'}</Text>
+                <Text style={{ marginLeft: 10 }}>{timesPerMonth === '1' ? 'time per week' : 'times per week'}</Text>
+              </View>
+            )}
+              {showRecurrenceDropdown && recurrenceType === 'monthly' && (
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <ModalDropdown 
+                options={['1', '2', '3', '4', '5']}
+                defaultValue={timesPerMonth || 'Select...'}
+                onSelect={(index, value) => setTimesPerMonth(value)}
+                
+                style={{
+                  height: 30,
+                  width: 80,
+                  borderWidth: 1, 
+                  borderColor: "#ddd", 
+                  borderRadius: 8, 
+                  justifyContent: 'center'
+                }} 
+                textStyle={{
+                  textAlign: 'center',
+                  fontSize: 14
+                }}
+                dropdownStyle={{ width: 80 }}
+              />
+                <Text style={{ marginLeft: 10 }}>{timesPerWeek === '1' ? 'time per month' : 'times per month'}</Text>
               </View>
             )}
             <View style={styles.buttonContainer}>
