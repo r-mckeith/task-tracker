@@ -17,9 +17,7 @@ const AddTask: React.FC<AddTaskProps> = ({
   const [newTaskName, setNewTaskName] = useState('');
   const [recurrenceType, setRecurrenceType] = useState<null | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'specificDays'>(null);
   const [isRecurring, setIsRecurring] = useState(false);
-  const [timesPerDay, setTimesPerDay] = useState('');
-  const [timesPerWeek, setTimesPerWeek] = useState('');
-  const [timesPerMonth, setTimesPerMonth] = useState('');
+  const [timesPerPeriod, setTimesPerPeriod] = useState<string>('');
   const [showDailyCheckboxes, setShowDailyCheckboxes] = useState(false);
   const [showRecurrenceDropdown, setShowRecurrenceDropdown] = useState(false);
   const [selectedDays, setSelectedDays] = useState<{ [key in DayName]: boolean }>({
@@ -51,14 +49,14 @@ const AddTask: React.FC<AddTaskProps> = ({
   }
 
   const onAddTask = async () => {
-    const success = await handleAddTask(newTaskName, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
+    const success = await handleAddTask(newTaskName, parentId, depth, isRecurring, selectedDays, timesPerPeriod, route.name, dispatch);
     
     if (success) {
       setNewTaskName('');
       setIsRecurring(false);
       setShowModal(false);
       setShowDailyCheckboxes(false);
-      setTimesPerDay('');
+      setTimesPerPeriod('');
     } else {
       console.error('Failed to add task');
     }
@@ -68,7 +66,7 @@ const AddTask: React.FC<AddTaskProps> = ({
     setShowModal(false);
     setShowDailyCheckboxes(false);
     setIsRecurring(false);
-    setTimesPerDay('');
+    setTimesPerPeriod('');
   };
 
   const toggleRecurrence = (type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'specificDays') => {
@@ -91,15 +89,6 @@ const AddTask: React.FC<AddTaskProps> = ({
     } else if (recurrenceType === 'specificDays') {
       resetStates();
       setShowDailyCheckboxes(true);
-      setSelectedDays({
-        Sun: false,
-        Mon: false,
-        Tue: false,
-        Wed: false,
-        Thu: false,
-        Fri: false,
-        Sat: false,
-      });
     } else if (recurrenceType === 'weekly') {
       resetStates();
       setShowRecurrenceDropdown(true);
@@ -109,9 +98,7 @@ const AddTask: React.FC<AddTaskProps> = ({
   }, [recurrenceType]);
 
   const resetStates = () => {
-    setTimesPerDay('');
-    setTimesPerWeek('');
-    setTimesPerMonth('');
+    setTimesPerPeriod('')
     setShowDailyCheckboxes(false);
     setShowRecurrenceDropdown(false);
     setSelectedDays({
@@ -123,10 +110,46 @@ const AddTask: React.FC<AddTaskProps> = ({
       Fri: false,
       Sat: false,
     });
-    // ... other states to reset
+  };
+
+  const renderDropdown = (
+    options: string[],
+    defaultValue: string,
+    setValueFunc: (value: string) => void,
+    type: 'daily' | 'weekly' | 'monthly'
+  ) => {
+    const types = {
+      daily: 'day',
+      weekly: 'week',
+      monthly: 'month',
+    };
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+        <ModalDropdown
+          options={options}
+          defaultValue={defaultValue || 'Select...'}
+          onSelect={(index, value) => setValueFunc(value)}
+          style={{
+            height: 30,
+            width: 80,
+            borderWidth: 1,
+            borderColor: "#ddd",
+            borderRadius: 8,
+            justifyContent: 'center',
+          }}
+          textStyle={{
+            textAlign: 'center',
+            fontSize: 14,
+          }}
+          dropdownStyle={{ width: 80 }}
+        />
+        <Text style={{ marginLeft: 10 }}>
+          {defaultValue === '1' ? `time per ${types[type]}` : `times per ${types[type]}`}
+        </Text>
+      </View>
+    );
   };
   
-
   return (
     <View>
      <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
@@ -214,78 +237,11 @@ const AddTask: React.FC<AddTaskProps> = ({
                     </TouchableOpacity>
                   ))}
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                <ModalDropdown 
-                  options={['1', '2', '3', '4', '5']}
-                  defaultValue={timesPerDay || 'Select...'}
-                  onSelect={(index, value) => setTimesPerDay(value)}
-                  
-                  style={{
-                    height: 30,
-                    width: 80,
-                    borderWidth: 1, 
-                    borderColor: "#ddd", 
-                    borderRadius: 8, 
-                    justifyContent: 'center'
-                  }} 
-                  textStyle={{
-                    textAlign: 'center',
-                    fontSize: 14
-                  }}
-                  dropdownStyle={{ width: 80 }}
-                />
-                  <Text style={{ marginLeft: 10 }}>{timesPerDay === '1' ? 'time per day' : 'times per day'}</Text>
-                </View>
               </View>
             )}
-            {showRecurrenceDropdown && recurrenceType === 'weekly' && (
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <ModalDropdown 
-                options={['1', '2', '3', '4', '5']}
-                defaultValue={timesPerWeek || 'Select...'}
-                onSelect={(index, value) => setTimesPerWeek(value)}
-                
-                style={{
-                  height: 30,
-                  width: 80,
-                  borderWidth: 1, 
-                  borderColor: "#ddd", 
-                  borderRadius: 8, 
-                  justifyContent: 'center'
-                }} 
-                textStyle={{
-                  textAlign: 'center',
-                  fontSize: 14
-                }}
-                dropdownStyle={{ width: 80 }}
-              />
-                <Text style={{ marginLeft: 10 }}>{timesPerMonth === '1' ? 'time per week' : 'times per week'}</Text>
-              </View>
-            )}
-              {showRecurrenceDropdown && recurrenceType === 'monthly' && (
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <ModalDropdown 
-                options={['1', '2', '3', '4', '5']}
-                defaultValue={timesPerMonth || 'Select...'}
-                onSelect={(index, value) => setTimesPerMonth(value)}
-                
-                style={{
-                  height: 30,
-                  width: 80,
-                  borderWidth: 1, 
-                  borderColor: "#ddd", 
-                  borderRadius: 8, 
-                  justifyContent: 'center'
-                }} 
-                textStyle={{
-                  textAlign: 'center',
-                  fontSize: 14
-                }}
-                dropdownStyle={{ width: 80 }}
-              />
-                <Text style={{ marginLeft: 10 }}>{timesPerWeek === '1' ? 'time per month' : 'times per month'}</Text>
-              </View>
-            )}
+            {showDailyCheckboxes && renderDropdown(['1', '2', '3', '4', '5'], timesPerPeriod, setTimesPerPeriod, 'daily')}
+            {showRecurrenceDropdown && recurrenceType === 'weekly' && renderDropdown(['1', '2', '3', '4', '5'], timesPerPeriod, setTimesPerPeriod, 'weekly')}
+            {showRecurrenceDropdown && recurrenceType === 'monthly' && renderDropdown(['1', '2', '3', '4', '5'], timesPerPeriod, setTimesPerPeriod, 'monthly')}
             <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.buttonStyle} 
