@@ -4,6 +4,7 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { isInSelectedMonth } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
 import Header from '../../components/Header';
+import AddTask from '../../components/task/AddTask';
 
 export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();
@@ -34,6 +35,7 @@ export default function MonthlyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
+      <AddTask parentId={0} depth={1} />
       <TaskContainer
         tasks={filteredTasks}
         navigateToAdd="ScopeMonth"
