@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
+import { useDateContext } from '../../src/contexts/date/useDateContext'
 import { isSelectedDate } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
 import Header from '../../components/Header';
 
 export default function DailyScreen() {
   const { state: tasks } = useTaskContext();
-  console.log(tasks)
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate, setSelectedDate } = useDateContext();
   
   function isTaskCompleted(task: TaskInterface) {
     return task.completed;

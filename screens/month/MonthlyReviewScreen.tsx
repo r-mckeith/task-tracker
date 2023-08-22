@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
+import { useDateContext } from '../../src/contexts/date/useDateContext';
 import { isInSelectedMonth } from '../../helpers/dateHelpers';
 import ReviewContainer from '../../components/review/ReviewContainer';
 import Header from '../../components/Header';
@@ -8,7 +9,7 @@ import Header from '../../components/Header';
 export default function MonthlyReviewScreen() {
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { selectedDate, setSelectedDate } = useDateContext();
 
   function isTaskForSelectedMonth(task: TaskInterface) {
     return task.inScopeMonth && isInSelectedMonth(task.inScopeMonth, selectedDate);
