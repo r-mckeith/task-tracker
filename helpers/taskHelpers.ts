@@ -13,6 +13,7 @@ export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch:
 
 export const handleAddTask = async (
   newTaskName: string,
+  userId: string | null,
   parentId: number,
   depth: number,
   isRecurring: boolean | null = null,
@@ -22,11 +23,15 @@ export const handleAddTask = async (
   dispatch: React.Dispatch<any>
 ): Promise<boolean> => {
   const currentDate = new Date();
+  if (!userId) {
+    throw new Error("User's ID is not available.");
+  }
+  
   const newTask: NewTask = {
     name: newTaskName,
     parentId: parentId,
     depth: depth + 1,
-    userId: '19ccea07-a8a2-4bde-a768-48bc9e8f775e',
+    user_id: userId,
     recurringOptions: {
       isRecurring: isRecurring,
       selectedDays: selectedDays,

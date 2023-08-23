@@ -16,3 +16,10 @@ export const useSession = () => {
 
   return session;
 };
+
+const useUserId = (): string | null => {
+  const session = useSession();
+  return session?.user?.id || null;
+}
+
+export default useUserId;
