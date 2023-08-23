@@ -59,14 +59,10 @@ export function isInSelectedWeek(date: string | Date, referenceDate: Date): bool
   }
 
   const strippedDate = stripTimeFromDateUTC(d);
-  console.log("STRIPPED DATE", strippedDate)
   const strippedReferenceDate = stripTimeFromDateUTC(referenceDate);
-  console.log("STRIPPED REFERENCE DATE", strippedReferenceDate)
 
   const startOfWeek = getStartOfWeek(strippedReferenceDate);
-  console.log("START OF WEEK", startOfWeek)
   const endOfWeek = getEndOfWeek(strippedReferenceDate);
-  console.log("END OF WEEK", endOfWeek)
   
   return startOfWeek <= strippedDate && strippedDate <= endOfWeek;
 }
