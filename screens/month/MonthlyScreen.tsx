@@ -6,6 +6,7 @@ import { isInSelectedMonth } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
 import Header from '../../components/Header';
 import AddTask from '../../components/task/AddTask';
+import Account from '../../components/auth/Account';
 
 export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();

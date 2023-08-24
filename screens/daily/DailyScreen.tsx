@@ -16,7 +16,6 @@ export default function DailyScreen() {
   }
 
   function isTaskRecurring(task: TaskInterface) {
-    console.log(task.recurringOptions && task.recurringOptions.isRecurring)
     return task.recurringOptions && task.recurringOptions.isRecurring;
   }
 

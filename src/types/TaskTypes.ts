@@ -29,7 +29,7 @@ export interface NewTask {
   name: string;
   parentId: number;
   depth: number;
-  userId: string;
+  user_id: string;
   recurringOptions: RecurringOptions;
   inScopeMonth: Date | string | null;
   inScopeDay: Date | string | null;

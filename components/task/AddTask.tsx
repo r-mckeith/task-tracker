@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import useUserId from '../../src/contexts/sessions/UseSessionHook';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from '../../styles/tasks/addTask';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
@@ -15,6 +16,7 @@ const AddTask = ({ parentId, depth }: AddTaskProps) => {
   const [timesPerDay, setTimesPerDay] = useState('');
   const route = useRoute();
   const { dispatch } = useTaskContext();
+  const userId = useUserId();
 
   const getTaskLevelName = (depth: number) => {
     switch (depth) {
@@ -32,7 +34,7 @@ const AddTask = ({ parentId, depth }: AddTaskProps) => {
   }
 
   const onAddTask = async () => {
-    const success = await handleAddTask(newTaskName, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
+    const success = await handleAddTask(newTaskName, userId, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
     if (success) {
       setNewTaskName('');
       setIsRecurring(false);
