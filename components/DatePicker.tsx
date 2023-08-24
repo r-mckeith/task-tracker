@@ -8,7 +8,7 @@ type DatePickerProps = {
   onDateChange: (date: Date) => void;
 };
 
-const DatePickerComponent: React.FC<DatePickerProps> = ({ selectedDate, onDateChange }) => {
+const DatePickerComponent = ({ selectedDate, onDateChange }: DatePickerProps) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {

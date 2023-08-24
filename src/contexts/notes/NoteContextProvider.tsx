@@ -7,7 +7,7 @@ interface NoteContextProviderProps {
   children: ReactNode;
 }
 
-const NoteContextProvider: React.FC<NoteContextProviderProps> = ({ children }) => {
+const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
   const [state, dispatch] = useReducer(NoteReducer, []);
 
   useEffect(() => {

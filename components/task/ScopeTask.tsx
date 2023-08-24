@@ -12,11 +12,7 @@ interface ScopeProps {
   inScopeWeek: Date | string | null;
 }
 
-const ScopeTask: React.FC<ScopeProps> = ({
-  id,
-  inScopeDay,
-  inScopeWeek,
-}) => {
+const ScopeTask = ({id, inScopeDay, inScopeWeek}: ScopeProps) => {
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
 

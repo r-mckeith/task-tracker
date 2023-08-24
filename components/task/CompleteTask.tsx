@@ -11,7 +11,7 @@ interface CompleteTaskProps {
   pushed?: Date | null;
 }
 
-const CompleteTask: React.FC<CompleteTaskProps> = ({ id, completed, pushed }) => {
+const CompleteTask = ({ id, completed, pushed }: CompleteTaskProps) => {
   const { name } = useRoute();
   const { state, dispatch } = useTaskContext();
 

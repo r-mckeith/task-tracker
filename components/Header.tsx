@@ -9,7 +9,7 @@ type HeaderProps = {
   onDateChange: (date: Date) => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ title, selectedDate, onDateChange }) => {
+const Header = ({ title, selectedDate, onDateChange }: HeaderProps) => {
   return (
     <View style={styles.headerContainer}>
       <Text style={styles.headerText}>{title}</Text>
