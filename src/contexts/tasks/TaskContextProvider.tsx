@@ -7,7 +7,7 @@ interface TaskContextProviderProps {
   children: ReactNode;
 }
 
-const TaskContextProvider: React.FC<TaskContextProviderProps> = ({ children }) => {
+const TaskContextProvider = ({ children }: TaskContextProviderProps) => {
   const [state, dispatch] = useReducer(taskReducer, []);
 
   useEffect(() => {

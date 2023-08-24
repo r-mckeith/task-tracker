@@ -7,7 +7,7 @@ interface NestedListProps {
   taskProps: TaskInterface[];
 }
 
-const NestedList: React.FC<NestedListProps> = ({taskProps}) => {
+const NestedList = ({taskProps}: NestedListProps) => {
 
   const findRootTasks = () => {
     const allIds = new Set(taskProps.map(task => task.id));

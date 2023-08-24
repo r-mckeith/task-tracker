@@ -12,15 +12,7 @@ import AddNote from '../note/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 
-const Task: React.FC<TaskInterface> = ({
-  id,
-  name,
-  parentId,
-  completed,
-  inScopeDay,
-  inScopeWeek,
-  depth,
-}) => {
+const Task = ({id, name, parentId, completed, inScopeDay, inScopeWeek, depth}: TaskInterface) => {
   const route = useRoute();
   const { state, dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);

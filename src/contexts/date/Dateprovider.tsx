@@ -5,7 +5,7 @@ type DateProviderProps = {
   children: ReactNode;
 };
 
-const DateProvider: React.FC<DateProviderProps> = ({ children }) => {
+const DateProvider = ({ children }: DateProviderProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (

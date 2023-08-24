@@ -15,14 +15,7 @@ type RenderRightActionsProps = {
   swipeableRow: React.RefObject<Swipeable | null>;
 };
 
-const RenderRightActions: React.FC<RenderRightActionsProps> = ({
-  handleDelete,
-  id,
-  tasks,
-  dispatch,
-  setShowNoteModal,
-  swipeableRow
-}) => {
+const RenderRightActions = ({swipeableRow, id, tasks, dispatch, handleDelete, setShowNoteModal}: RenderRightActionsProps) => {
   return (
     <View style={styles.rightActionContainer}>
       <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, tasks, dispatch)}>

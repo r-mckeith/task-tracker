@@ -12,7 +12,7 @@ type ReviewContainerProps = {
   tasks: TaskInterface[];
 };
 
-const ReviewContainer: React.FC<ReviewContainerProps> = ({tasks }) => {
+const ReviewContainer = ({tasks }: ReviewContainerProps) => {
   const [incompleteTasks, setIncompleteTasks] = useState<TaskInterface[]>([]);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);

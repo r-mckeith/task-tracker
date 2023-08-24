@@ -7,12 +7,7 @@ import { AddNoteProps } from '../../src/types/NoteTypes';
 import { NewNote } from '../../src/types/NoteTypes';
 import { addNote } from '../../src/api/SupabaseNotes';
 
-const AddNote: React.FC<AddNoteProps> = ({
-  showModal,
-  taskId,
-  onClose,
-  setShowModal,
-}) => {
+const AddNote = ({showModal, taskId, onClose, setShowModal}: AddNoteProps) => {
   const [noteText, setNoteText] = useState('');
 
   const { dispatch } = useNoteContext();

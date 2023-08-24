@@ -15,15 +15,7 @@ interface ReviewModalProps {
   onPushTask: (id: number, completed: Date | null) => void;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({
-  visible,
-  task,
-  onComplete,
-  onDelete,
-  onAddNote,
-  onPushTask,
-  onToggleScope,
-}) => {
+const ReviewModal = ({visible, task, onComplete, onDelete, onAddNote, onPushTask, onToggleScope}: ReviewModalProps) => {
   const [noteText, setNoteText] = useState('');
 
   const handleReviewAction = (action: ActionType) => {

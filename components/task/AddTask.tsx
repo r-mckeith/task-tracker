@@ -7,10 +7,7 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { AddTaskProps } from '../../src/types/TaskTypes';
 import { handleAddTask } from '../../helpers/taskHelpers';
 
-const AddTask: React.FC<AddTaskProps> = ({
-  parentId,
-  depth,
-}) => {
+const AddTask = ({ parentId, depth }: AddTaskProps) => {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);

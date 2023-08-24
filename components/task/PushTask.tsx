@@ -11,11 +11,7 @@ interface PushTaskProps {
   inScopeWeek: Date | null;
 }
 
-const ScopeTask: React.FC<PushTaskProps> = ({
-  id,
-  inScopeDay,
-  inScopeWeek,
-}) => {
+const ScopeTask = ({id, inScopeDay, inScopeWeek}: PushTaskProps) => {
 
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
