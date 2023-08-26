@@ -7,7 +7,7 @@ interface NestedListProps {
   taskProps: TaskInterface[];
 }
 
-const NestedList = ({taskProps}: NestedListProps) => {
+export default function NestedList({taskProps}: NestedListProps) {
 
   const findRootTasks = () => {
     const allIds = new Set(taskProps.map(task => task.id));

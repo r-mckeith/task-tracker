@@ -8,7 +8,7 @@ type DatePickerProps = {
   onDateChange: (date: Date) => void;
 };
 
-const DatePickerComponent = ({ selectedDate, onDateChange }: DatePickerProps) => {
+export default function DatePickerComponent({ selectedDate, onDateChange }: DatePickerProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {

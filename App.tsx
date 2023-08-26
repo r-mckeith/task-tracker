@@ -10,7 +10,7 @@ import NoteContextProvider from './src/contexts/notes/NoteContextProvider';
 import DateProvider from './src/contexts/date/Dateprovider';
 import { MyTabs } from './screens/TabNavigator';
 import { useSession } from './src/contexts/sessions/UseSessionHook';
-import styles from './styles/globalStyles';
+import { StyleSheet } from 'react-native';
 
 export default function App() {
   const session = useSession();
@@ -35,3 +35,11 @@ export default function App() {
     </TaskContextProvider>
   );
 }
+
+const styles=StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+    marginTop: 20,
+  },
+});

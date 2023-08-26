@@ -3,12 +3,12 @@ import { View, Text, TextInput, Modal, Switch, TouchableOpacity } from 'react-na
 import { useRoute } from '@react-navigation/native';
 import useUserId from '../../src/contexts/sessions/UseSessionHook';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from '../../styles/tasks/addTask';
+import { StyleSheet } from 'react-native';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { AddTaskProps } from '../../src/types/TaskTypes';
 import { handleAddTask, getTaskLevelName } from '../../helpers/taskHelpers';
 
-const AddTask = ({ parentId, depth }: AddTaskProps) => {
+export default function AddTask({ parentId, depth }: AddTaskProps) {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
@@ -78,4 +78,68 @@ const AddTask = ({ parentId, depth }: AddTaskProps) => {
   );
 };
 
-export default AddTask;
+const styles=StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  modalView: {
+    margin: 20,
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  input: {
+    height: 40,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderColor: '#bbb',
+    marginBottom: 10,
+    paddingHorizontal: 0,
+    paddingVertical: 10,
+  },
+  textInput: {
+    width: '100%',
+  },
+  
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  addButton: {
+    borderRadius: 25, 
+    padding: 2,
+    elevation: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+  },
+});

@@ -1,5 +1,6 @@
 import { NoteInterface } from "../types/NoteTypes";
-const getNotes = (): NoteInterface[] => [
+
+export default function getNotes(): NoteInterface[] [
   {
     id: 1,
     text: 'Went well',

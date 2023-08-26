@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../../src/types/TaskTypes';
-import styles from '../../styles/tasks/rightSwipe'
+import { StyleSheet } from 'react-native';
 
 type RenderRightActionsProps = {
   handleDelete: (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => Promise<void>;
@@ -15,7 +15,7 @@ type RenderRightActionsProps = {
   swipeableRow: React.RefObject<Swipeable | null>;
 };
 
-const RenderRightActions = ({swipeableRow, id, tasks, dispatch, handleDelete, setShowNoteModal}: RenderRightActionsProps) => {
+export default function RenderRightActions({swipeableRow, id, tasks, dispatch, handleDelete, setShowNoteModal}: RenderRightActionsProps) {
   return (
     <View style={styles.rightActionContainer}>
       <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, tasks, dispatch)}>
@@ -45,4 +45,28 @@ const RenderRightActions = ({swipeableRow, id, tasks, dispatch, handleDelete, se
   );
 };
 
-export default RenderRightActions;
+const styles=StyleSheet.create({
+  rightActionContainer: {
+    flexDirection: 'row',
+    height: 60,
+    width: 180,
+  },
+  rightSwipeItem: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 0,
+    height: 60,
+    width: 60,
+    marginVertical: 5,
+    backgroundColor: '#EE4B60',
+  },
+  deleteButton: {
+    backgroundColor: '#c0c0c0',
+  },
+  unscopeButton: {
+    backgroundColor: '#a8a8a8',
+  },
+  pushButton: {
+    backgroundColor: '#909090',
+  },
+});
