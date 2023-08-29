@@ -37,7 +37,7 @@ export default function MonthlyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
-      <AddTask parentId={0} depth={1} />
+      <AddTask parentId={0} depth={0} />
       <TaskContainer
         tasks={filteredTasks}
         navigateToAdd="ScopeMonth"

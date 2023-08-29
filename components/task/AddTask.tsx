@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styles from '../../styles/tasks/addTask';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { AddTaskProps } from '../../src/types/TaskTypes';
-import { handleAddTask } from '../../helpers/taskHelpers';
+import { handleAddTask, getTaskLevelName } from '../../helpers/taskHelpers';
 
 const AddTask = ({ parentId, depth }: AddTaskProps) => {
   const [showModal, setShowModal] = useState(false);
@@ -17,21 +17,6 @@ const AddTask = ({ parentId, depth }: AddTaskProps) => {
   const route = useRoute();
   const { dispatch } = useTaskContext();
   const userId = useUserId();
-
-  const getTaskLevelName = (depth: number) => {
-    switch (depth) {
-      case 0:
-        return 'Section';
-      case 1:
-        return 'Goal';
-      case 2:
-        return 'Objective';
-      case 3:
-        return 'Task';
-      default:
-        return 'Subtask';
-    }
-  }
 
   const onAddTask = async () => {
     const success = await handleAddTask(newTaskName, userId, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
@@ -59,10 +44,10 @@ const AddTask = ({ parentId, depth }: AddTaskProps) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{`New ${getTaskLevelName((depth ?? 0) + 1)}`}</Text>
+            <Text style={styles.modalText}>{`New ${getTaskLevelName(depth)}`}</Text>
             <TextInput
               style={[styles.textInput, styles.input, { marginBottom: 10 }]}
-              placeholder={`${getTaskLevelName((depth ?? 0) + 1)} Name`}
+              placeholder={`${getTaskLevelName(depth)} Name`}
               value={newTaskName}
               onChangeText={setNewTaskName}
             />

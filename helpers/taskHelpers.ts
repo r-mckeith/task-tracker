@@ -136,3 +136,17 @@ const today = new Date
 export const todayFormatted = today.toISOString().split('T')[0];
 const tomorrow = addDays(new Date(), 1);
 export const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+
+export function getTaskLevelName (depth: number): "Goal" | "Objective" | "Task" | "Subtask" {
+  const newTaskDepth = depth+1;
+  switch (newTaskDepth) {
+    case 1: 
+      return 'Goal';
+    case 2:
+      return 'Objective';
+    case 3:
+      return 'Task';
+    default:
+      return 'Subtask';
+  }
+}
