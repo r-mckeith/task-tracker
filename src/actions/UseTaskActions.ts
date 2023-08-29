@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-const useTaskActions = () => {
+export default function useTaskActions() {
 
   const handleTaskPress = useCallback((taskId: number) => {
     // Implementation goes here
@@ -19,5 +19,3 @@ export const addTask = (name, parentId, recurringOptions) => {
     },
   };
 };
-
-export default useTaskActions;

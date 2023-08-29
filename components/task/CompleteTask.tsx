@@ -11,7 +11,7 @@ interface CompleteTaskProps {
   pushed?: Date | null;
 }
 
-const CompleteTask = ({ id, completed, pushed }: CompleteTaskProps) => {
+export default function CompleteTask({ id, completed, pushed }: CompleteTaskProps) {
   const { name } = useRoute();
   const { state, dispatch } = useTaskContext();
 
@@ -38,5 +38,3 @@ const CompleteTask = ({ id, completed, pushed }: CompleteTaskProps) => {
     </View>
   );
 };
-
-export default CompleteTask;

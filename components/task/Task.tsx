@@ -4,7 +4,7 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { TaskInterface } from '../../src/types/TaskTypes'
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import styles from '../../styles/tasks/task'
+import { StyleSheet } from 'react-native';
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
@@ -12,7 +12,7 @@ import AddNote from '../note/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 
-const Task = ({id, name, parentId, completed, inScopeDay, inScopeWeek, depth}: TaskInterface) => {
+export default function Task({id, name, parentId, completed, inScopeDay, inScopeWeek, depth}: TaskInterface) {
   const route = useRoute();
   const { state, dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
@@ -57,4 +57,50 @@ const Task = ({id, name, parentId, completed, inScopeDay, inScopeWeek, depth}: T
   );
 };
 
-export default Task;
+const styles=StyleSheet.create({
+  taskContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    height: 60,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+    marginVertical: 5,
+  },
+  taskName: {
+    fontSize: 16,
+    marginLeft: 10,
+    flex: 1,
+    color: '#333',
+  },
+  completedTask: {
+    textDecorationLine: 'line-through',
+  },
+  sectionLevel: {
+    paddingLeft: 5,
+    borderLeftColor: '#4780E6',
+    borderLeftWidth: 2,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  objectiveLevel: {
+    paddingLeft: 10,
+    borderLeftColor: '#c0c0c0',
+    borderLeftWidth: 2,
+  },
+  goalLevel: {
+    paddingLeft: 15,
+    borderLeftColor: '#a8a8a8',
+    borderLeftWidth: 2,
+  },
+  taskLevel: {
+    paddingLeft: 20,
+    borderLeftColor: '#909090',
+    borderLeftWidth: 2,
+  },
+  subtaskLevel: {
+    paddingLeft: 25,
+    borderLeftColor: '#787878',
+    borderLeftWidth: 2,
+  },
+});

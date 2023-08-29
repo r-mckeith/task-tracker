@@ -11,7 +11,7 @@ interface PushTaskProps {
   inScopeWeek: Date | null;
 }
 
-const ScopeTask = ({id, inScopeDay, inScopeWeek}: PushTaskProps) => {
+export default function ScopeTask({id, inScopeDay, inScopeWeek}: PushTaskProps) {
 
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
@@ -31,5 +31,3 @@ const ScopeTask = ({id, inScopeDay, inScopeWeek}: PushTaskProps) => {
     </View>
   );
 };
-
-export default ScopeTask;

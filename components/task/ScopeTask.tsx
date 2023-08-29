@@ -12,7 +12,7 @@ interface ScopeProps {
   inScopeWeek: Date | string | null;
 }
 
-const ScopeTask = ({id, inScopeDay, inScopeWeek}: ScopeProps) => {
+export default function ScopeTask({id, inScopeDay, inScopeWeek}: ScopeProps) {
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
 
@@ -34,5 +34,3 @@ const ScopeTask = ({id, inScopeDay, inScopeWeek}: ScopeProps) => {
     </View>
   );
 };
-
-export default ScopeTask;
