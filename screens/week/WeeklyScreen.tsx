@@ -25,7 +25,7 @@ export default function WeeklyScreen() {
   }
 
   useEffect(() => {
-    const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
+    const weeklyTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)));
     setFilteredTasks(weeklyTasks);
   }, [tasks, selectedDate]);
 

@@ -7,7 +7,7 @@ import { isRouteNameInScope } from '../../helpers/taskHelpers';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../NestedList';
 import { DoStackParamList } from '../../src/types/StackTypes';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler'; 
 
 type TaskContainerProps = {
   tasks: TaskInterface[];
@@ -19,7 +19,8 @@ export default function TaskContainer({ tasks, navigateToAdd }: TaskContainerPro
   const route = useRoute();
 
   function showAddTasksButton() {
-    const scopeRoutes = ['DailyScreen', 'WeeklyScreen'];
+    const scopeRoutes = ['Focus', 'Execute'];
+    console.log(route.name)
     return isRouteNameInScope(route.name, scopeRoutes);
   }
 
@@ -34,8 +35,11 @@ export default function TaskContainer({ tasks, navigateToAdd }: TaskContainerPro
       )}
       <View style={styles.addButtonContainer}>
         {showAddTasksButton() &&
-          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToAdd)}>
-            <Text style={styles.addButtonText}>Add Tasks</Text>
+          <TouchableOpacity style={styles.addButton} onPress={() => {
+            console.log(navigateToAdd);
+            navigation.navigate(navigateToAdd);
+          }}>
+            <Text style={styles.addButtonText}>Add Items</Text>
           </TouchableOpacity>
         }
       </View>

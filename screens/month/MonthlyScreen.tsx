@@ -7,6 +7,9 @@ import TaskContainer from '../../components/task/TaskContainer';
 import Header from '../../components/Header';
 import AddTask from '../../components/task/AddTask';
 import Account from '../../components/auth/Account';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const MonthlyNav = createStackNavigator();
 
 export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();
@@ -26,7 +29,7 @@ export default function MonthlyScreen() {
   }
 
   useEffect(() => {
-    const monthlyTasks = tasks.filter((t) => (isTaskForSelectedMonth(t) || isTaskRecurring(t)) && !isTaskCompleted(t));
+    const monthlyTasks = tasks.filter((t) => (isTaskForSelectedMonth(t) || isTaskRecurring(t)));
     setFilteredTasks(monthlyTasks);
   }, [tasks, selectedDate]);
 
