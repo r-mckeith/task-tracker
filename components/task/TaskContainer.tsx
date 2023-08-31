@@ -7,6 +7,7 @@ import { isRouteNameInScope } from '../../helpers/taskHelpers';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../NestedList';
 import { DoStackParamList } from '../../src/types/StackTypes';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type TaskContainerProps = {
   tasks: TaskInterface[];
@@ -25,9 +26,9 @@ export default function TaskContainer({ tasks, navigateToAdd }: TaskContainerPro
   return (
     <View style={styles.container}>
       {tasks.length > 0 ? (
-        <View style={styles.taskList}>
+        <ScrollView style={styles.taskList}>
           <NestedList taskProps={tasks} />
-        </View>
+        </ScrollView>
       ) : (
         <View style={styles.emptyContainer} />
       )}
