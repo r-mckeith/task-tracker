@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { StyleSheet } from "react-native";
@@ -80,9 +80,9 @@ export default function ReviewContainer({tasks }: ReviewContainerProps) {
   return (
     <View style={styles.container}>
       {tasks.length > 0 ? (
-        <View style={styles.taskList}>
+        <ScrollView style={styles.taskList}>
           <NestedList taskProps={tasks} />
-        </View>
+        </ScrollView>
       ) : (
         <View style={styles.emptyContainer} />
       )}

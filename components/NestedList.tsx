@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './task/Task';
 
