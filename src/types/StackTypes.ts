@@ -12,4 +12,5 @@ export type DoStackParamList = {
   WeeklyDuo: undefined;
   MonthlyDuo: undefined;
   Execute: undefined;
+  Focus: undefined;
 };

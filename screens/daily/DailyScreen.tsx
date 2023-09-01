@@ -26,7 +26,7 @@ export default function DailyScreen() {
         />
         <TaskContainer
           tasks={filteredTasks}
-          navigateToAdd="DailyScreen"
+          navigateToAdd="Focus"
         />
       </>
     );
@@ -51,12 +51,12 @@ export default function DailyScreen() {
 
   return (
     <DailyNav.Navigator
-      screenOptions={{
+      screenOptions={{ 
         headerBackTitle: 'Today',
         headerTintColor: '#767577',
     }}>
       <DailyNav.Screen name="Execute" component={DailyView} options={{ title: '' }}/>
-      <DailyNav.Screen name="ScopeDay" component={WeeklyScreen} options={{ title: '' }}/>
+      <DailyNav.Screen name="Focus" component={WeeklyScreen} options={{ title: '' }}/>
     </DailyNav.Navigator>
   );
 }
