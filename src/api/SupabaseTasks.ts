@@ -105,7 +105,7 @@ export const toggleCompleted = async (id: number, currentScope: Date | null, tas
 export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
   
   const childTasks = findChildTasks(id, tasks);
-  const parentTasks = findParentTasks(id, tasks);
+  //const parentTasks = findParentTasks(id, tasks);
 
   const updatedValues = currentScope 
     ? { inScopeDay: null, unScoped: todayFormatted }
@@ -118,7 +118,7 @@ export const toggleScopeForDay = async (id: number, currentScope: Date | string 
       .eq('id', task.id);
   }
 
-  for (let task of parentTasks) {
+  /*for (let task of parentTasks) {
     await supabase
       .from('tasks')
       .update(updatedValues)
@@ -128,13 +128,13 @@ export const toggleScopeForDay = async (id: number, currentScope: Date | string 
   await supabase
     .from('tasks')
     .update(updatedValues)
-    .eq('id', id);
+    .eq('id', id);*/
 };
 
 
 export const toggleScopeForWeek = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
   const childTasks = findChildTasks(id, tasks);
-  const parentTasks = findParentTasks(id, tasks);
+  //const parentTasks = findParentTasks(id, tasks);
 
   for (let task of childTasks) {
     await supabase
@@ -143,7 +143,7 @@ export const toggleScopeForWeek = async (id: number, currentScope: Date | string
       .eq('id', task.id);
   }
 
-  for (let task of parentTasks) {
+  /*for (let task of parentTasks) {
     await supabase
       .from('tasks')
       .update({ inScopeWeek: currentScope ? null : new Date() })
@@ -153,7 +153,7 @@ export const toggleScopeForWeek = async (id: number, currentScope: Date | string
   await supabase
     .from('tasks')
     .update({ inScopeWeek: currentScope ? null : new Date() })
-    .eq('id', id);
+    .eq('id', id);*/
 };
 
 export const pushDay = async (id: number) => {
