@@ -1,10 +1,9 @@
 import React, {useState, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { TaskInterface } from '../../src/types/TaskTypes'
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { StyleSheet } from 'react-native';
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
@@ -45,12 +44,12 @@ export default function Task({id, name, parentId, completed, inScopeDay, inScope
       <Swipeable ref={swipeableRow} renderRightActions={() => <RenderRightActions handleDelete={handleDelete} id={id} tasks={state} dispatch={dispatch} setShowNoteModal={setShowNoteModal} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
           {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
+          {!showScopeTaskToggle() && <CompleteTask id={id} completed={completed} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
-          <CompleteTask id={id} completed={completed} />
-          {showAddTaskIcon() && 
+          {showAddTaskIcon() && !showScopeTaskToggle() &&
             <AddTask parentId={id} depth={depth} />
           }
-          <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
+          {/* <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} /> */}
         </View>
       </Swipeable>
     </View>

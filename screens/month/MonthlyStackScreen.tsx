@@ -1,28 +1,20 @@
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MonthlyScreen from './MonthlyScreen';
-import MonthlyReviewScreen from './MonthlyReviewScreen';
+import WeeklyScreen from './WeeklyScreen';
 
 const MonthlyStack = createStackNavigator();
-const TopTab = createMaterialTopTabNavigator();
-
-function MonthlyTopTabs() {
-  return (
-    <TopTab.Navigator>
-      <TopTab.Screen name="MonthlyScreen" component={MonthlyScreen} options={{ title: 'Plan' }} />
-      <TopTab.Screen name="MonthlyReviewScreen" component={MonthlyReviewScreen} options={{ title: 'Review' }} />
-    </TopTab.Navigator>
-  );
-}
 
 export function MonthlyStackScreen() {
   return (
     <MonthlyStack.Navigator
       screenOptions={{
-        headerBackTitle: 'This Month',
+        headerBackTitle: 'Back',
         headerTintColor: '#767577',
     }}>
-      <MonthlyStack.Screen name="MonthlyDuo" component={MonthlyTopTabs} options={{ title: '' }}/>
+      <MonthlyStack.Screen name="MonthlyDuo" component={MonthlyScreen} options={{ title: '' }}/>
+      <MonthlyStack.Screen name="ScopeDay" component={WeeklyScreen} options={{ title: '' }}/>
+      <MonthlyStack.Screen name="ScopeWeek" component={MonthlyScreen} options={{ title: '' }}/>
     </MonthlyStack.Navigator>
   );
 }

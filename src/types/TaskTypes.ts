@@ -57,6 +57,7 @@ export interface Scope {
 export interface AddTaskProps {
   parentId: number;
   depth: number;
+  variant?: 'default' | 'button';
 }
 
 // Review Actions

@@ -33,7 +33,8 @@
     "react-native-screens": "^3.22.1",
     "react-native-sortable-list": "^0.0.25",
     "react-native-tab-view": "^3.5.2",
-    "react-native-url-polyfill": "^2.0.0"
+    "react-native-url-polyfill": "^2.0.0",
+    "@react-native-segmented-control/segmented-control": "2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
