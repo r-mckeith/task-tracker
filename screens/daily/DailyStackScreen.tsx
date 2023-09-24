@@ -22,18 +22,18 @@ function DailyTopTabs() {
 export function DailyStackScreen() {
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'DailyDuo' }],
-            })
-        );
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //       navigation.dispatch(
+  //           CommonActions.reset({
+  //               index: 0,
+  //               routes: [{ name: 'DailyDuo' }],
+  //           })
+  //       );
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <DailyStack.Navigator
@@ -41,7 +41,8 @@ export function DailyStackScreen() {
         headerBackTitle: 'Today',
         headerTintColor: '#767577',
     }}>
-      <DailyStack.Screen name="DailyDuo" component={DailyTopTabs} options={{ title: '' }}/>
+      {/* <DailyStack.Screen name="DailyDuo" component={DailyTopTabs} options={{ title: '' }}/> */}
+      <DailyStack.Screen name="DailyScreen" component={DailyScreen} options={{ title: '' }}/>
       <DailyStack.Screen name="ScopeDay" component={WeeklyScreen} options={{ title: '' }}/>
     </DailyStack.Navigator>
   );

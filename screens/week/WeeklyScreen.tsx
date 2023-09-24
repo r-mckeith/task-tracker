@@ -4,6 +4,7 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { useDateContext } from '../../src/contexts/date/useDateContext';
 import { isInSelectedWeek } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
+import AddTask from '../../components/task/AddTask';
 import Header from '../../components/Header';
 
 export default function WeeklyScreen() {
@@ -36,6 +37,7 @@ export default function WeeklyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
+      <AddTask parentId={0} depth={0} />
       <TaskContainer
         tasks={filteredTasks}
         navigateToAdd="ScopeWeek"

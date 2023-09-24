@@ -88,15 +88,15 @@ export const toggleCompleted = async (id: number, currentScope: Date | null, tas
 
   const completionDate = currentScope ? null : new Date();
 
-  const childTasks = findChildTasks(id, tasks);
-  for (let task of childTasks) {
-    await updateCompletionStatus(task.id, completionDate);
-  }
+  // const childTasks = findChildTasks(id, tasks);
+  // for (let task of childTasks) {
+  //   await updateCompletionStatus(task.id, completionDate);
+  // }
 
-  const parentTasks = findParentTasks(id, tasks);
-  for (let task of parentTasks) {
-    await updateCompletionStatus(task.id, completionDate);
-  }
+  // const parentTasks = findParentTasks(id, tasks);
+  // for (let task of parentTasks) {
+  //   await updateCompletionStatus(task.id, completionDate);
+  // }
 
   await updateCompletionStatus(id, completionDate);
 };
@@ -111,19 +111,19 @@ export const toggleScopeForDay = async (id: number, currentScope: Date | string 
     ? { inScopeDay: null, unScoped: todayFormatted }
     : { inScopeDay: todayFormatted };
 
-  for (let task of childTasks) {
-    await supabase
-      .from('tasks')
-      .update(updatedValues)
-      .eq('id', task.id);
-  }
+  // for (let task of childTasks) {
+  //   await supabase
+  //     .from('tasks')
+  //     .update(updatedValues)
+  //     .eq('id', task.id);
+  // }
 
-  for (let task of parentTasks) {
-    await supabase
-      .from('tasks')
-      .update(updatedValues)
-      .eq('id', task.id);
-  }
+  // for (let task of parentTasks) {
+  //   await supabase
+  //     .from('tasks')
+  //     .update(updatedValues)
+  //     .eq('id', task.id);
+  // }
 
   await supabase
     .from('tasks')
@@ -136,19 +136,19 @@ export const toggleScopeForWeek = async (id: number, currentScope: Date | string
   const childTasks = findChildTasks(id, tasks);
   const parentTasks = findParentTasks(id, tasks);
 
-  for (let task of childTasks) {
-    await supabase
-      .from('tasks')
-      .update({ inScopeWeek: currentScope ? null : new Date() })
-      .eq('id', task.id);
-  }
+  // for (let task of childTasks) {
+  //   await supabase
+  //     .from('tasks')
+  //     .update({ inScopeWeek: currentScope ? null : new Date() })
+  //     .eq('id', task.id);
+  // }
 
-  for (let task of parentTasks) {
-    await supabase
-      .from('tasks')
-      .update({ inScopeWeek: currentScope ? null : new Date() })
-      .eq('id', task.id);
-  }
+  // for (let task of parentTasks) {
+  //   await supabase
+  //     .from('tasks')
+  //     .update({ inScopeWeek: currentScope ? null : new Date() })
+  //     .eq('id', task.id);
+  // }
 
   await supabase
     .from('tasks')

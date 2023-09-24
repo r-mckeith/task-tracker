@@ -20,8 +20,9 @@ export default function Task({id, name, parentId, completed, inScopeDay, inScope
   const [showNoteModal, setShowNoteModal] = useState(false);
   
   function showScopeTaskToggle() {
-    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
-    return isRouteNameInScope(route.name, scopeRoutes);
+    // const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
+    // return isRouteNameInScope(route.name, scopeRoutes);
+    return true
   }
   
   function showAddTaskIcon() {

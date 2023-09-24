@@ -22,18 +22,18 @@ function WeeklyTopTabs() {
 export function WeeklyStackScreen() {
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'WeeklyDuo' }],
-            })
-        );
-    });
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //       navigation.dispatch(
+  //           CommonActions.reset({
+  //               index: 0,
+  //               routes: [{ name: 'WeeklyDuo' }],
+  //           })
+  //       );
+  //   });
 
-    return unsubscribe;
-  }, [navigation]);
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <WeeklyStack.Navigator
@@ -41,9 +41,9 @@ export function WeeklyStackScreen() {
         headerBackTitle: 'This week',
         headerTintColor: '#767577',
     }}>
-      <WeeklyStack.Screen name="WeeklyDuo" component={WeeklyTopTabs} options={{ title: '' }}/>
-      <WeeklyStack.Screen name="WeeklyReviewScreen" component={WeeklyReviewScreen} options={{ title: '' }}/>
-      <WeeklyStack.Screen name="ScopeWeek" component={MonthlyScreen} options={{ title: '' }}/>
+      {/* <WeeklyStack.Screen name="WeeklyDuo" component={WeeklyTopTabs} options={{ title: '' }}/> */}
+      <WeeklyStack.Screen name="WeeklyScreen" component={WeeklyReviewScreen} options={{ title: '' }}/>
+      {/* <WeeklyStack.Screen name="ScopeWeek" component={MonthlyScreen} options={{ title: '' }}/> */}
     </WeeklyStack.Navigator>
   );
 }

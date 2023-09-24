@@ -22,7 +22,7 @@ export function MonthlyStackScreen() {
         headerBackTitle: 'This Month',
         headerTintColor: '#767577',
     }}>
-      <MonthlyStack.Screen name="MonthlyDuo" component={MonthlyTopTabs} options={{ title: '' }}/>
+      <MonthlyStack.Screen name="MonthlyScreen" component={MonthlyScreen} options={{ title: '' }}/>
     </MonthlyStack.Navigator>
   );
 }
