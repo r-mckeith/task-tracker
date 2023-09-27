@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { useDateContext } from '../../src/contexts/date/useDateContext';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { isInSelectedMonth, isInSelectedWeek, isSelectedDate } from '../../helpers/dateHelpers';
 import TaskContainer from '../../components/task/TaskContainer';
-import { DoStackParamList } from '../../src/types/StackTypes';
+import ReviewContainer from '../../components/review/ReviewContainer';
 import Header from '../../components/Header';
 import AddTask from '../../components/task/AddTask';
 
@@ -20,12 +17,11 @@ type SegmentedControlChangeEvent = {
 };
 
 export default function MonthlyScreen() {
-  const navigation = useNavigation<StackNavigationProp<DoStackParamList>>();
-  const route = useRoute();
   const { state: tasks } = useTaskContext();
   const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const { selectedDate, setSelectedDate } = useDateContext();
   const [selectedScope, setSelectedScope] = useState('month');
+  const [isReviewMode, setIsReviewMode] = useState(false);
 
   useEffect(() => {
     let scopeTasks;
@@ -77,25 +73,12 @@ export default function MonthlyScreen() {
     }
   };
 
-  function showFocusButton() {
-    return selectedScope === 'day' || selectedScope === 'week' && route.name !== 'ScopeWeek'
-  };
-
-  function navigateToFocus() {
-    return selectedScope === 'day' ? 'ScopeDay' : 'ScopeWeek'
+  function toggleReviewMode() {
+    setIsReviewMode(prevMode => !prevMode);
   };
 
   function showAddNewGoalButton() {
-    return selectedScope === 'month' && route.name !== 'ScopeWeek'
-  }
-
-  function showDoneButton() {
-    console.log(route.name)
-    return route.name === 'ScopeWeek' || route.name === 'ScopeDay'
-  }
-
-  function showSegmentedControl() {
-    return route.name !== 'ScopeWeek'
+    return selectedScope === 'month'
   }
 
   return (
@@ -105,35 +88,34 @@ export default function MonthlyScreen() {
         selectedDate={selectedDate} 
         onDateChange={setSelectedDate}
       />
-      {showSegmentedControl() &&
-        <SegmentedControl
-          values={['Month', 'Week', 'Day']}
-          selectedIndex={0}
-          onChange={handleScopeChange}
-        />
-      }
-      <View style={styles.container}>
-      <TaskContainer
-        tasks={filteredTasks}
+      <SegmentedControl
+        values={['Month', 'Week', 'Day']}
+        selectedIndex={0}
+        onChange={handleScopeChange}
       />
-      {showFocusButton() && (
-        <View style={styles.addButtonContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate(navigateToFocus())}>
-            <Text style={styles.addButtonText}>Adjust Focus</Text>
+      {showAddNewGoalButton() && (
+        <AddTask parentId={0} depth={0}/>
+      )}
+      <View style={styles.container}>
+      {isReviewMode ? (
+          <ReviewContainer 
+            tasks={filteredTasks}
+          />
+        ) : (
+          <TaskContainer
+            tasks={filteredTasks}
+            filter={selectedScope}
+          />
+        )}
+      {/* {showAddNewGoalButton() && (
+        <AddTask parentId={0} depth={0} variant={'button'}/>
+      )} */}
+    </View>
+    <View style={styles.addButtonContainer}>
+          <TouchableOpacity style={styles.addButton} onPress={() => toggleReviewMode()}>
+            <Text style={styles.addButtonText}>{isReviewMode ? 'Done' : 'Review'}</Text>
           </TouchableOpacity>
         </View>
-      )}
-      {showAddNewGoalButton() && (
-        <AddTask parentId={0} depth={0} variant={'button'}/>
-      )}
-      {showDoneButton() && (
-         <View style={styles.addButtonContainer}>
-         <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('MonthlyDuo')}>
-           <Text style={styles.addButtonText}>Done</Text>
-         </TouchableOpacity>
-       </View>
-      )}
-    </View>
     </>
   );
 }
@@ -149,7 +131,7 @@ const styles=StyleSheet.create({
     marginBottom: 20,
   },
   addButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFCCCB',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',

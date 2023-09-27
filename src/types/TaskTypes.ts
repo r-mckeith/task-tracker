@@ -44,6 +44,7 @@ export interface TaskInterface extends NewTask {
   completed: Date | null;
   pushed: Date | string | null;
   unScoped: Date | string | null;
+  filter?: string | null;
 }
 
 // Scope Definition

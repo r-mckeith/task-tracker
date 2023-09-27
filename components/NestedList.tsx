@@ -5,9 +5,10 @@ import Task from './task/Task';
 
 interface NestedListProps {
   taskProps: TaskInterface[];
+  filter?: string;
 }
 
-export default function NestedList({taskProps}: NestedListProps) {
+export default function NestedList({taskProps, filter}: NestedListProps) {
 
   const findRootTasks = () => {
     const allIds = new Set(taskProps.map(task => task.id));
@@ -27,7 +28,7 @@ export default function NestedList({taskProps}: NestedListProps) {
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task {...task}/>
+          <Task {...task} filter={filter}/>
           {renderTasks(task.id)}
         </View>
       ));
@@ -71,6 +72,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-
-export default NestedList;

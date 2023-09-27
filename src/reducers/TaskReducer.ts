@@ -90,12 +90,12 @@ export type Action =
         if (task.id === actionId || descendantsCompleted.some(descendant => descendant.id === task.id)) {
             return { ...task, completed: newCompletedStatus };
         }
-        if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
-            return { ...task, completed: newCompletedStatus };
-        }
-        if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
-            return { ...task, completed: newCompletedStatus };
-        }
+        // if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
+        //     return { ...task, completed: newCompletedStatus };
+        // }
+        // if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
+        //     return { ...task, completed: newCompletedStatus };
+        // }
         return task;
     });
 };

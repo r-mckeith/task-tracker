@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MonthlyStackScreen } from './month/MonthlyStackScreen';
+import MonthlyScreen from './month/MonthlyScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -13,8 +13,8 @@ export function MyTabs() {
         },
       }}
     >
-      <Tab.Screen name="Home" component={MonthlyStackScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Settings" component={MonthlyStackScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Home" component={MonthlyScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Settings" component={MonthlyScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }

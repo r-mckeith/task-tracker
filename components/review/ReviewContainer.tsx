@@ -97,11 +97,11 @@ export default function ReviewContainer({tasks }: ReviewContainerProps) {
         onAddNote={handleAddNote}
       />
 
-      <View style={styles.addButtonContainer}>
+      {/* <View style={styles.addButtonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleDoneButtonPress}>
           <Text style={styles.addButtonText}>Done</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

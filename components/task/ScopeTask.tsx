@@ -10,18 +10,22 @@ interface ScopeProps {
   id: number,
   inScopeDay: Date | string | null;
   inScopeWeek: Date | string | null;
+  filter?: string | null;
 }
 
-export default function ScopeTask({id, inScopeDay, inScopeWeek}: ScopeProps) {
+export default function ScopeTask({id, inScopeDay, inScopeWeek, filter}: ScopeProps) {
   const { state, dispatch } = useTaskContext();
   const route = useRoute();
 
 
   const handleToggleScope = () => {
-    route.name === 'ScopeDay' ? handleToggleScopeforDay(id, inScopeDay, state, dispatch) : handleToggleScopeforWeek(id, inScopeWeek, state, dispatch);
+    console.log(filter)
+    filter === 'month' ? handleToggleScopeforWeek(id, inScopeWeek, state, dispatch) : handleToggleScopeforDay(id, inScopeDay, state, dispatch);
   };
 
-  const inScope = route.name === 'ScopeDay' ? inScopeDay === todayFormatted : inScopeWeek;
+  // const inScope = route.name === 'ScopeDay' ? inScopeDay === todayFormatted : inScopeWeek;
+
+  const inScope = filter === 'month' ? inScopeWeek : inScopeDay === todayFormatted;
 
   return (
     <View>
