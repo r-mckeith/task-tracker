@@ -1,10 +1,9 @@
 import React, {useState, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useRoute } from '@react-navigation/native';
 import { TaskInterface } from '../../src/types/TaskTypes'
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { StyleSheet } from 'react-native';
 import { handleDelete, isRouteNameInScope } from '../../helpers/taskHelpers';
 import RenderRightActions from './RightSwipe';
 import AddTask from './AddTask';
@@ -12,7 +11,7 @@ import AddNote from '../note/AddNote';
 import ScopeTask from './ScopeTask'
 import CompleteTask from './CompleteTask';
 
-export default function Task({id, name, parentId, completed, inScopeDay, inScopeWeek, depth}: TaskInterface) {
+export default function Task({id, name, parentId, completed, inScopeDay, inScopeWeek, depth, filter}: TaskInterface) {
   const route = useRoute();
   const { state, dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
@@ -20,15 +19,8 @@ export default function Task({id, name, parentId, completed, inScopeDay, inScope
   const [showNoteModal, setShowNoteModal] = useState(false);
   
   function showScopeTaskToggle() {
-    const scopeRoutes = ['ScopeDay', 'ScopeWeek', 'ScopeMonth'];
-    return isRouteNameInScope(route.name, scopeRoutes);
+    return filter === 'month' || filter === 'week'
   }
-  
-  function showAddTaskIcon() {
-    route.name
-    const addRoutes = ['DailyReviewScreen', 'WeeklyReviewScreen', 'MonthlyReviewScreen'];
-    return !isRouteNameInScope(route.name, addRoutes);
-  }  
 
   function getDepthStyle() {
     switch (depth) {
@@ -44,13 +36,11 @@ export default function Task({id, name, parentId, completed, inScopeDay, inScope
     <View>
       <Swipeable ref={swipeableRow} renderRightActions={() => <RenderRightActions handleDelete={handleDelete} id={id} tasks={state} dispatch={dispatch} setShowNoteModal={setShowNoteModal} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
-          {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} />}
+          {showScopeTaskToggle() && <ScopeTask id={id} inScopeDay={inScopeDay} inScopeWeek={inScopeWeek} filter={filter} />}
+          {!showScopeTaskToggle() && <CompleteTask id={id} completed={completed} />}
           <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
-          <CompleteTask id={id} completed={completed} />
-          {showAddTaskIcon() && 
-            <AddTask parentId={id} depth={depth} />
-          }
-          <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} />
+          <AddTask parentId={id} depth={depth} />
+          {/* <AddNote showModal={showNoteModal} onClose={() => setShowNoteModal(false)} taskId={id} setShowModal={setShowNoteModal} /> */}
         </View>
       </Swipeable>
     </View>

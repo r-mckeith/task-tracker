@@ -8,7 +8,7 @@ import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { AddTaskProps } from '../../src/types/TaskTypes';
 import { handleAddTask, getTaskLevelName } from '../../helpers/taskHelpers';
 
-export default function AddTask({ parentId, depth }: AddTaskProps) {
+export default function AddTask({ parentId, depth, variant = 'default' }: AddTaskProps) {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
   const [isRecurring, setIsRecurring] = useState(false);
@@ -31,9 +31,17 @@ export default function AddTask({ parentId, depth }: AddTaskProps) {
 
   return (
     <View>
-     <TouchableOpacity onPress={() => setShowModal(true)} style={styles.addButton}>
-      <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#767577" />
-    </TouchableOpacity>
+      {variant === 'button' ? (
+        <View style={styles.addButtonContainer}>
+          <TouchableOpacity style={styles.addButton2} onPress={() => setShowModal(true)}>
+            <Text style={styles.addButtonText}>Add New Goal</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <TouchableOpacity onPress={() => setShowModal(true)} style={styles.defaultAddButton}>
+          <MaterialCommunityIcons name="plus-circle-outline" size={24} color="#767577" />
+        </TouchableOpacity>
+      )}
       <Modal
         animationType="slide"
         transparent={true}
@@ -133,7 +141,7 @@ const styles=StyleSheet.create({
   iconButton: {
     padding: 10,
   },
-  addButton: {
+  defaultAddButton: {
     borderRadius: 25, 
     padding: 2,
     elevation: 2,
@@ -141,5 +149,29 @@ const styles=StyleSheet.create({
     alignItems: 'center',
     width: 30,
     height: 30,
+  },
+  addButtonContainer: {
+    alignSelf: 'center',
+    width: '90%',
+    marginBottom: 20,
+  },
+  addButton2: {
+    backgroundColor: '#f5f5f5',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    marginTop: 10,
+  },
+  addButtonText: {
+    color: '#000',
+    fontSize: 16,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { StyleSheet } from "react-native";
@@ -97,11 +97,11 @@ export default function ReviewContainer({tasks }: ReviewContainerProps) {
         onAddNote={handleAddNote}
       />
 
-      <View style={styles.addButtonContainer}>
+      {/* <View style={styles.addButtonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleDoneButtonPress}>
           <Text style={styles.addButtonText}>Done</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

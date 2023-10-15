@@ -35,9 +35,9 @@ export type Action =
       if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
         return { ...task, inScopeDay: currentScopeDay, unScoped: currentUnScoped };
       }
-      if (currentScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
-        return { ...task, inScopeDay: currentScopeDay };
-      }
+      // if (currentScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
+      //   return { ...task, inScopeDay: currentScopeDay };
+      // }
       return task;
     });
   };
@@ -65,9 +65,9 @@ export type Action =
       if (currentScopeWeek === null && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
         return { ...task, inScopeWeek: currentScopeWeek };
       }
-      if (currentScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
-        return { ...task, inScopeWeek: currentScopeWeek };
-      }
+      // if (currentScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
+      //   return { ...task, inScopeWeek: currentScopeWeek };
+      // }
       return task;
     });
   };
@@ -90,12 +90,12 @@ export type Action =
         if (task.id === actionId || descendantsCompleted.some(descendant => descendant.id === task.id)) {
             return { ...task, completed: newCompletedStatus };
         }
-        if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
-            return { ...task, completed: newCompletedStatus };
-        }
-        if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
-            return { ...task, completed: newCompletedStatus };
-        }
+        // if (newCompletedStatus && siblingsCompleted.every(sibling => sibling.completed) && taskForCompleted.parentId === task.parentId) {
+        //     return { ...task, completed: newCompletedStatus };
+        // }
+        // if (!newCompletedStatus && ancestorsCompleted.some(ancestor => ancestor.id === task.id)) {
+        //     return { ...task, completed: newCompletedStatus };
+        // }
         return task;
     });
 };
