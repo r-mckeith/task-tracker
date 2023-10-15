@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { TaskInterface } from '../../src/types/TaskTypes';
-import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { useDateContext } from '../../src/contexts/date/useDateContext';
-import { isInSelectedMonth, isInSelectedWeek, isSelectedDate } from '../../helpers/dateHelpers';
-import TaskContainer from '../../components/task/TaskContainer';
-import ReviewContainer from '../../components/review/ReviewContainer';
-import Header from '../../components/Header';
-import AddTask from '../../components/task/AddTask';
+import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
+import { useDateContext } from '../src/contexts/date/useDateContext';
+import TaskContainer from '../components/task/TaskContainer';
+import ReviewContainer from '../components/review/ReviewContainer';
+import Header from '../components/Header';
+import AddTask from '../components/task/AddTask';
+import { useFilteredTasks } from '../src/hooks/useFilteredTasks';
 
 type SegmentedControlChangeEvent = {
   nativeEvent: {
@@ -16,49 +15,18 @@ type SegmentedControlChangeEvent = {
   };
 };
 
+type ScopeType = 'week' | 'day' | 'month';
+
 export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();
-  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
   const { selectedDate, setSelectedDate } = useDateContext();
-  const [selectedScope, setSelectedScope] = useState('month');
+  const [selectedScope, setSelectedScope] = useState<ScopeType>('month');
   const [isReviewMode, setIsReviewMode] = useState(false);
 
-  useEffect(() => {
-    let scopeTasks;
-    switch (selectedScope) {
-      case 'week':
-        scopeTasks = tasks.filter((t) => (isTaskForSelectedWeek(t) || isTaskRecurring(t)));
-        break;
-      case 'day':
-        scopeTasks = tasks.filter((t) => (isTaskForSelectedDate(t) || isTaskRecurring(t)));
-        break;
-      case 'month':
-      default:
-        scopeTasks = tasks.filter((t) => (isTaskForSelectedMonth(t) || isTaskRecurring(t)));
-        break;
-    }
-    setFilteredTasks(scopeTasks);
-  }, [tasks, selectedDate, selectedScope]);
-
-  function isTaskForSelectedMonth(task: TaskInterface) {
-    return task.inScopeMonth && isInSelectedMonth(task.inScopeMonth, selectedDate);
-  }
-
-  function isTaskForSelectedWeek(task: TaskInterface) {
-    return task.inScopeWeek && isInSelectedWeek(task.inScopeWeek, selectedDate);
-  }
-
-  function isTaskForSelectedDate(task: TaskInterface) {
-    return task.inScopeDay && isSelectedDate(task.inScopeDay, selectedDate);
-  }
-
-  function isTaskRecurring(task: TaskInterface) {
-    return task.recurringOptions && task.recurringOptions.isRecurring;
-  }
+  const filteredTasks = useFilteredTasks(tasks, selectedDate, selectedScope);
 
   function handleScopeChange(e: SegmentedControlChangeEvent) {
     const index = e.nativeEvent.selectedSegmentIndex;
-    let newScope;
     switch (index) {
       case 1:
         setSelectedScope('week');
@@ -107,12 +75,9 @@ export default function MonthlyScreen() {
             filter={selectedScope}
           />
         )}
-      {/* {showAddNewGoalButton() && (
-        <AddTask parentId={0} depth={0} variant={'button'}/>
-      )} */}
     </View>
     <View style={styles.addButtonContainer}>
-          <TouchableOpacity style={styles.addButton} onPress={() => toggleReviewMode()}>
+          <TouchableOpacity style={styles.addButton} onPress={toggleReviewMode}>
             <Text style={styles.addButtonText}>{isReviewMode ? 'Done' : 'Review'}</Text>
           </TouchableOpacity>
         </View>

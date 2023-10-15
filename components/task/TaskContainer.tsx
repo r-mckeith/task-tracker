@@ -3,12 +3,10 @@ import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../NestedList';
-import { DoStackParamList } from '../../src/types/StackTypes';
 import { ScrollView } from 'react-native-gesture-handler';
 
 type TaskContainerProps = {
   tasks: TaskInterface[];
-  navigateToAdd?: keyof DoStackParamList;
   filter: string;
 };
 
