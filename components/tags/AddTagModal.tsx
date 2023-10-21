@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { CANCEL_BUTTON, CIRCLE_CHECK_BUTTON } from '../../src/utils/colors';
 
 type AddTagModalProps = {
   visible: boolean;
   onClose: () => void;
   onAddTag: (color: string, tag: string) => void;
-  currentSection: string | null;
   color: string | null;
+  currentSection: string | null;
 }
 
-export default function AddTagModal ({ visible, onClose, onAddTag, currentSection, color }: AddTagModalProps) {
+export default function AddTagModal ({ visible, onClose, onAddTag, color }: AddTagModalProps) {
   const [newTagName, setNewTagName] = useState('');
 
   const handleAddTag = () => {
@@ -21,7 +22,6 @@ export default function AddTagModal ({ visible, onClose, onAddTag, currentSectio
     }
   };
   
-
   return (
     <Modal
       animationType="slide"
@@ -46,10 +46,10 @@ export default function AddTagModal ({ visible, onClose, onAddTag, currentSectio
               style={styles.iconButton} 
               onPress={handleAddTag}
             >
-              <MaterialCommunityIcons name="check-circle-outline" size={24} color="#4CAF50" />
+              <MaterialCommunityIcons name="check-circle-outline" size={24} color={CIRCLE_CHECK_BUTTON} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={onClose}>
-              <MaterialCommunityIcons name="cancel" size={24} color="#F44336" /> 
+              <MaterialCommunityIcons name="cancel" size={24} color={CANCEL_BUTTON} /> 
             </TouchableOpacity>
           </View>
         </View>

@@ -8,18 +8,11 @@ type SectionProps = {
   tags: string[];
   title: string;
   addTag: () => void;
+  onSelect: (tag: string) => void;
+  onRemove: (tag: string, color: string) => void;
 };
 
-export default function Section({ color, tags, title, addTag }: SectionProps) {
-  function handleTagSelect (tag: string) {
-  };
-
-  function removeTag (color: string, tag: string) {
-    switch (color) {
-      //...similar logic for removal
-    }
-  };
-
+export default function Section({ color, tags, title, addTag, onSelect, onRemove }: SectionProps) {
   return (
     <View style={[styles.section, { backgroundColor: color }]}>
       <View style={styles.sectionHeader}>
@@ -33,8 +26,9 @@ export default function Section({ color, tags, title, addTag }: SectionProps) {
           <Tag 
             key={index} 
             text={tag}
-            onRemove={() => removeTag(color, tag)} 
-            onSelect={() => handleTagSelect(tag)}
+            color={color}
+            onRemove={() => onRemove(color, tag)} 
+            onSelect={() => onSelect(tag)}
           />
         ))}
       </View>

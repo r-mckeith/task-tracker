@@ -5,14 +5,19 @@ import { TAG_BACKGROUND } from "../../src/utils/colors";
 
 type TagProps = {
   text: string;
-  onRemove: () => void;
+  color: string;
+  onRemove: (color: string, tag: string) => void;
   onSelect: () => void;
 };
 
-export default function Tag({ text, onRemove, onSelect }: TagProps) {
+export default function Tag({ text, color, onRemove, onSelect }: TagProps) {
+  const handleRemove = () => {
+    onRemove(color, text);
+  };
+  
   return (
-    <TouchableOpacity onPress={onSelect} style={styles.tag}>
-      <Text onPress={onRemove} style={styles.x}>
+    <TouchableOpacity onPress={() => onSelect()} style={styles.tag}>
+      <Text onPress={() => onRemove(color, text)} style={styles.x}>
         X
       </Text>
       <Text>{text}</Text>

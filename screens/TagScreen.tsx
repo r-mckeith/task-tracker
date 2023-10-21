@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Section from '../components/tags/Section';
@@ -12,50 +12,63 @@ const pinkTagSeeds = ['Horrible tag', 'Pink tag', 'Bad tag', 'Don\t do this agai
 
 const TagScreen: React.FC = () => {
   const [timeframe, setTimeframe] = useState('Day');
-  const [yellowTags, setYellowTags] = useState<string[]>(greenTagSeeds);
-  const [blueTags, setBlueTags] = useState<string[]>(yellowTagSeeds);
-  const [greenTags, setGreenTags] = useState<string[]>(pinkTagSeeds);
+  const [goodTags, setGoodTags] = useState<string[]>(greenTagSeeds);
+  const [neutralTags, setNeutralTags] = useState<string[]>(yellowTagSeeds);
+  const [badTags, setBadTags] = useState<string[]>(pinkTagSeeds);
   const [selectedTags, setSelectedTags] = useState<{ name: string, count: number }[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [currentSection, setCurrentSection] = useState<'yellow' | 'blue' | 'green' | null>(null);
-
-
-  const [newTagName, setNewTagName] = useState('');
+  const [currentSection, setCurrentSection] = useState<'good' | 'neutral' | 'bad' | null>(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const addTag = (color: string, tag: string) => {
     console.log("Adding tag: ", tag, " to ", color);
     switch (color) {
-      case 'blue':
-        setYellowTags((prev) => [...prev, tag]);
+      case 'good':
+        setGoodTags((prev) => [...prev, tag]);
         break;
-      case 'yellow':
-        setBlueTags((prev) => [...prev, tag]);
+      case 'neutral':
+        setNeutralTags((prev) => [...prev, tag]);
         break;
-      case 'green':
-        setGreenTags((prev) => [...prev, tag]);
+      case 'bad':
+        setBadTags((prev) => [...prev, tag]);
         break;
     }
   };
 
-  // setSelectedTags((prev) => {
-  //   const foundTag = prev.find((t) => t.name === tag);
-  //   if (foundTag) {
-  //     return prev.map((t) =>
-  //       t.name === tag ? { ...t, count: t.count + 1 } : t
-  //     );
-  //   } else {
-  //     return [...prev, { name: tag, count: 1 }];
-  //   }
-  // });
-  
+  const handleTagSelect = (tag: string) => {
+    setSelectedTags((prev) => {
+      const foundTag = prev.find((t) => t.name === tag);
+      if (foundTag) {
+        return prev.map((t) =>
+          t.name === tag ? { ...t, count: t.count + 1 } : t
+        );
+      } else {
+        return [...prev, { name: tag, count: 1 }];
+      }
+    });
+  };  
+
+  function handleRemoveTag(color: string, tag: string) {
+    console.log("Removing tag", tag, "from section", color);
+    switch (color) {
+      case 'good':
+        setGoodTags((prev) => prev.filter((t) => t !== tag));
+        break;
+      case 'neutral':
+        setNeutralTags((prev) => prev.filter((t) => t !== tag));
+        break;
+      case 'bad':
+        setBadTags((prev) => prev.filter((t) => t !== tag));
+        break;
+    }
+  }  
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
-        <Section title="" color="lightgreen" tags={yellowTags} addTag={() => { setShowModal(true); setCurrentSection('yellow'); }} />
-        <Section title="" color="lightyellow" tags={blueTags} addTag={() => { setShowModal(true); setCurrentSection('blue'); }} />
-        <Section title="" color="pink" tags={greenTags} addTag={() => { setShowModal(true); setCurrentSection('green'); }} />
+        <Section title="" color='lightgreen' tags={goodTags} addTag={() => { setShowModal(true); setCurrentSection('good') }} onSelect={(tag) => handleTagSelect(tag)} onRemove={(tag) => handleRemoveTag('good', tag)} />
+        <Section title="" color='lightyellow' tags={neutralTags} addTag={() => { setShowModal(true); setCurrentSection('neutral'); }} onSelect={(tag) => handleTagSelect(tag)} onRemove={(tag) => handleRemoveTag('neutral', tag)} />
+        <Section title="" color='pink' tags={badTags} addTag={() => { setShowModal(true); setCurrentSection('bad'); }} onSelect={(tag) => handleTagSelect(tag)} onRemove={(tag) => handleRemoveTag('bad', tag)} />
 
     
         <View style={styles.selectedTagList}>
@@ -79,19 +92,13 @@ const TagScreen: React.FC = () => {
           </View>
         ))}
         </View>
-        {/* <AddTagModal
+        <AddTagModal
           visible={showModal}
           onClose={() => setShowModal(false)}
-          onAddTag={(tag: string) => addTag(tag, currentSection!)}
+          onAddTag={(color, tag) => addTag(color, tag)}
           currentSection={currentSection}
-        /> */}
-        <AddTagModal
-  visible={showModal}
-  onClose={() => setShowModal(false)}
-  onAddTag={(color, tag) => addTag(color, tag)} // Pass both 'color' and 'tag'
-  currentSection={currentSection}
-  color={currentSection}
-/>
+          color={currentSection}
+        />
       </View>
     </ScrollView>
   );
