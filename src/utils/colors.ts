@@ -1,0 +1,1 @@
+export const TAG_BACKGROUND = '#f1f1f1';
