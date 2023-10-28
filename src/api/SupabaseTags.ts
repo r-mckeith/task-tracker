@@ -1,20 +1,34 @@
 import { NewTagProps, TagProps } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
 
-interface TagResponse {
-
-}
-
-export async function getTags () {
+export const getTags = async () => {
+  const today = new Date()
+  const todayFormatted = today.toISOString().split('T')[0];
+  const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
+  const endDate = todayFormatted + "T23:59:59.999Z";   // End of the day
   const { data, error } = await supabase
-    .from('tags')
-    .select('*')
+  .from('tags')
+  .select(`
+      *,
+      tag_data (created_at, tag_id)
+  `)
+  .filter('tag_data.created_at', 'gte', startDate)
+  .filter('tag_data.created_at', 'lte', endDate)
+  .order('id', { ascending: true });
+
 
   if (error) {
     console.error(error);
+    throw new Error(error.message);
   }
-  return data || [];
+
+  if (!data) {
+    return [];
+  }
+
+  return data;
 };
+
 
 export async function addTag(newTag: NewTagProps): Promise<TagProps> {
   let { data: tagData, error: tagError } = await supabase

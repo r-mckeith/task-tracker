@@ -19,6 +19,8 @@ export default function TagScreen() {
 
   const { tags, tagData } = useTagContext();
 
+  console.log(tags)
+
   useEffect(() => {
     const goodTags = tags.filter(tag => tag.section === 'good').map(tag => tag);
     const neutralTags = tags.filter(tag => tag.section === 'neutral').map(tag => tag);
