@@ -3,20 +3,6 @@ import { supabase } from './SupabaseClient'
 import { TaskInterface } from '../types/TaskTypes';
 import { findChildTasks, findParentTasks, todayFormatted, tomorrowFormatted } from '../../helpers/taskHelpers';
 
-interface TaskResponse {
-  id: bigint;
-  created_at: string;
-  userId: string;
-  name: string;
-  parentId: number;
-  depth: number;
-  recurringOptions: {
-    isRecurring: boolean;
-    selectedDays: string;
-    timesPerDay: string;
-  };
-}
-
 export const getTasks = async () => {
   const { data, error } = await supabase
   .from('tasks')

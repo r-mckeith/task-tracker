@@ -1,0 +1,30 @@
+import React, { useEffect, useReducer, ReactNode } from 'react';
+import { getTags } from '../../api/SupabaseTags';
+import { TagContext } from './TagContext';
+import { tagReducer } from '../../reducers/TagReducer';
+
+interface TagContextProviderProps {
+  children: ReactNode;
+}
+
+const TagContextProvider = ({ children }: TagContextProviderProps) => {
+  const [state, dispatch] = useReducer(tagReducer, []);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      const tags = await getTags();
+      dispatch({ type: 'INITIALIZE_TAGS', payload: tags });
+    };
+
+    fetchTags();
+  }, []);
+
+  return (
+<TagContext.Provider value={{ tags: state, tagData: [], dispatch }}>
+  {children}
+</TagContext.Provider>
+
+  );
+};
+
+export default TagContextProvider;

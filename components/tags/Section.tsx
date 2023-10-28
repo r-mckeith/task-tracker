@@ -1,35 +1,23 @@
 import React from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, StyleSheet } from "react-native";
+import { TagProps } from "../../src/types/TagTypes";
 import Tag from "./Tag";
+import AddTag from "./AddTag";
 
 type SectionProps = {
   color: string;
-  tags: string[];
-  title: string;
-  addTag: () => void;
+  tags: TagProps[];
+  sectionName: string;
   onSelect: (tag: string) => void;
-  onRemove: (tag: string, color: string) => void;
 };
 
-export default function Section({ color, tags, title, addTag, onSelect, onRemove }: SectionProps) {
+export default function Section({ color, tags, sectionName, onSelect }: SectionProps) {
   return (
     <View style={[styles.section, { backgroundColor: color }]}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-        <TouchableOpacity onPress={addTag}>
-            <MaterialCommunityIcons name="plus-circle-outline" size={24} />
-        </TouchableOpacity>
-      </View>
+      <AddTag sectionName={sectionName}/>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
-          <Tag 
-            key={index} 
-            text={tag}
-            color={color}
-            onRemove={() => onRemove(color, tag)} 
-            onSelect={() => onSelect(tag)}
-          />
+          <Tag key={index} tag={tag} onSelect={() => onSelect(tag.name)} />
         ))}
       </View>
     </View>
@@ -44,15 +32,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     marginBottom: 8,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   tagContainer: {
     flexDirection: 'row',

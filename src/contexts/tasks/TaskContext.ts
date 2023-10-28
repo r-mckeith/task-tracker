@@ -1,7 +1,6 @@
-import React, { createContext, useReducer } from 'react';
+import React from 'react';
 import { TaskInterface } from '../../types/TaskTypes';
 import { Action } from '../../reducers/TaskReducer';
-import { taskReducer } from '../../reducers/TaskReducer';
 
 interface TaskState {
   state: TaskInterface[];
@@ -10,7 +9,7 @@ interface TaskState {
 
 type TaskContextProps = {
   state: TaskInterface[];
-  dispatch: React.Dispatch<any>; // Replace "any" with your action types
+  dispatch: React.Dispatch<any>;
 };
 
 export interface TaskContextType {

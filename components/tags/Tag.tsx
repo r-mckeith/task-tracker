@@ -1,27 +1,38 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTagContext } from '../../src/contexts/tags/UseTagContext';
+import { TagProps } from "../../src/types/TagTypes";
+import { deleteTag } from "../../src/api/SupabaseTags";
 import { TAG_BACKGROUND } from "../../src/utils/colors";
 
-type TagProps = {
-  text: string;
-  color: string;
-  onRemove: (color: string, tag: string) => void;
+type TagComponentProps = {
+  tag: TagProps;
   onSelect: () => void;
-};
+}
 
-export default function Tag({ text, color, onRemove, onSelect }: TagProps) {
-  const handleRemove = () => {
-    onRemove(color, text);
+export default function Tag({ tag, onSelect }: TagComponentProps) {
+  const { dispatch } = useTagContext();
+
+  async function handleDeleteTag(id: number) {
+    console.log('deleting tag')
+    try {
+      await deleteTag(id);
+      dispatch({ type: 'DELETE_TAG', id });
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+    }
   };
-  
+
   return (
-    <TouchableOpacity onPress={() => onSelect()} style={styles.tag}>
-      <Text onPress={() => onRemove(color, text)} style={styles.x}>
-        X
-      </Text>
-      <Text>{text}</Text>
-    </TouchableOpacity>
+    <View style={styles.tag}>
+      <TouchableOpacity onPress={() => handleDeleteTag(tag.id)} style={styles.x}>
+        <Text>X</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => onSelect()} style={styles.tagText}>
+        <Text>{tag.name}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -35,7 +46,11 @@ const styles = StyleSheet.create({
     margin: 4,
     alignSelf: 'flex-start'
   },
+  tagText: {
+    flex: 1, // Take up available space
+  },
   x: {
     marginRight: 8,
   },
 });
+

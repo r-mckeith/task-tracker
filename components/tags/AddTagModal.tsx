@@ -5,18 +5,17 @@ import { CANCEL_BUTTON, CIRCLE_CHECK_BUTTON } from '../../src/utils/colors';
 
 type AddTagModalProps = {
   visible: boolean;
+  sectionName: string;
   onClose: () => void;
-  onAddTag: (color: string, tag: string) => void;
-  color: string | null;
-  currentSection: string | null;
+  onAddTag: (name: string, section: string) => void;
 }
 
-export default function AddTagModal ({ visible, onClose, onAddTag, color }: AddTagModalProps) {
+export default function AddTagModal ({ visible, sectionName, onClose, onAddTag }: AddTagModalProps) {
   const [newTagName, setNewTagName] = useState('');
 
   const handleAddTag = () => {
-    if (newTagName && color) {
-      onAddTag(color, newTagName);
+    if (newTagName) {
+      onAddTag(newTagName, sectionName);
       setNewTagName('');
       onClose();
     }
