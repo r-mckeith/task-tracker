@@ -19,7 +19,7 @@ export default function Tag({ tag, onSelect }: TagComponentProps) {
       await deleteTag(id);
       dispatch({ type: 'DELETE_TAG', id });
     } catch (error) {
-      console.error('Failed to delete task:', error);
+      console.error('Failed to delete tag:', error);
     }
   };
 

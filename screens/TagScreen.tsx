@@ -16,14 +16,12 @@ export default function TagScreen() {
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
   const [selectedTagList, setSelectedTagList] = useState<TagProps[]>([]);
-  console.log(selectedTagList)
-
   const { tags, tagData } = useTagContext();
 
   useEffect(() => {
-    const goodTags = tags.filter(tag => tag.section === 'good').map(tag => tag);
-    const neutralTags = tags.filter(tag => tag.section === 'neutral').map(tag => tag);
-    const badTags = tags.filter(tag => tag.section === 'bad').map(tag => tag);
+    const goodTags = tags.filter(tag => tag.section === 'good');
+    const neutralTags = tags.filter(tag => tag.section === 'neutral');
+    const badTags = tags.filter(tag => tag.section === 'bad');
     const selectedTags = tags.filter(tag => tag.tag_data && tag.tag_data.length > 0);
 
     setGoodTagsList(goodTags);

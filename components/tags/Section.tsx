@@ -1,6 +1,8 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { TagProps } from "../../src/types/TagTypes";
+import { useTagContext } from "../../src/contexts/tags/UseTagContext";
+import { selectTag } from "../../src/api/SupabaseTags";
 import Tag from "./Tag";
 import AddTag from "./AddTag";
 
@@ -10,26 +12,24 @@ type SectionProps = {
   sectionName: string;
 };
 
-function handleSelectTag(tag: string) {
-  // setSelectedTagList((prev) => {
-  //   const foundTag = prev.find((t) => t.name === tag);
-  //   if (foundTag) {
-  //     return prev.map((t) =>
-  //       t.name === tag ? { ...t, count: t.count + 1 } : t
-  //     );
-  //   } else {
-  //     return [...prev, { name: tag, count: 1 }];
-  //   }
-  // });
-}; 
-
 export default function Section({ color, tags, sectionName }: SectionProps) {
+  const { dispatch } = useTagContext();
+
+  const handleSelectTag = async (tag: TagProps): Promise<void> => {
+    try {
+      await selectTag(tag.id);
+      dispatch({ type: 'SELECT_TAG', payload: tag });
+    } catch (error) {
+      console.error('Failed to select tag:', error);
+    }
+  };
+
   return (
     <View style={[styles.section, { backgroundColor: color }]}>
       <AddTag sectionName={sectionName}/>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
-          <Tag key={index} tag={tag} onSelect={() => handleSelectTag(tag.name)} />
+          <Tag key={index} tag={tag} onSelect={() => handleSelectTag(tag)} />
         ))}
       </View>
     </View>
