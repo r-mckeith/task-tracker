@@ -19,7 +19,6 @@ export default function ScopeTask({id, inScopeDay, inScopeWeek, filter}: ScopePr
 
 
   const handleToggleScope = () => {
-    console.log(filter)
     filter === 'month' ? handleToggleScopeforWeek(id, inScopeWeek, state, dispatch) : handleToggleScopeforDay(id, inScopeDay, state, dispatch);
   };
 

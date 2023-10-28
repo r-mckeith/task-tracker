@@ -15,7 +15,6 @@ export default function Tag({ tag, onSelect }: TagComponentProps) {
   const { dispatch } = useTagContext();
 
   async function handleDeleteTag(id: number) {
-    console.log('deleting tag')
     try {
       await deleteTag(id);
       dispatch({ type: 'DELETE_TAG', id });

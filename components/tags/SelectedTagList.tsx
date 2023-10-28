@@ -4,7 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { TagProps } from "../../src/types/TagTypes";
 
 type SelectedTagListProps = {
-  selectedTags: { name: string, count: number }[];
+  selectedTags: TagProps[];
 };
 
 export default function SelectedTagList({selectedTags}: SelectedTagListProps) {
@@ -29,7 +29,7 @@ export default function SelectedTagList({selectedTags}: SelectedTagListProps) {
     {selectedTags.map((tagObj, index) => (
       <View style={styles.selectedTag} key={index}>
         <Text style={styles.tagName}>{tagObj.name}</Text>
-        {tagObj.count > 1 && <Text style={styles.tagCount}>{`x${tagObj.count}`}</Text>}
+        {tagObj.tag_data[0].count > 1 && <Text style={styles.tagCount}>{`x${tagObj.tag_data[0].count}`}</Text>}
       </View>
     ))}
     </View>

@@ -15,42 +15,30 @@ export default function TagScreen() {
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
-  const [selectedTags, setSelectedTags] = useState<{ name: string, count: number }[]>([]);
+  const [selectedTagList, setSelectedTagList] = useState<TagProps[]>([]);
+  console.log(selectedTagList)
 
   const { tags, tagData } = useTagContext();
-
-  console.log(tags)
 
   useEffect(() => {
     const goodTags = tags.filter(tag => tag.section === 'good').map(tag => tag);
     const neutralTags = tags.filter(tag => tag.section === 'neutral').map(tag => tag);
     const badTags = tags.filter(tag => tag.section === 'bad').map(tag => tag);
+    const selectedTags = tags.filter(tag => tag.tag_data && tag.tag_data.length > 0);
 
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
-  }, [tags]);
-
-  function handleTagSelect(tag: string) {
-    setSelectedTags((prev) => {
-      const foundTag = prev.find((t) => t.name === tag);
-      if (foundTag) {
-        return prev.map((t) =>
-          t.name === tag ? { ...t, count: t.count + 1 } : t
-        );
-      } else {
-        return [...prev, { name: tag, count: 1 }];
-      }
-    });
-  };  
+    setSelectedTagList(selectedTags)
+  }, [tags]); 
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
-        <Section color='lightgreen' tags={goodTagsList} sectionName={'good'} onSelect={(tag) => handleTagSelect(tag)} />
-        <Section color='lightyellow' tags={neutralTagsList} sectionName={'neutral'} onSelect={(tag) => handleTagSelect(tag)} />
-        <Section color='pink' tags={badTagsList} sectionName={'bad'} onSelect={(tag) => handleTagSelect(tag)} />
-        <SelectedTagList selectedTags={selectedTags}/>
+        <Section color='lightgreen' tags={goodTagsList} sectionName={'good'} />
+        <Section color='lightyellow' tags={neutralTagsList} sectionName={'neutral'} />
+        <Section color='pink' tags={badTagsList} sectionName={'bad'} />
+        <SelectedTagList selectedTags={selectedTagList}/>
       </View>
     </ScrollView>
   );

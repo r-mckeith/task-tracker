@@ -8,16 +8,28 @@ type SectionProps = {
   color: string;
   tags: TagProps[];
   sectionName: string;
-  onSelect: (tag: string) => void;
 };
 
-export default function Section({ color, tags, sectionName, onSelect }: SectionProps) {
+function handleSelectTag(tag: string) {
+  // setSelectedTagList((prev) => {
+  //   const foundTag = prev.find((t) => t.name === tag);
+  //   if (foundTag) {
+  //     return prev.map((t) =>
+  //       t.name === tag ? { ...t, count: t.count + 1 } : t
+  //     );
+  //   } else {
+  //     return [...prev, { name: tag, count: 1 }];
+  //   }
+  // });
+}; 
+
+export default function Section({ color, tags, sectionName }: SectionProps) {
   return (
     <View style={[styles.section, { backgroundColor: color }]}>
       <AddTag sectionName={sectionName}/>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
-          <Tag key={index} tag={tag} onSelect={() => onSelect(tag.name)} />
+          <Tag key={index} tag={tag} onSelect={() => handleSelectTag(tag.name)} />
         ))}
       </View>
     </View>

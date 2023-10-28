@@ -10,7 +10,7 @@ export const getTags = async () => {
   .from('tags')
   .select(`
       *,
-      tag_data (created_at, tag_id)
+      tag_data (created_at, tag_id, count)
   `)
   .filter('tag_data.created_at', 'gte', startDate)
   .filter('tag_data.created_at', 'lte', endDate)
