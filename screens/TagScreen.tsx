@@ -17,6 +17,7 @@ export default function TagScreen() {
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
   const [selectedTagList, setSelectedTagList] = useState<TagProps[]>([]);
   const { tags, tagData } = useTagContext();
+  console.log("TAG DATA:", tagData)
 
   useEffect(() => {
     const goodTags = tags.filter(tag => tag.section === 'good');

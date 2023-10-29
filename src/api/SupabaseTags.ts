@@ -1,21 +1,21 @@
 import { NewTagProps, TagProps, TagDataProps } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
 
-export const getTags = async () => {
+export const getTagsWithTodayData = async () => {
   const today = new Date()
   const todayFormatted = today.toISOString().split('T')[0];
-  const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
-  const endDate = todayFormatted + "T23:59:59.999Z";   // End of the day
+  const startDate = todayFormatted + "T00:00:00.000Z";  
+  const endDate = todayFormatted + "T23:59:59.999Z";   
+
   const { data, error } = await supabase
-  .from('tags')
-  .select(`
+    .from('tags')
+    .select(`
       *,
       tag_data (created_at, tag_id, count)
-  `)
-  .filter('tag_data.created_at', 'gte', startDate)
-  .filter('tag_data.created_at', 'lte', endDate)
-  .order('id', { ascending: true });
-
+    `)
+    .filter('tag_data.created_at', 'gte', startDate)
+    .filter('tag_data.created_at', 'lte', endDate)
+    .order('id', { ascending: true });
 
   if (error) {
     console.error(error);
@@ -23,11 +23,19 @@ export const getTags = async () => {
   }
 
   if (!data) {
-    return [];
+    return { tags: [], tagData: [] };
   }
 
-  return data;
+  const tags = data.map(tag => {
+    const { tag_data, ...tagDetails } = tag;
+    return tagDetails;
+  });
+
+  const tagData = data.flatMap(tag => tag.tag_data);
+
+  return { tags, tagData };
 };
+
 
 
 export async function addTag(newTag: NewTagProps): Promise<TagProps> {
