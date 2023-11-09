@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer, ReactNode } from 'react';
-import { getTagsWithTodayData } from '../../api/SupabaseTags';
+import { getTagsWithData } from '../../api/SupabaseTags';
 import { TagContext } from './TagContext';
 import { tagReducer } from '../../reducers/TagReducer';
 import { tagDataReducer } from '../../reducers/TagDataReducer';
+import { DateRange } from '../../types/TagTypes';
 
 
 interface TagContextProviderProps {
@@ -15,7 +16,7 @@ const TagContextProvider = ({ children }: TagContextProviderProps) => {
 
   useEffect(() => {
     const fetchTags = async () => {
-      const { tags, tagData } = await getTagsWithTodayData();
+      const { tags, tagData } = await getTagsWithData(DateRange.ThisWeek);
       dispatchTags({ type: 'INITIALIZE_TAGS', payload: tags });
       dispatchTagData({ type: 'INITIALIZE_TAG_DATA', payload: tagData });
     };
@@ -32,3 +33,4 @@ const TagContextProvider = ({ children }: TagContextProviderProps) => {
 
 
 export default TagContextProvider;
+

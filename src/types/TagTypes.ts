@@ -14,3 +14,10 @@ export type TagDataProps = {
   tag_id: number;
   count: number;
 }
+
+export enum DateRange {
+  Today,
+  ThisWeek,
+  ThisMonth,
+  ThisYear
+}

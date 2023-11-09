@@ -1,11 +1,36 @@
-import { NewTagProps, TagProps, TagDataProps } from '../types/TagTypes';
+import { NewTagProps, TagProps, TagDataProps, DateRange } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
 
-export const getTagsWithTodayData = async () => {
-  const today = new Date()
-  const todayFormatted = today.toISOString().split('T')[0];
-  const startDate = todayFormatted + "T00:00:00.000Z";  
-  const endDate = todayFormatted + "T23:59:59.999Z";   
+export const getTagsWithData = async (range: DateRange) => {
+  let startDate: string;
+  let endDate: string;
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth();
+  const currentDay = today.getDate();
+
+  switch (range) {
+    case DateRange.Today:
+      const todayFormatted = today.toISOString().split('T')[0];
+      startDate = todayFormatted + "T00:00:00.000Z";
+      endDate = todayFormatted + "T23:59:59.999Z";
+      break;
+    case DateRange.ThisWeek:
+      const oneWeekAgo = new Date(today);
+      oneWeekAgo.setDate(currentDay - 6);
+      startDate = oneWeekAgo.toISOString();
+      endDate = today.toISOString();
+      break;
+    case DateRange.ThisMonth:
+      startDate = new Date(currentYear, currentMonth, 1).toISOString();
+      endDate = today.toISOString();
+      break;
+    case DateRange.ThisYear:
+      startDate = new Date(currentYear, 0, 1).toISOString();
+      endDate = today.toISOString();
+      break;
+  }
 
   const { data, error } = await supabase
     .from('tags')
@@ -16,6 +41,7 @@ export const getTagsWithTodayData = async () => {
     .filter('tag_data.created_at', 'gte', startDate)
     .filter('tag_data.created_at', 'lte', endDate)
     .order('id', { ascending: true });
+
 
   if (error) {
     console.error(error);

@@ -17,7 +17,7 @@ export default function Tag({ tag, onSelect }: TagComponentProps) {
   async function handleDeleteTag(id: number) {
     try {
       await deleteTag(id);
-      dispatch({ type: 'DELETE_TAG', id });
+      dispatch.tags({ type: 'DELETE_TAG', id });
     } catch (error) {
       console.error('Failed to delete tag:', error);
     }
@@ -43,10 +43,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: TAG_BACKGROUND,
     margin: 4,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   tagText: {
-    flex: 1, // Take up available space
+    // flex: 1,
   },
   x: {
     marginRight: 8,

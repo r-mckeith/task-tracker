@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTagContext } from '../src/contexts/tags/UseTagContext';
-import { TagProps } from '../src/types/TagTypes';
+import { TagProps, TagDataProps } from '../src/types/TagTypes';
 import Section from '../components/tags/Section';
 import SelectedTagList from '../components/tags/SelectedTagList';
 
@@ -15,20 +15,16 @@ export default function TagScreen() {
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
-  const [selectedTagList, setSelectedTagList] = useState<TagProps[]>([]);
-  const { tags, tagData } = useTagContext();
-  console.log("TAG DATA:", tagData)
+  const { tags } = useTagContext();
 
   useEffect(() => {
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
-    const selectedTags = tags.filter(tag => tag.tag_data && tag.tag_data.length > 0);
 
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
-    setSelectedTagList(selectedTags)
   }, [tags]); 
 
   return (
@@ -37,7 +33,7 @@ export default function TagScreen() {
         <Section color='lightgreen' tags={goodTagsList} sectionName={'good'} />
         <Section color='lightyellow' tags={neutralTagsList} sectionName={'neutral'} />
         <Section color='pink' tags={badTagsList} sectionName={'bad'} />
-        <SelectedTagList selectedTags={selectedTagList}/>
+        <SelectedTagList />
       </View>
     </ScrollView>
   );

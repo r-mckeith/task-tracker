@@ -18,7 +18,7 @@ export default function Section({ color, tags, sectionName }: SectionProps) {
   const handleSelectTag = async (tag: TagProps): Promise<void> => {
     try {
       await selectTag(tag.id);
-      dispatch({ type: 'SELECT_TAG', payload: tag });
+      dispatch.tags({ type: 'SELECT_TAG', payload: tag });
     } catch (error) {
       console.error('Failed to select tag:', error);
     }
@@ -39,6 +39,7 @@ export default function Section({ color, tags, sectionName }: SectionProps) {
 const styles = StyleSheet.create({
   section: {
     flexShrink: 1,
+    flexGrow: 1,
     minHeight: 150,
     padding: 10,
     borderRadius: 10,
@@ -48,6 +49,6 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'center'
+    alignItems: 'flex-start',
   },
 });

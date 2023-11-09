@@ -23,7 +23,7 @@ export default function AddTag({ sectionName }: AddTagProps) {
 
     try {
         const createdTag = await addTag(newTag);
-        dispatch({ type: 'ADD_TAG', payload: createdTag });
+        dispatch.tags({ type: 'ADD_TAG', payload: createdTag });
     } catch (error) {
         console.error('Failed to add tag:', error);
     }

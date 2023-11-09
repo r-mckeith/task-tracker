@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TagProps } from "../../src/types/TagTypes";
+import { TagProps, TagDataProps } from "../../src/types/TagTypes";
+import { useTagContext } from "../../src/contexts/tags/UseTagContext";
 
-type SelectedTagListProps = {
-  selectedTags: TagProps[];
-};
-
-export default function SelectedTagList({selectedTags}: SelectedTagListProps) {
+export default function SelectedTagList() {
   const [timeframe, setTimeframe] = useState('Day');
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedTagsList, setSelectedTagsList] = useState<any>([]);
+
+  const { tags, tagData } = useTagContext();
+  console.log(tagData.length)
+
+
+
+  useEffect(() => {
+    const mergedData = tagData.map(tagDataItem => {
+      const associatedTag = tags.find(tag => tag.id === tagDataItem.tag_id);
+      return {
+        ...tagDataItem,
+        name: associatedTag?.name
+      };
+    });  
+    setSelectedTagsList(mergedData);
+  }, [tagData, tags]);
+
+  // const mergedData = tagData.map(tagDataItem => {
+  //   const associatedTag = tags.find(tag => tag.id === tagDataItem.tag_id);
+  //   return {
+  //     ...tagDataItem,
+  //     name: associatedTag?.name
+  //   };
+  // });  
   
   return (
+    <View>
     <View style={styles.selectedTagList}>
     <TouchableOpacity style={styles.dropdownButton} onPress={() => setDropdownVisible(!dropdownVisible)}>
       <Text>{timeframe}</Text>
@@ -26,12 +49,35 @@ export default function SelectedTagList({selectedTags}: SelectedTagListProps) {
         ))}
       </View>
     )}
-    {selectedTags.map((tagObj, index) => (
-      <View style={styles.selectedTag} key={index}>
-        <Text style={styles.tagName}>{tagObj.name}</Text>
-        {tagObj.tag_data[0].count > 1 && <Text style={styles.tagCount}>{`x${tagObj.tag_data[0].count}`}</Text>}
+      <View style={styles.table}></View>
+      {selectedTagsList.map((item: any, index: any) => (
+      <View key={index} style={styles.row}>
+        <Text style={styles.cell}>{item.name}</Text>
+        <Text style={styles.cell}>{item.count}</Text>
       </View>
     ))}
+    {/* {selectedTagsList.map((item, index) => (
+      <View style={styles.selectedTag} key={index}>
+        <Text style={styles.tagName}>{item.name}</Text>
+        {item.count > 1 && <Text style={styles.tagCount}>{`x${item.count}`}</Text>}
+      </View>
+    ))} */}
+    </View>
+    <View style={styles.table}>
+    {/* Header */}
+    {/* <View style={styles.row}>
+      <Text style={styles.headerCell}>Header 1</Text>
+      <Text style={styles.headerCell}>Header 2</Text>
+    </View> */}
+
+    {/* Data Rows */}
+    {/* {selectedTagsList.map((item, index) => (
+      <View key={index} style={styles.row}>
+        <Text style={styles.cell}>{item.name}</Text>
+        <Text style={styles.cell}>{item.count}</Text>
+      </View>
+    ))} */}
+    </View>
     </View>
   );
 }
@@ -83,5 +129,26 @@ const styles = StyleSheet.create({
   tagCount: {
       fontSize: 16,
       color: '#555',
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  headerCell: {
+    flex: 1,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'lightgray',
+    fontWeight: 'bold',
+  },
+  cell: {
+    flex: 1,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });
