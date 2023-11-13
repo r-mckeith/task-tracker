@@ -13,6 +13,7 @@ export type TagDataProps = {
   created_at: Date;
   tag_id: number;
   count: number;
+  tag_name: string;
 }
 
 export enum DateRange {

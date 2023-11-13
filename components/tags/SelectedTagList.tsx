@@ -2,82 +2,41 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TagProps, TagDataProps } from "../../src/types/TagTypes";
-import { useTagContext } from "../../src/contexts/tags/UseTagContext";
+import { useTagDataContext } from "../../src/contexts/tagData/UseTagDataContext";
 
 export default function SelectedTagList() {
   const [timeframe, setTimeframe] = useState('Day');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedTagsList, setSelectedTagsList] = useState<any>([]);
 
-  const { tags, tagData } = useTagContext();
-  console.log(tagData.length)
-
-
+  const { tagData } = useTagDataContext();
 
   useEffect(() => {
-    const mergedData = tagData.map(tagDataItem => {
-      const associatedTag = tags.find(tag => tag.id === tagDataItem.tag_id);
-      return {
-        ...tagDataItem,
-        name: associatedTag?.name
-      };
-    });  
-    setSelectedTagsList(mergedData);
-  }, [tagData, tags]);
-
-  // const mergedData = tagData.map(tagDataItem => {
-  //   const associatedTag = tags.find(tag => tag.id === tagDataItem.tag_id);
-  //   return {
-  //     ...tagDataItem,
-  //     name: associatedTag?.name
-  //   };
-  // });  
+    setSelectedTagsList(tagData);
+  }, [tagData]);
   
   return (
-    <View>
     <View style={styles.selectedTagList}>
-    <TouchableOpacity style={styles.dropdownButton} onPress={() => setDropdownVisible(!dropdownVisible)}>
-      <Text>{timeframe}</Text>
-      <MaterialCommunityIcons name={dropdownVisible ? "chevron-up" : "chevron-down"} size={24} />
-    </TouchableOpacity>
-    {dropdownVisible && (
-      <View style={styles.dropdownList}>
-        {['Day', 'Week', 'Month', 'Year'].map(option => (
-          <TouchableOpacity key={option} style={styles.dropdownItem} onPress={() => { setTimeframe(option); setDropdownVisible(false); }}>
-            <Text>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    )}
-      <View style={styles.table}></View>
-      {selectedTagsList.map((item: any, index: any) => (
-      <View key={index} style={styles.row}>
-        <Text style={styles.cell}>{item.name}</Text>
-        <Text style={styles.cell}>{item.count}</Text>
-      </View>
-    ))}
-    {/* {selectedTagsList.map((item, index) => (
-      <View style={styles.selectedTag} key={index}>
-        <Text style={styles.tagName}>{item.name}</Text>
-        {item.count > 1 && <Text style={styles.tagCount}>{`x${item.count}`}</Text>}
-      </View>
-    ))} */}
-    </View>
-    <View style={styles.table}>
-    {/* Header */}
-    {/* <View style={styles.row}>
-      <Text style={styles.headerCell}>Header 1</Text>
-      <Text style={styles.headerCell}>Header 2</Text>
-    </View> */}
-
-    {/* Data Rows */}
-    {/* {selectedTagsList.map((item, index) => (
-      <View key={index} style={styles.row}>
-        <Text style={styles.cell}>{item.name}</Text>
-        <Text style={styles.cell}>{item.count}</Text>
-      </View>
-    ))} */}
-    </View>
+      <TouchableOpacity style={styles.dropdownButton} onPress={() => setDropdownVisible(!dropdownVisible)}>
+        <Text>{timeframe}</Text>
+        <MaterialCommunityIcons name={dropdownVisible ? "chevron-up" : "chevron-down"} size={24} />
+      </TouchableOpacity>
+      {dropdownVisible && (
+        <View style={styles.dropdownList}>
+          {['Day', 'Week', 'Month', 'Year'].map(option => (
+            <TouchableOpacity key={option} style={styles.dropdownItem} onPress={() => { setTimeframe(option); setDropdownVisible(false); }}>
+              <Text>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+        <View style={styles.table}></View>
+        {selectedTagsList.map((item: any, index: any) => (
+        <View key={index} style={styles.row}>
+          <Text style={styles.cell}>{item.tag_name}</Text>
+          <Text style={styles.cell}>{item.count}</Text>
+        </View>
+      ))}
     </View>
   );
 }

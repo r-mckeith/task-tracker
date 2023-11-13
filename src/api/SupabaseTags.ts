@@ -1,7 +1,22 @@
 import { NewTagProps, TagProps, TagDataProps, DateRange } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
 
-export const getTagsWithData = async (range: DateRange) => {
+export const getTags = async () => {
+  const { data, error } = await supabase
+    .from('tags')
+    .select('*');
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  const tags = data || [];
+
+  return tags;
+};
+
+export const getTagData = async (range: DateRange) => {
   let startDate: string;
   let endDate: string;
 
@@ -33,36 +48,22 @@ export const getTagsWithData = async (range: DateRange) => {
   }
 
   const { data, error } = await supabase
-    .from('tags')
-    .select(`
-      *,
-      tag_data (created_at, tag_id, count)
-    `)
-    .filter('tag_data.created_at', 'gte', startDate)
-    .filter('tag_data.created_at', 'lte', endDate)
-    .order('id', { ascending: true });
-
+    .from('tag_data')
+    .select('created_at, tag_id, count')
+    .filter('created_at', 'gte', startDate)
+    .filter('created_at', 'lte', endDate)
+    .order('created_at', { ascending: true })
+    .select();
 
   if (error) {
     console.error(error);
     throw new Error(error.message);
   }
 
-  if (!data) {
-    return { tags: [], tagData: [] };
-  }
+  const tagData = data || [];
 
-  const tags = data.map(tag => {
-    const { tag_data, ...tagDetails } = tag;
-    return tagDetails;
-  });
-
-  const tagData = data.flatMap(tag => tag.tag_data);
-
-  return { tags, tagData };
+  return tagData;
 };
-
-
 
 export async function addTag(newTag: NewTagProps): Promise<TagProps> {
   let { data: tagData, error: tagError } = await supabase
@@ -148,7 +149,7 @@ export async function selectTag(id: number): Promise<TagDataProps> {
   } else {
       const newData: Partial<TagDataProps> = {
           tag_id: id,
-          count: 1
+          count: 1,
       };
 
       const { data: insertedData, error: insertError } = await supabase
