@@ -6,6 +6,8 @@ import { MenuProvider } from 'react-native-popup-menu';
 import 'react-native-url-polyfill/auto';
 import Auth from './components/auth/Auth';
 import TaskContextProvider from './src/contexts/tasks/TaskContextProvider';
+import TagContextProvider from './src/contexts/tags/TagContextProvider';
+import TagDataContextProvider from './src/contexts/tagData/TagDataContextProvider';
 import NoteContextProvider from './src/contexts/notes/NoteContextProvider';
 import DateProvider from './src/contexts/date/Dateprovider';
 import { MyTabs } from './screens/TabNavigator';
@@ -17,21 +19,25 @@ export default function App() {
 
   return (
     <TaskContextProvider>
-      <NoteContextProvider>
-        <DateProvider>
-          <SafeAreaView style={styles.container}>
-            <MenuProvider>
-              <GestureHandlerRootView style={{flex: 1}}>
-                {session && session.user ?  
-                  <NavigationContainer>
-                    <MyTabs />
-                  </NavigationContainer> : 
-                  <Auth />}
-              </GestureHandlerRootView>
-            </MenuProvider>
-          </SafeAreaView>
-        </DateProvider>
-      </NoteContextProvider>
+      <TagContextProvider>
+        <TagDataContextProvider>
+          <NoteContextProvider>
+            <DateProvider>
+              <SafeAreaView style={styles.container}>
+                <MenuProvider>
+                  <GestureHandlerRootView style={{flex: 1}}>
+                    {session && session.user ?  
+                      <NavigationContainer>
+                        <MyTabs />
+                      </NavigationContainer> : 
+                      <Auth />}
+                  </GestureHandlerRootView>
+                </MenuProvider>
+              </SafeAreaView>
+            </DateProvider>
+          </NoteContextProvider>
+        </TagDataContextProvider>
+      </TagContextProvider>
     </TaskContextProvider>
   );
 }
