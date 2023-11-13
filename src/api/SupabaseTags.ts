@@ -105,7 +105,109 @@ export async function deleteTag (tagId: number) {
   }
 };
 
-export async function selectTag(id: number): Promise<TagDataProps> {
+// export async function selectTag(id: number): Promise<TagDataProps> {
+//   const today = new Date();
+//   const todayFormatted = today.toISOString().split('T')[0];
+//   const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
+//   const endDate = todayFormatted + "T23:59:59.999Z";   // End of the day
+
+//   // Check if tag_data for the tagId with today's date exists
+//   const { data, error } = await supabase
+//       .from('tag_data')
+//       .select('*')
+//       .eq('tag_id', id)
+//       .gte('created_at', startDate)
+//       .lte('created_at', endDate);
+
+//   if (error) {
+//       console.error(error);
+//       throw new Error('Failed to select tag data');
+//   }
+
+//   // If exists, increment the count. If not, insert new row.
+//   if (data && data.length > 0) {
+//       const currentCount = data[0].count;
+//       const updatedCount = currentCount + 1;
+
+//       const { data: updatedData, error: updateError } = await supabase
+//           .from('tag_data')
+//           .update({ count: updatedCount })
+//           .eq('id', data[0].id)
+//           .select();
+
+//       if (updateError) {
+//           console.error(updateError);
+//           throw new Error('Failed to update tag data count');
+//       }
+
+//       if (!updatedData) {
+//         throw new Error('Updated data is not available.');
+//     }
+      
+//       return updatedData[0];
+
+//   } else {
+//       const newData: Partial<TagDataProps> = {
+//           tag_id: id,
+//           count: 1,
+//       };
+
+//       const { data: insertedData, error: insertError } = await supabase
+//           .from('tag_data')
+//           .insert([newData])
+//           .single();
+
+//       if (insertError) {
+//           console.error(insertError);
+//           throw new Error('Failed to insert tag data');
+//       }
+
+//       return insertedData;
+//   }
+// }
+
+// export async function updateOrInsertTagData(selectedTagId: number, currentCount: number): Promise<TagDataProps> {
+//   const existingTagData = await selectTag(selectedTagId);
+
+//   if (existingTagData) {
+//       // Update existing tag data
+//       const updatedCount = existingTagData.count + 1;
+//       const { data: updatedData, error: updateError } = await supabase
+//           .from('tag_data')
+//           .update({ count: updatedCount })
+//           .eq('id', existingTagData.tag_id)
+//           .select();
+
+//       if (updateError) {
+//           console.error(updateError);
+//           throw new Error('Failed to update tag data count');
+//       }
+
+//       return updatedData[0];
+
+//   } else {
+//       // Insert new tag data
+//       const newTagData: Partial<TagDataProps> = {
+//           tag_id: selectedTagId,
+//           count: currentCount,
+//           name: 
+//       };
+
+//       const { data: insertedData, error: insertError } = await supabase
+//           .from('tag_data')
+//           .insert([newTagData])
+//           .single();
+
+//       if (insertError) {
+//           console.error(insertError);
+//           throw new Error('Failed to insert tag data');
+//       }
+
+//       return insertedData;
+//   }
+// }
+
+export async function selectTag(tag: TagProps): Promise<TagDataProps> {
   const today = new Date();
   const todayFormatted = today.toISOString().split('T')[0];
   const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
@@ -115,7 +217,7 @@ export async function selectTag(id: number): Promise<TagDataProps> {
   const { data, error } = await supabase
       .from('tag_data')
       .select('*')
-      .eq('tag_id', id)
+      .eq('tag_id', tag.id)
       .gte('created_at', startDate)
       .lte('created_at', endDate);
 
@@ -124,8 +226,8 @@ export async function selectTag(id: number): Promise<TagDataProps> {
       throw new Error('Failed to select tag data');
   }
 
-  // If exists, increment the count. If not, insert new row.
   if (data && data.length > 0) {
+      // Tag data exists, update the count
       const currentCount = data[0].count;
       const updatedCount = currentCount + 1;
 
@@ -141,27 +243,32 @@ export async function selectTag(id: number): Promise<TagDataProps> {
       }
 
       if (!updatedData) {
-        throw new Error('Updated data is not available.');
-    }
+          throw new Error('Updated data is not available.');
+      }
       
       return updatedData[0];
 
   } else {
+      // Tag data doesn't exist, insert a new row
       const newData: Partial<TagDataProps> = {
-          tag_id: id,
+          tag_id: tag.id,
           count: 1,
+          tag_name: tag.name
       };
 
       const { data: insertedData, error: insertError } = await supabase
           .from('tag_data')
           .insert([newData])
-          .single();
+          .select();
+          console.log("insertedData", insertedData)
 
       if (insertError) {
           console.error(insertError);
           throw new Error('Failed to insert tag data');
       }
 
-      return insertedData;
+      return insertedData[0];
   }
 }
+
+
