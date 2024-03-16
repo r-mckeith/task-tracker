@@ -10,6 +10,7 @@ export default function SelectedTagList() {
   const [selectedTagsList, setSelectedTagsList] = useState<any>([]);
 
   const { tagData } = useTagDataContext();
+  console.log(tagData)
 
   useEffect(() => {
     setSelectedTagsList(tagData);

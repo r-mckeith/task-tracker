@@ -14,8 +14,8 @@ export function MyTabs() {
         },
       }}
     >
-      <Tab.Screen name="Home" component={TagScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Settings" component={MainScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Today" component={TagScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="To Do" component={MainScreen} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }

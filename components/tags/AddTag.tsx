@@ -28,13 +28,17 @@ export default function AddTag({ sectionName }: AddTagProps) {
         console.error('Failed to add tag:', error);
     }
 };
+
+const toDoSection = sectionName === 'today'
   
   return (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}></Text>
-      <TouchableOpacity onPress={() => setShowModal(true)}>
-        <MaterialCommunityIcons name="plus-circle-outline" size={24} />
-      </TouchableOpacity>
+      <Text style={styles.sectionTitle}>{toDoSection ? 'To Do' : sectionName}</Text>
+      {!toDoSection && 
+        <TouchableOpacity style={styles.addButton} onPress={() => setShowModal(true)}>
+          <MaterialCommunityIcons name="plus-circle-outline" size={24} />
+        </TouchableOpacity>
+      }
       <AddTagModal visible={showModal} onClose={() => setShowModal(false)} onAddTag={handleAddTag} sectionName={sectionName} />
     </View>
   );
@@ -44,10 +48,17 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    position: 'relative',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
+  addButton: {
+    position: 'absolute',
+    right: 0,
+  },
+
 });

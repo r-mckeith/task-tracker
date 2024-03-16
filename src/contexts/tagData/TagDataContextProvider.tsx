@@ -13,7 +13,7 @@ const TagDataContextProvider = ({ children }: TagDataContextProviderProps) => {
 
   useEffect(() => {
     const fetchTagData = async () => {
-      const tagData = await getTagData(DateRange.ThisWeek);
+      const tagData = await getTagData(DateRange.Today);
       dispatchTagData({ type: 'INITIALIZE_TAG_DATA', payload: tagData });
     };
 

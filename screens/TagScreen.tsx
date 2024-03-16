@@ -7,19 +7,25 @@ import { TagProps, TagDataProps } from '../src/types/TagTypes';
 import Header from '../components/Header';
 import Section from '../components/tags/Section';
 import SelectedTagList from '../components/tags/SelectedTagList';
+import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
+import { todayFormatted } from '../helpers/taskHelpers';
 
 export default function TagScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
+  const [todayTags, setTodayTags] = useState<any>([])
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
   const { tags } = useTagContext();
+  const { state: tasks } = useTaskContext();
 
   useEffect(() => {
+    const todayTasks = tasks.filter(task => task.inScopeDay === todayFormatted || task.inScopeWeek);
+    console.log('today', todayFormatted)
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
-
+    setTodayTags(todayTasks)
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
@@ -34,6 +40,7 @@ export default function TagScreen() {
       />
       <ScrollView style={styles.container}>
         <View style={styles.container}>
+          <Section color='pink' tags={todayTags} sectionName={'today'} />
           <Section color='lightgreen' tags={goodTagsList} sectionName={'good'} />
           <Section color='lightyellow' tags={neutralTagsList} sectionName={'neutral'} />
           <Section color='pink' tags={badTagsList} sectionName={'bad'} />

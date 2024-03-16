@@ -4,7 +4,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useTagContext } from '../../src/contexts/tags/UseTagContext';
 import { TagProps } from "../../src/types/TagTypes";
 import { deleteTag } from "../../src/api/SupabaseTags";
-import { TAG_BACKGROUND } from "../../src/utils/colors";
 
 type TagComponentProps = {
   tag: TagProps;
@@ -41,9 +40,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     borderRadius: 16,
-    backgroundColor: TAG_BACKGROUND,
+    backgroundColor: '#FFF',
     margin: 4,
     alignSelf: 'flex-start',
+    borderWidth: 2,
+    borderColor: '#000',
   },
   tagText: {
     // flex: 1,
