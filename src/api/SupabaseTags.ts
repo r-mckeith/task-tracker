@@ -1,6 +1,5 @@
 import { NewTagProps, TagProps, TagDataProps, DateRange } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
-import { findChildTags } from '../../helpers/taskHelpers';
 
 export const getTags = async () => {
   const { data, error } = await supabase
@@ -125,21 +124,6 @@ export async function deleteTag (tagId: number) {
   }
 };
 
-export const deleteTagFromList = async (tagId: number, tasks: TagProps[]) => {
-  const childTags = findChildTags(tagId, tasks);
-
-  const allTagIdsToDelete = [tagId, ...childTags.map(tag => tag.id)];
-
-  const { data, error } = await supabase
-    .from('tasks')
-    .delete()
-    .in('id', allTagIdsToDelete); 
-
-  if (error) {
-    console.error(error);
-  }
-};
-
 export const toggleScope = async (tagId: number, selectedDate: string) => {
   const { data, error } = await supabase
     .from('tags')
@@ -230,5 +214,38 @@ export async function selectTag(tag: TagProps, selectedDate: any): Promise<TagDa
       return insertedData[0];
   }
 }
+
+export const markTagAsComplete = async (tagId: number, completionDate: Date) => {
+  const fetchResult = await supabase
+    .from('tags')
+    .select('completed')
+    .eq('id', tagId)
+    .single();
+
+  if (fetchResult.error || !fetchResult.data) {
+    console.error('Failed to fetch tag:', fetchResult.error);
+    throw new Error('Failed to fetch tag');
+  }
+
+  const tag = fetchResult.data;
+
+  const newCompletionDate = tag.completed ? null : completionDate;
+
+  const data = await supabase
+    .from('tags')
+    .update({ completed: newCompletionDate })
+    .eq('id', tagId);
+
+  if (data.error) {
+    console.error('Failed to mark task as complete/incomplete:', data.error);
+    throw new Error('Failed to update task');
+  }
+
+  if (!data) {
+        throw new Error('No data returned after insert operation');
+      } else {
+        return data;
+      }
+};
 
 

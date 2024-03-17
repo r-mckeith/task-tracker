@@ -5,8 +5,8 @@ import { useTagContext } from '../src/contexts/tags/UseTagContext';
 import { useDateContext } from '../src/contexts/date/useDateContext';
 import { TagProps, TagDataProps } from '../src/types/TagTypes';
 import Header from '../components/Header';
-import Section from '../components/tags/Section';
-import SelectedTagList from '../components/tags/SelectedTagList';
+import Section from '../components/buckets/Section';
+import SelectedTagList from '../components/buckets/SelectedTagList';
 import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
 
 export default function TagScreen() {

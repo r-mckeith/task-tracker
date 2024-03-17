@@ -53,5 +53,3 @@ export default function DatePickerComponent({ selectedDate, onDateChange }: Date
     </>
   );
 };
-
-export default DatePickerComponent;

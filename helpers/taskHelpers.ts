@@ -1,9 +1,8 @@
 import addDays from 'date-fns/addDays';
-import { markTaskAsComplete } from '../src/api/SupabaseTasks';
-import { toggleScope, addListTag, deleteTag } from '../src/api/SupabaseTags';
+import { toggleScope, addListTag, deleteTag, markTagAsComplete } from '../src/api/SupabaseTags';
 import { TagProps } from '../src/types/TagTypes';
 
-export const handleDeleteTag = async (id: number, tasks: TagProps[], dispatch: React.Dispatch<any>) => {
+export const handleDeleteTag = async (id: number, dispatch: React.Dispatch<any>) => {
   try {
     await deleteTag(id);
     dispatch({ type: 'DELETE_TAG', id });
@@ -47,7 +46,7 @@ export const handleToggleCompleted = async (id: number, selectedDate: Date, disp
   dispatch({ type: 'TOGGLE_COMPLETED', id });
 
   try {
-    await markTaskAsComplete(id, selectedDate);
+    await markTagAsComplete(id, selectedDate);
   } catch (error) {
     console.error('Failed to toggle task:', error);
 

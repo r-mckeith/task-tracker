@@ -3,9 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
 import { useTagContext } from '../src/contexts/tags/UseTagContext';
 import { useDateContext } from '../src/contexts/date/useDateContext';
-import TaskContainer from '../components/task/TaskContainer';
+import TaskContainer from '../components/list/TaskContainer';
 import Header from '../components/Header';
-import AddTask from '../components/task/AddTask';
+import AddTask from '../components/list/AddTask';
 import { useFilteredTasks } from '../src/hooks/useFilteredTasks';
 
 type ScopeType = 'week' | 'day' | 'month';
