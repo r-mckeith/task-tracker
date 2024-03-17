@@ -3,12 +3,10 @@ import { View, Text, TextInput, Modal, TouchableOpacity } from 'react-native';
 import useUserId from '../../src/contexts/sessions/UseSessionHook';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StyleSheet } from 'react-native';
-import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { useTagContext } from '../../src/contexts/tags/UseTagContext';
-import { AddTaskProps } from '../../src/types/TaskTypes';
-import { addTagToList, getTaskLevelName } from '../../helpers/taskHelpers';
+import { addTagToList, getTaskLevelName } from '../../helpers/tagHelpers';
 
-export default function AddTask({ parentId, depth, variant = 'default' }: AddTaskProps) {
+export default function AddTask({ parentId, depth, variant = 'default' }: any) {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
 

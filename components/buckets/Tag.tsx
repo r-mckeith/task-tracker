@@ -7,8 +7,7 @@ import { deleteTag, selectTag } from "../../src/api/SupabaseTags";
 import { useTagDataContext } from "../../src/contexts/tagData/UseTagDataContext";
 import { useDateContext } from "../../src/contexts/date/useDateContext";
 import RightSwipe from "./RightSwipe";
-import { handleToggleCompleted } from "../../helpers/taskHelpers";
-import { useTaskContext } from "../../src/contexts/tasks/UseTaskContext";
+import { handleToggleCompleted } from "../../helpers/tagHelpers";
 
 type TagComponent = {
   tag: TagProps;
@@ -20,7 +19,6 @@ export default function Tag({ tag, sectionName }: TagComponent) {
 
   const { dispatch: tagDispatch } = useTagContext();
   const { dispatch: tagDataDispatch } = useTagDataContext();
-  const { dispatch: taskDispatch } = useTaskContext();
   const { selectedDate } = useDateContext();
 
   const swipeableRow = useRef<Swipeable | null>(null);
@@ -45,7 +43,7 @@ export default function Tag({ tag, sectionName }: TagComponent) {
   const handleSelectTag = async (selectedTag: TagProps) => {
     if (sectionName === 'today') {
       setIsSelected(!isSelected)
-      handleToggleCompleted(tag.id, selectedDate, taskDispatch)
+      handleToggleCompleted(tag.id, selectedDate, tagDispatch)
     } else {
       try {
         setIsSelected(true);

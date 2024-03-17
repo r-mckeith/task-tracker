@@ -3,9 +3,7 @@ import { View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Swipeable } from 'react-native-gesture-handler';
-import { TaskInterface } from '../../src/types/TaskTypes';
 import { StyleSheet } from 'react-native';
-import { TagProps } from '../../src/types/TagTypes';
 
 type RightSwipe = {
   handleDelete: (id: number, dispatch: React.Dispatch<any>) => Promise<void>;

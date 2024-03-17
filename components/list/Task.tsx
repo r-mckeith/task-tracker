@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import { handleDeleteTag } from '../../helpers/taskHelpers';
+import { handleDeleteTag } from '../../helpers/tagHelpers';
 import RightSwipe from './RightSwipe';
 import AddTask from './AddTask';
 import ScopeTask from './ScopeTask'
@@ -9,7 +9,8 @@ import { TagProps } from '../../src/types/TagTypes';
 import { useTagContext } from '../../src/contexts/tags/UseTagContext';
 
 export default function Task({id, name, completed, inScopeDay, depth }: TagProps) {
-  const { tags, dispatch: tagDispatch} = useTagContext()
+  console.log(name, completed)
+  const { dispatch: tagDispatch} = useTagContext()
   const swipeableRow = useRef<Swipeable | null>(null);
 
   function getDepthStyle() {

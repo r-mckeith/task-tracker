@@ -17,12 +17,12 @@ const updateScope = (
   state: TagProps[],
   action: { id: number; selectedDate: string }
 ): TagProps[] => {
-  return state.map(task => {
-    if (task.id === action.id) {
-      const newScopeDay = (task.inScopeDay === action.selectedDate) ? null : action.selectedDate;
-      return { ...task, inScopeDay: newScopeDay };
+  return state.map(tag => {
+    if (tag.id === action.id) {
+      const newScopeDay = (tag.inScopeDay === action.selectedDate) ? null : action.selectedDate;
+      return { ...tag, inScopeDay: newScopeDay };
     }
-    return task;
+    return tag;
   });
 };
 

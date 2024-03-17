@@ -3,11 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTagContext } from '../src/contexts/tags/UseTagContext';
 import { useDateContext } from '../src/contexts/date/useDateContext';
-import { TagProps, TagDataProps } from '../src/types/TagTypes';
+import { TagProps } from '../src/types/TagTypes';
 import Header from '../components/Header';
 import Section from '../components/buckets/Section';
 import SelectedTagList from '../components/buckets/SelectedTagList';
-import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
 
 export default function TagScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
@@ -15,8 +14,7 @@ export default function TagScreen() {
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
-  const { tags } = useTagContext();
-  const { state: tasks } = useTaskContext();
+  const { tags, dispatch } = useTagContext();
   const selectedDateString = selectedDate.toISOString().split('T')[0];
 
   useEffect(() => {
@@ -34,7 +32,7 @@ export default function TagScreen() {
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
-  }, [tags, tasks, selectedDate]); 
+  }, [tags, selectedDate]); 
 
   return (
     <>

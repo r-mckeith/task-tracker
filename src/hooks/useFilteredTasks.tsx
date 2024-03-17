@@ -1,14 +1,13 @@
 // customHooks.ts
 import { useState, useEffect } from 'react';
-import { TaskInterface } from '../types/TaskTypes';
 import { isInSelectedMonth, isInSelectedWeek, isSelectedDate } from '../../helpers/dateHelpers';
 
 type ScopeType = 'month' | 'week' | 'day';
 
-export function useFilteredTasks(tasks: TaskInterface[], selectedDate: Date, selectedScope: ScopeType): TaskInterface[] {
-  const [filteredTasks, setFilteredTasks] = useState<TaskInterface[]>([]);
+export function useFilteredTasks(tasks: any, selectedDate: Date, selectedScope: ScopeType): any {
+  const [filteredTasks, setFilteredTasks] = useState<any>([]);
 
-  const isTaskForSelectedScope = (task: TaskInterface, scope: ScopeType, selectedDate: Date): boolean => {
+  const isTaskForSelectedScope = (task: any, scope: ScopeType, selectedDate: Date): boolean => {
     const scopeCheckers = {
       month: isInSelectedMonth,
       week: isInSelectedWeek,
@@ -19,7 +18,7 @@ export function useFilteredTasks(tasks: TaskInterface[], selectedDate: Date, sel
     
     if (!checkScope) return false;
   
-    const scopeValue = task[`inScope${capitalize(scope)}` as keyof TaskInterface];
+    const scopeValue = task[`inScope${capitalize(scope)}` as keyof any];
   
     if (typeof scopeValue === "string") {
       return checkScope(new Date(scopeValue), selectedDate);

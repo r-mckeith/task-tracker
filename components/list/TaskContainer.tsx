@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { TagProps } from '../../src/types/TagTypes';
-import { TaskInterface } from '../../src/types/TaskTypes';
 import NestedList from '../NestedList';
 import { ScrollView } from 'react-native-gesture-handler';
 
