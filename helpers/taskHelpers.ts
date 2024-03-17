@@ -1,5 +1,5 @@
 import addDays from 'date-fns/addDays';
-import { deleteTask, markTaskAsComplete, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
+import { deleteTask, markTaskAsComplete, toggleScopeForDay, addTask } from '../src/api/SupabaseTasks';
 import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
@@ -52,44 +52,19 @@ export const handleToggleCompleted = async (id: number, selectedDate: Date, disp
   }
 };
 
-export const handleToggleScopeforDay = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-  dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: inScope });
+export const handleToggleScopeforDay = async (id: any, selectedDate: any, dispatch: any) => {  
+  dispatch({ type: 'TOGGLE_DAY', id: id, selectedDate: selectedDate });
 
   try {
-    await toggleScopeForDay(id, inScope, tasks);
+    const updatedTask = await toggleScopeForDay(id, selectedDate);
+    
+    if (updatedTask) {
+    } else {
+      console.error('Failed to toggle scope for day');
+    }
   } catch (error) {
     console.error('Failed to toggle scope for day:', error);
-
-    dispatch({ type: 'TOGGLE_DAY', id: id, inScopeDay: !inScope });
   }
-};
-
-export const handleToggleScopeforWeek = async (id: number, inScope: Date | string | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-  dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: inScope });
-
-  try {
-    await toggleScopeForWeek(id, inScope, tasks);
-  } catch (error) {
-    console.error('Failed to toggle scope for week:', error);
-
-    dispatch({ type: 'TOGGLE_WEEK', id: id, inScopeWeek: !inScope });
-  }
-};
-
-export const handlePushTaskForDay = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-  dispatch({ type: 'PUSH_DAY', id });
-
-  try {
-    await pushDay(id);
-  } catch (error) {
-    console.error('Failed to push task:', error);
-
-    dispatch({ type: 'PUSH_DAY', id });
-  }
-};
-
-export const handlePushTaskForWeek = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
-
 };
 
 export const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {

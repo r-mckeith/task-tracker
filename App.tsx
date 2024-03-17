@@ -8,7 +8,6 @@ import Auth from './components/auth/Auth';
 import TaskContextProvider from './src/contexts/tasks/TaskContextProvider';
 import TagContextProvider from './src/contexts/tags/TagContextProvider';
 import TagDataContextProvider from './src/contexts/tagData/TagDataContextProvider';
-import NoteContextProvider from './src/contexts/notes/NoteContextProvider';
 import DateProvider from './src/contexts/date/Dateprovider';
 import { MyTabs } from './screens/TabNavigator';
 import { useSession } from './src/contexts/sessions/UseSessionHook';
@@ -22,7 +21,6 @@ export default function App() {
       <TaskContextProvider>
         <TagContextProvider>
           <TagDataContextProvider>
-            <NoteContextProvider>
                 <SafeAreaView style={styles.container}>
                   <MenuProvider>
                     <GestureHandlerRootView style={{flex: 1}}>
@@ -34,7 +32,6 @@ export default function App() {
                     </GestureHandlerRootView>
                   </MenuProvider>
                 </SafeAreaView>
-            </NoteContextProvider>
           </TagDataContextProvider>
         </TagContextProvider>
       </TaskContextProvider>

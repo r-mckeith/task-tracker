@@ -36,16 +36,8 @@ export interface NewTask {
 export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
-  scope: Scope;
   completed: Date | null;
-  inScopeDay: string | Date;
-}
-
-// Scope Definition
-export interface Scope {
-  inScopeDay: Date | string | null;
-  inScopeWeek: Date | string | null;
-  inScopeMonth: Date | string | null;
+  inScopeDay: string | null;
 }
 
 // Add Task Props

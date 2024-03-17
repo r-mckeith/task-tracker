@@ -4,6 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
 import { handleToggleScopeforDay } from '../../helpers/taskHelpers';
 import { todayFormatted } from '../../helpers/taskHelpers';
+import { useDateContext } from '../../src/contexts/date/useDateContext';
 
 interface Scope {
   id: number,
@@ -11,15 +12,23 @@ interface Scope {
 }
 
 export default function ScopeTask({id, inScopeDay}: Scope) {
-  const { state, dispatch } = useTaskContext();
+  const { dispatch } = useTaskContext();
+  const { selectedDate } = useDateContext();
+
+  const toggleScope = () => {
+    handleToggleScopeforDay(id, selectedDate.toISOString().split('T')[0], dispatch);
+  };
+  if (id === 256) {
+    console.log('inScopeDay', inScopeDay, 'selectedDate', selectedDate)
+  }
 
   return (
     <View>
       <MaterialCommunityIcons 
-        name={inScopeDay === todayFormatted ? "radiobox-marked" : "radiobox-blank"} 
+        name={inScopeDay === selectedDate.toISOString().split('T')[0] ? "radiobox-marked" : "radiobox-blank"} 
         size={24} 
-        color={inScopeDay === todayFormatted ? '#767577' : '#767577'}
-        onPress={() => handleToggleScopeforDay(id, inScopeDay, state, dispatch)}
+        color={inScopeDay === selectedDate.toISOString().split('T')[0] ? '#767577' : '#767577'}
+        onPress={toggleScope}
       />
     </View>
   );

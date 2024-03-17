@@ -1,76 +1,74 @@
 import addDays from 'date-fns/addDays';
 import { TaskInterface } from '../types/TaskTypes'; 
 import { findChildTasks, findParentTasks, todayFormatted, tomorrowFormatted } from '../../helpers/taskHelpers';
+import { isSelectedDate } from '../../helpers/dateHelpers';
 
 export type Action =
   | { type: 'INITIALIZE'; payload: TaskInterface[] }
   | { type: 'TOGGLE_COMPLETED'; id: number }
-  | { type: 'TOGGLE_DAY'; id: number }
-  | { type: 'TOGGLE_WEEK'; id: number }
+  | { type: 'TOGGLE_DAY'; id: number; selectedDate: string }
   | { type: 'DELETE_TASK'; id: number }
   | { type: 'ADD_TASK'; payload: TaskInterface }
   | { type: 'PUSH_DAY'; id: number }
 
   const updateScopeDay = (
     state: TaskInterface[],
-    actionId: number
+    action: { id: number; selectedDate: string }
   ): TaskInterface[] => {
-    const taskForDay = state.find((task) => task.id === actionId);
-  
-    if (!taskForDay) {
-      return state;
-    }
-  
-    const descendantsDay = findChildTasks(actionId, state);
-    const ancestorsDay = findParentTasks(actionId, state);
-    const siblingsDay = taskForDay.parentId ? state.filter(task => task.parentId === taskForDay.parentId) : [];
-  
-    const currentScopeDay = taskForDay.inScopeDay ? null : todayFormatted;
-    const currentUnScoped = currentScopeDay ? todayFormatted : taskForDay.unScoped;  // if inScopeDay is set to null, set unScoped to today. Otherwise, keep the existing value.
-  
-    return state.map((task) => {
-      if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeDay: currentScopeDay, unScoped: currentUnScoped };
+    return state.map(task => {
+      if (task.id === action.id) {
+        console.log('SELECTED DATE', action.selectedDate)
+        const newScopeDay = (task.inScopeDay === action.selectedDate) ? null : action.selectedDate;
+        return { ...task, inScopeDay: newScopeDay };
       }
-      if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeDay: currentScopeDay, unScoped: currentUnScoped };
-      }
-      // if (currentScopeDay !== null && siblingsDay.every(sibling => sibling.inScopeDay) && taskForDay.parentId === task.parentId) {
-      //   return { ...task, inScopeDay: currentScopeDay };
-      // }
+      console.log(task)
       return task;
     });
   };
   
-  const updateScopeWeek = (
-    state: TaskInterface[],
-    actionId: number
-  ): TaskInterface[] => {
-    const taskForWeek = state.find((task) => task.id === actionId);
   
-    if (!taskForWeek) {
-      return state;
-    }
+    // const descendantsDay = findChildTasks(actionId, state);
+    // const ancestorsDay = findParentTasks(actionId, state);
   
-    const descendantsWeek = findChildTasks(actionId, state);
-    const ancestorsWeek = findParentTasks(actionId, state);
-    const siblingsWeek = taskForWeek.parentId ? state.filter(task => task.parentId === taskForWeek.parentId) : [];
+    // const currentScopeDay = task.inScopeDay ? null : todayFormatted;
+
+    // return { ...task, inScopeDay: selectedDate}
   
-    const currentScopeWeek = taskForWeek.inScopeWeek ? null : todayFormatted;
+    // return state.map((task) => {
+    //   if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
+    //     return { ...task, inScopeDay: currentScopeDay };
+    //   }
+    //   if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
+    //     return { ...task, inScopeDay: currentScopeDay };
+    //   }
+    //   return task;
+    // });
+
+  // const updateScopeDay = (
+  //   state: TaskInterface[],
+  //   actionId: number
+  // ): TaskInterface[] => {
+  //   const taskForDay = state.find((task) => task.id === actionId);
   
-    return state.map((task) => {
-      if (task.id === actionId || descendantsWeek.some(descendant => descendant.id === task.id)) {
-        return { ...task, inScopeWeek: currentScopeWeek };
-      }
-      if (currentScopeWeek === null && ancestorsWeek.some(ancestor => ancestor.id === task.id)) {
-        return { ...task, inScopeWeek: currentScopeWeek };
-      }
-      // if (currentScopeWeek !== null && siblingsWeek.every(sibling => sibling.inScopeWeek) && taskForWeek.parentId === task.parentId) {
-      //   return { ...task, inScopeWeek: currentScopeWeek };
-      // }
-      return task;
-    });
-  };
+  //   if (!taskForDay) {
+  //     return state;
+  //   }
+  
+  //   const descendantsDay = findChildTasks(actionId, state);
+  //   const ancestorsDay = findParentTasks(actionId, state);
+  
+  //   const currentScopeDay = taskForDay.inScopeDay ? null : todayFormatted;
+  
+  //   return state.map((task) => {
+  //     if (task.id === actionId || descendantsDay.some(descendant => descendant.id === task.id)) {
+  //       return { ...task, inScopeDay: currentScopeDay };
+  //     }
+  //     if (currentScopeDay === null && ancestorsDay.some(ancestor => ancestor.id === task.id)) {
+  //       return { ...task, inScopeDay: currentScopeDay };
+  //     }
+  //     return task;
+  //   });
+  // };
 
   const updateCompletedStatus = (
     state: TaskInterface[],
@@ -122,9 +120,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
     case 'TOGGLE_COMPLETED':
       return updateCompletedStatus(state, action.id);
     case 'TOGGLE_DAY':
-      return updateScopeDay(state, action.id);
-    case 'TOGGLE_WEEK':
-      return updateScopeWeek(state, action.id);
+      return updateScopeDay(state, action);
     case 'ADD_TASK':
       return [...state, action.payload];
     case 'DELETE_TASK': {

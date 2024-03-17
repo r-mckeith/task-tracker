@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     padding: 10,
-    borderWidth: 1,
-    borderColor: 'black',
+    // borderWidth: 1,
+    // borderColor: 'black',
   },
 });

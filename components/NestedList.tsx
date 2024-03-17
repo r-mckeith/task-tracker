@@ -28,7 +28,7 @@ export default function NestedList({taskProps, filter}: NestedListProps) {
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task {...task} filter={filter}/>
+          <Task {...task}/>
           {renderTasks(task.id)}
         </View>
       ));

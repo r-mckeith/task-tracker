@@ -20,7 +20,7 @@ export default function TagScreen() {
   const { state: tasks } = useTaskContext();
 
   useEffect(() => {
-    const todayTasks = tasks.filter(task => task.inScopeDay === todayFormatted);
+    const todayTasks = tasks.filter(task => task.inScopeDay === selectedDate.toISOString().split('T')[0] || task.inScopeDay && task.inScopeDay < selectedDate.toISOString().split('T')[0] && !task.completed);
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
@@ -28,7 +28,7 @@ export default function TagScreen() {
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
-  }, [tags, tasks]); 
+  }, [tags, tasks, selectedDate]); 
 
   return (
     <>
