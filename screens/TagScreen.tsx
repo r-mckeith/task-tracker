@@ -11,7 +11,7 @@ import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
 
 export default function TagScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
-  const [todayTags, setTodayTags] = useState<any>([])
+  const [todayTags, setTodayTags] = useState<TagProps[]>([])
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const [neutralTagsList, setNeutralTagsList] = useState<TagProps[]>([]);
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
@@ -20,20 +20,22 @@ export default function TagScreen() {
   const selectedDateString = selectedDate.toISOString().split('T')[0];
 
   useEffect(() => {
-    const filteredTasks = tasks.filter(task => {
-      const isScopedForTodayOrFuture = task.inScopeDay === selectedDateString || task.inScopeDay && task.inScopeDay < selectedDateString;
-      const isUncompletedOrCompletedAfter = !task.completed || (task.completed && task.completed >= selectedDateString);
-    
-      return isScopedForTodayOrFuture && isUncompletedOrCompletedAfter;
-    });
+    const todayTags = tags.filter(tag => tag.section === 'today')
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
-    setTodayTags(filteredTasks)
+    setTodayTags(todayTags)
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
   }, [tags, tasks, selectedDate]); 
+
+    const filteredTodayTags = todayTags.filter(tag => {
+      const isScopedForTodayOrFuture = tag.inScopeDay === selectedDateString || tag.inScopeDay && tag.inScopeDay < selectedDateString;
+      const isUncompletedOrCompletedAfter = !tag.completed || (tag.completed && tag.completed >= selectedDateString);
+    
+      return isScopedForTodayOrFuture && isUncompletedOrCompletedAfter;
+    });
 
   return (
     <>
@@ -44,7 +46,7 @@ export default function TagScreen() {
       />
       <ScrollView style={styles.container}>
         <View style={styles.container}>
-          <Section tags={todayTags} sectionName={'today'} />
+          <Section tags={filteredTodayTags} sectionName={'today'} />
           <Section tags={goodTagsList} sectionName={'good'} />
           <Section tags={neutralTagsList} sectionName={'neutral'} />
           <Section tags={badTagsList} sectionName={'bad'} />

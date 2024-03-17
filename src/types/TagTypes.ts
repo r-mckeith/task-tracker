@@ -1,7 +1,7 @@
 export interface Tag extends NewTagProps {
   id: number;
   user_id: number;
-  tag_data: TagDataProps[];
+  tag_data: TagDataProps[]; 
 };
 
 export type NewTagProps = {
@@ -28,5 +28,8 @@ export interface TagProps extends NewTagProps {
   id: number;
   user_id: number;
   tag_data: TagDataProps[];
+  inScopeDay?: string;
   completed?: string;
+  depth?: number;
+  parentId?: number; 
 };

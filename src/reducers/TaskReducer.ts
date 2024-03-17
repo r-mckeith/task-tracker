@@ -8,7 +8,7 @@ export type Action =
   | { type: 'TOGGLE_COMPLETED'; id: number }
   | { type: 'TOGGLE_DAY'; id: number; selectedDate: string }
   | { type: 'DELETE_TASK'; id: number }
-  | { type: 'ADD_TASK'; payload: TaskInterface }
+  | { type: 'ADD_LIST_TAG'; payload: any }
   | { type: 'PUSH_DAY'; id: number }
 
   const updateScopeDay = (
@@ -119,7 +119,7 @@ export const taskReducer = (state: TaskInterface[], action: Action): TaskInterfa
       return updateCompletedStatus(state, action.id);
     case 'TOGGLE_DAY':
       return updateScopeDay(state, action);
-    case 'ADD_TASK':
+    case 'ADD_LIST_TAG':
       return [...state, action.payload];
     case 'DELETE_TASK': {
       const childTasks = findChildTasks(action.id, state);

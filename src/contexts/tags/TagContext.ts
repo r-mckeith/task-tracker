@@ -5,9 +5,7 @@ import { TagProps } from '../../types/TagTypes';
 
 export interface TagContextType {
   tags: TagProps[];
-  dispatch: {
-    tags: React.Dispatch<Action>;
-  };
+  dispatch: React.Dispatch<Action>;
 }
 
 export const TagContext = React.createContext<TagContextType | undefined>(undefined);

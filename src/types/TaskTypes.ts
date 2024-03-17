@@ -30,6 +30,7 @@ export interface NewTask {
   parentId: number;
   depth: number;
   user_id: string;
+  section: string;
 }
 
 // Complete Task Interface

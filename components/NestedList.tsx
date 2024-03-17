@@ -2,41 +2,42 @@ import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './task/Task';
+import { TagProps } from '../src/types/TagTypes';
 
 interface NestedListProps {
-  tasks: TaskInterface[];
+  tags: TagProps[];
   filter?: string;
 }
 
-export default function NestedList({tasks, filter}: NestedListProps) {
+export default function NestedList({tags, filter}: NestedListProps) {
 
-  const findRootTasks = () => {
-    const allIds = new Set(tasks.map(task => task.id));
-    return tasks.filter(task => !task.parentId || !allIds.has(task.parentId));
+  const findRoottags = () => {
+    const allIds = new Set(tags.map(tag => tag.id));
+    return tags.filter(tag => !tag.parentId || !allIds.has(tag.parentId));
   };
   
-  const renderTasks = (parentId: number | null) => {
-    const tasksToRender = parentId === null ? findRootTasks() : tasks.filter(task => task.parentId === parentId);
+  const rendertags = (parentId: number | null) => {
+    const tagsToRender = parentId === null ? findRoottags() : tags.filter(tag => tag.parentId === parentId);
     
-    return tasksToRender
+    return tagsToRender
       .sort((a, b) => a.id - b.id)
-      .map((task, index) => (
+      .map((tag, index) => (
         <View 
-          key={task.id} 
+          key={tag.id} 
           style={[
             parentId !== null ? styles.subtask : undefined,
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task {...task}/>
-          {renderTasks(task.id)}
+          <Task {...tag}/>
+          {rendertags(tag.id)}
         </View>
       ));
   };
   
   return (
     <View style={styles.container}>
-      {renderTasks(null)}
+      {rendertags(null)}
     </View>
   );
 };

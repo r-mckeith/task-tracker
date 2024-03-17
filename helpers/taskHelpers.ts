@@ -1,5 +1,5 @@
 import addDays from 'date-fns/addDays';
-import { deleteTask, markTaskAsComplete, toggleScopeForDay, addTask } from '../src/api/SupabaseTasks';
+import { deleteTask, markTaskAsComplete, toggleScopeForDay, addListTag } from '../src/api/SupabaseTasks';
 import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
@@ -11,11 +11,12 @@ export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch:
   }
 };
 
-export const handleAddTask = async (
+export const addTagToList = async (
   newTaskName: string,
   userId: string | null,
   parentId: number,
   depth: number,
+  section: string,
   dispatch: React.Dispatch<any>
 ): Promise<boolean> => {
 
@@ -23,16 +24,17 @@ export const handleAddTask = async (
     throw new Error("User's ID is not available.");
   }
   
-  const newTask: NewTask = {
+  const newTag: any = {
     name: newTaskName,
     parentId: parentId,
     depth: depth + 1,
     user_id: userId,
+    section: section
   };
 
   try {
-    const createdTask = await addTask(newTask);
-    dispatch({ type: 'ADD_TASK', payload: createdTask });
+    const createdTask = await addListTag(newTag);
+    dispatch({ type: 'ADD_TAG', payload: createdTask });
     return true;
   } catch (error) {
     console.error('Failed to add task:', error);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
+import { useTagContext } from '../src/contexts/tags/UseTagContext';
 import { useDateContext } from '../src/contexts/date/useDateContext';
 import TaskContainer from '../components/task/TaskContainer';
 import Header from '../components/Header';
@@ -11,6 +12,7 @@ type ScopeType = 'week' | 'day' | 'month';
 
 export default function MonthlyScreen() {
   const { state: tasks } = useTaskContext();
+  const { tags } = useTagContext();
   const { selectedDate, setSelectedDate } = useDateContext();
   const [selectedScope, setSelectedScope] = useState<ScopeType>('month');
 
@@ -24,7 +26,7 @@ export default function MonthlyScreen() {
       <AddTask parentId={0} depth={0}/>
       <View style={styles.container}>
         <TaskContainer
-          tasks={tasks}
+          tags={tags}
           filter={selectedScope}
         />
       </View>

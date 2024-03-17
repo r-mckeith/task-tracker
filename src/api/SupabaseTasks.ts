@@ -15,9 +15,9 @@ export const getTasks = async () => {
   return data || [];
 };
 
-export async function addTask(newTask: NewTask): Promise<TaskInterface> {
+export async function addListTag(newTask: NewTask): Promise<TaskInterface> {
   let { data: taskData, error: taskError } = await supabase
-    .from('tasks')
+    .from('tags')
     .insert([newTask])
     .select();
 

@@ -4,18 +4,20 @@ import useUserId from '../../src/contexts/sessions/UseSessionHook';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StyleSheet } from 'react-native';
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
+import { useTagContext } from '../../src/contexts/tags/UseTagContext';
 import { AddTaskProps } from '../../src/types/TaskTypes';
-import { handleAddTask, getTaskLevelName } from '../../helpers/taskHelpers';
+import { addTagToList, getTaskLevelName } from '../../helpers/taskHelpers';
 
 export default function AddTask({ parentId, depth, variant = 'default' }: AddTaskProps) {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
 
-  const { dispatch } = useTaskContext();
+  const { dispatch } = useTagContext()
+
   const userId = useUserId();
 
   const onAddTask = async () => {
-    const success = await handleAddTask(newTaskName, userId, parentId, depth, dispatch);
+    const success = await addTagToList(newTaskName, userId, parentId, depth, 'today', dispatch);
     if (success) {
       setNewTaskName('');
       setShowModal(false);

@@ -7,8 +7,9 @@ import { handleDelete } from '../../helpers/taskHelpers';
 import RightSwipe from './RightSwipe';
 import AddTask from './AddTask';
 import ScopeTask from './ScopeTask'
+import { TagProps } from '../../src/types/TagTypes';
 
-export default function Task({id, name, parentId, completed, inScopeDay, depth }: TaskInterface) {
+export default function Task({id, name, parentId, completed, inScopeDay, depth }: TagProps) {
   const { state: tasks , dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
 
@@ -26,9 +27,9 @@ export default function Task({id, name, parentId, completed, inScopeDay, depth }
     <View>
       <Swipeable ref={swipeableRow} renderRightActions={() => <RightSwipe handleDelete={handleDelete} id={id} tasks={tasks} dispatch={dispatch} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
-          <ScopeTask id={id} inScopeDay={inScopeDay} />
+          <ScopeTask id={id} inScopeDay={inScopeDay ? inScopeDay : null} />
           <Text style={[styles.taskName, (parentId !== null && completed) ? styles.completedTask : null]}>{name}</Text>
-          <AddTask parentId={id} depth={depth} />
+          <AddTask parentId={id} depth={depth ? depth : 0} />
         </View>
       </Swipeable>
     </View>
