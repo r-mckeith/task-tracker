@@ -36,7 +36,7 @@ export default function Tag({ tag, sectionName }: TagComponent) {
   async function handleDeleteTag(id: number) {
     try {
       await deleteTag(id);
-      tagDispatch.tags({ type: 'DELETE_TAG', id });
+      tagDispatch({ type: 'DELETE_TAG', id });
     } catch (error) {
       console.error('Failed to delete tag:', error);
     }

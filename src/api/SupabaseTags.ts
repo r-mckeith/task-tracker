@@ -1,5 +1,6 @@
 import { NewTagProps, TagProps, TagDataProps, DateRange } from '../types/TagTypes';
 import { supabase } from './SupabaseClient'
+import { findChildTags } from '../../helpers/taskHelpers';
 
 export const getTags = async () => {
   const { data, error } = await supabase
@@ -84,6 +85,24 @@ export async function addTag(newTag: NewTagProps): Promise<TagProps> {
   }
 }
 
+export async function addListTag(newTag: any): Promise<TagProps> {
+  let { data: tagData, error: tagError } = await supabase
+    .from('tags')
+    .insert([newTag])
+    .select();
+
+  if (tagError) {
+    console.error(tagError);
+    throw new Error('Failed to add task');
+  }
+
+  if (!tagData) {
+    throw new Error('No data returned after insert operation');
+  } else {
+    return tagData[0];
+  }
+}
+
 // export async function editTag (noteId: number, updatedFields: Partial<NewNote>) {
 //   const { data, error } = await supabase
 //     .from('notes')
@@ -104,6 +123,53 @@ export async function deleteTag (tagId: number) {
   if (error) {
     console.error(error);
   }
+};
+
+export const deleteTagFromList = async (tagId: number, tasks: TagProps[]) => {
+  const childTags = findChildTags(tagId, tasks);
+
+  const allTagIdsToDelete = [tagId, ...childTags.map(tag => tag.id)];
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .delete()
+    .in('id', allTagIdsToDelete); 
+
+  if (error) {
+    console.error(error);
+  }
+};
+
+export const toggleScope = async (tagId: number, selectedDate: string) => {
+  const { data, error } = await supabase
+    .from('tags')
+    .select('inScopeDay')
+    .eq('id', tagId)
+    .single();
+
+  if (error || !data) {
+    console.error('Failed to fetch task:', error);
+    throw new Error('Failed to fetch task');
+  }
+
+  const newScopeDate = data.inScopeDay ? null : selectedDate;
+
+  const { data: updateData, error: updateError } = await supabase
+    .from('tags')
+    .update({ inScopeDay: newScopeDate })
+    .eq('id', tagId)
+    .select()
+
+  if (updateError) {
+    console.error('Failed to toggle scope:', updateError);
+    throw new Error('Failed to update task');
+  }
+
+  if (!data) {
+        throw new Error('No data returned after insert operation');
+      } else {
+        return updateData;
+      }
 };
 
 export async function selectTag(tag: TagProps, selectedDate: any): Promise<TagDataProps> {

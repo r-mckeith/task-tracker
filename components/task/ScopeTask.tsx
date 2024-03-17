@@ -1,8 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { handleToggleScopeforDay } from '../../helpers/taskHelpers';
+import { useTagContext } from '../../src/contexts/tags/UseTagContext';
+import { handleToggleScope } from '../../helpers/taskHelpers';
 import { useDateContext } from '../../src/contexts/date/useDateContext';
 
 interface Scope {
@@ -12,7 +12,7 @@ interface Scope {
 
 export default function ScopeTask({id, inScopeDay}: Scope) {
   const [inScope, setInScope] = useState<any>();
-  const { dispatch } = useTaskContext();
+  const { dispatch } = useTagContext();
   const { selectedDate } = useDateContext();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function ScopeTask({id, inScopeDay}: Scope) {
   }, [inScopeDay]);
 
   const toggleScope = () => {
-    handleToggleScopeforDay(id, selectedDate.toISOString().split('T')[0], dispatch);
+    handleToggleScope(id, selectedDate.toISOString().split('T')[0], dispatch);
   };
 
   return (

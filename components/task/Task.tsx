@@ -1,16 +1,17 @@
 import React, { useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import { TaskInterface } from '../../src/types/TaskTypes'
 import { useTaskContext } from '../../src/contexts/tasks/UseTaskContext';
-import { handleDelete } from '../../helpers/taskHelpers';
+import { handleDeleteTag } from '../../helpers/taskHelpers';
 import RightSwipe from './RightSwipe';
 import AddTask from './AddTask';
 import ScopeTask from './ScopeTask'
 import { TagProps } from '../../src/types/TagTypes';
+import { useTagContext } from '../../src/contexts/tags/UseTagContext';
 
 export default function Task({id, name, parentId, completed, inScopeDay, depth }: TagProps) {
   const { state: tasks , dispatch } = useTaskContext();
+  const { tags, dispatch: tagDispatch} = useTagContext()
   const swipeableRow = useRef<Swipeable | null>(null);
 
   function getDepthStyle() {
@@ -25,7 +26,7 @@ export default function Task({id, name, parentId, completed, inScopeDay, depth }
 
   return (
     <View>
-      <Swipeable ref={swipeableRow} renderRightActions={() => <RightSwipe handleDelete={handleDelete} id={id} tasks={tasks} dispatch={dispatch} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
+      <Swipeable ref={swipeableRow} renderRightActions={() => <RightSwipe handleDelete={handleDeleteTag} id={id} dispatch={tagDispatch} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
           <ScopeTask id={id} inScopeDay={inScopeDay ? inScopeDay : null} />
           <Text style={[styles.taskName, (parentId !== null && completed) ? styles.completedTask : null]}>{name}</Text>

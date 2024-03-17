@@ -1,7 +1,7 @@
 import { NewTask } from '../types/TaskTypes'
 import { supabase } from './SupabaseClient'
 import { TaskInterface } from '../types/TaskTypes';
-import { findChildTasks, findParentTasks, todayFormatted } from '../../helpers/taskHelpers';
+import { findChildTags, findParentTags, todayFormatted } from '../../helpers/taskHelpers';
 
 export const getTasks = async () => {
   const { data, error } = await supabase
@@ -15,38 +15,20 @@ export const getTasks = async () => {
   return data || [];
 };
 
-export async function addListTag(newTask: NewTask): Promise<TaskInterface> {
-  let { data: taskData, error: taskError } = await supabase
-    .from('tags')
-    .insert([newTask])
-    .select();
+// export const deleteTask = async (taskId: number, tasks: TaskInterface[]) => {
+//   const childTasks = findChildTags(taskId, tasks);
 
-  if (taskError) {
-    console.error(taskError);
-    throw new Error('Failed to add task');
-  }
+//   const allTaskIdsToDelete = [taskId, ...childTasks.map(task => task.id)];
 
-  if (!taskData) {
-    throw new Error('No data returned after insert operation');
-  } else {
-    return taskData[0];
-  }
-}
+//   const { data, error } = await supabase
+//     .from('tasks')
+//     .delete()
+//     .in('id', allTaskIdsToDelete); 
 
-export const deleteTask = async (taskId: number, tasks: TaskInterface[]) => {
-  const childTasks = findChildTasks(taskId, tasks);
-
-  const allTaskIdsToDelete = [taskId, ...childTasks.map(task => task.id)];
-
-  const { data, error } = await supabase
-    .from('tasks')
-    .delete()
-    .in('id', allTaskIdsToDelete); 
-
-  if (error) {
-    console.error(error);
-  }
-};
+//   if (error) {
+//     console.error(error);
+//   }
+// };
 
 export const markTaskAsComplete = async (taskId: number, completionDate: Date) => {
   const fetchResult = await supabase
@@ -100,37 +82,7 @@ export const markTaskAsComplete = async (taskId: number, completionDate: Date) =
 //   }
 // }
 
-export const toggleScopeForDay = async (taskId: number, selectedDate: string) => {
-  const { data, error } = await supabase
-    .from('tasks')
-    .select('inScopeDay')
-    .eq('id', taskId)
-    .single();
 
-  if (error || !data) {
-    console.error('Failed to fetch task:', error);
-    throw new Error('Failed to fetch task');
-  }
-
-  const newScopeDate = data.inScopeDay ? null : selectedDate;
-
-  const { data: updateData, error: updateError } = await supabase
-    .from('tasks')
-    .update({ inScopeDay: newScopeDate })
-    .eq('id', taskId)
-    .select()
-
-  if (updateError) {
-    console.error('Failed to toggle scope:', updateError);
-    throw new Error('Failed to update task');
-  }
-
-  if (!data) {
-        throw new Error('No data returned after insert operation');
-      } else {
-        return updateData;
-      }
-};
 
 
 // export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {

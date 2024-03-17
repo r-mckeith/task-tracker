@@ -20,22 +20,21 @@ export default function TagScreen() {
   const selectedDateString = selectedDate.toISOString().split('T')[0];
 
   useEffect(() => {
-    const todayTags = tags.filter(tag => tag.section === 'today')
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
-    setTodayTags(todayTags)
+    const filteredTodayTags = tags.filter(tag => {
+      const todayTags = tags.filter(tag => tag.section === 'today')
+      const isScopedForTodayOrFuture = tag.inScopeDay === selectedDateString || tag.inScopeDay && tag.inScopeDay < selectedDateString;
+      const isUncompletedOrCompletedAfter = !tag.completed || (tag.completed && tag.completed >= selectedDateString);
+    
+      return todayTags && isScopedForTodayOrFuture && isUncompletedOrCompletedAfter;
+    });
+    setTodayTags(filteredTodayTags)
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
   }, [tags, tasks, selectedDate]); 
-
-    const filteredTodayTags = todayTags.filter(tag => {
-      const isScopedForTodayOrFuture = tag.inScopeDay === selectedDateString || tag.inScopeDay && tag.inScopeDay < selectedDateString;
-      const isUncompletedOrCompletedAfter = !tag.completed || (tag.completed && tag.completed >= selectedDateString);
-    
-      return isScopedForTodayOrFuture && isUncompletedOrCompletedAfter;
-    });
 
   return (
     <>
@@ -46,7 +45,7 @@ export default function TagScreen() {
       />
       <ScrollView style={styles.container}>
         <View style={styles.container}>
-          <Section tags={filteredTodayTags} sectionName={'today'} />
+          <Section tags={todayTags} sectionName={'today'} />
           <Section tags={goodTagsList} sectionName={'good'} />
           <Section tags={neutralTagsList} sectionName={'neutral'} />
           <Section tags={badTagsList} sectionName={'bad'} />

@@ -1,13 +1,29 @@
 import { TagProps } from "../types/TagTypes";
+
 export type Action =
   | { type: 'INITIALIZE_TAGS'; payload: TagProps[] }
   | { type: 'DELETE_TAG'; id: number }
   | { type: 'ADD_TAG'; payload: TagProps }
+  | { type: 'ADD_LIST_TAG'; payload: any }
   | { type: 'UPDATE_TAG'; payload: TagProps}
+  | { type: 'TOGGLE_SCOPE'; id: number; selectedDate: string }
   | { type: 'SELECT_TAG'; payload: TagProps}
 
 export const initialState = {
   tags: [],
+};
+
+const updateScope = (
+  state: TagProps[],
+  action: { id: number; selectedDate: string }
+): TagProps[] => {
+  return state.map(task => {
+    if (task.id === action.id) {
+      const newScopeDay = (task.inScopeDay === action.selectedDate) ? null : action.selectedDate;
+      return { ...task, inScopeDay: newScopeDay };
+    }
+    return task;
+  });
 };
 
 export function tagReducer (state: TagProps[], action: Action): TagProps[] {
@@ -16,10 +32,14 @@ export function tagReducer (state: TagProps[], action: Action): TagProps[] {
       return action.payload;
     case 'ADD_TAG':
       return [...state, action.payload];
+    case 'ADD_LIST_TAG':
+      return [...state, action.payload];
     case 'DELETE_TAG':
       return state.filter((tag) => tag.id !== action.id);
     case 'UPDATE_TAG':
       return state.map((tag) => tag.id ===action.payload.id ? action.payload : tag);
+    case 'TOGGLE_SCOPE':
+      return updateScope(state, action);
     case 'SELECT_TAG':
       return state.map(tag => {
         if (tag.id === action.payload.tag_data?.[0]?.tag_id) {

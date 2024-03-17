@@ -1,13 +1,14 @@
 import addDays from 'date-fns/addDays';
-import { deleteTask, markTaskAsComplete, toggleScopeForDay, addListTag } from '../src/api/SupabaseTasks';
-import { TaskInterface, NewTask } from '../src/types/TaskTypes';
+import { markTaskAsComplete } from '../src/api/SupabaseTasks';
+import { toggleScope, addListTag, deleteTag } from '../src/api/SupabaseTags';
+import { TagProps } from '../src/types/TagTypes';
 
-export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleDeleteTag = async (id: number, tasks: TagProps[], dispatch: React.Dispatch<any>) => {
   try {
-    await deleteTask(id, tasks);
-    dispatch({ type: 'DELETE_TASK', id });
+    await deleteTag(id);
+    dispatch({ type: 'DELETE_TAG', id });
   } catch (error) {
-    console.error('Failed to delete task:', error);
+    console.error('Failed to delete tag:', error);
   }
 };
 
@@ -33,11 +34,11 @@ export const addTagToList = async (
   };
 
   try {
-    const createdTask = await addListTag(newTag);
-    dispatch({ type: 'ADD_TAG', payload: createdTask });
+    const createdTag = await addListTag(newTag);
+    dispatch({ type: 'ADD_TAG', payload: createdTag });
     return true;
   } catch (error) {
-    console.error('Failed to add task:', error);
+    console.error('Failed to add tag:', error);
     return false;
   }
 };
@@ -54,11 +55,11 @@ export const handleToggleCompleted = async (id: number, selectedDate: Date, disp
   }
 };
 
-export const handleToggleScopeforDay = async (id: any, selectedDate: any, dispatch: any) => {  
-  dispatch({ type: 'TOGGLE_DAY', id: id, selectedDate: selectedDate });
+export const handleToggleScope = async (id: any, selectedDate: any, dispatch: any) => {  
+  dispatch({ type: 'TOGGLE_SCOPE', id: id, selectedDate: selectedDate });
 
   try {
-    const updatedTask = await toggleScopeForDay(id, selectedDate);
+    const updatedTask = await toggleScope(id, selectedDate);
     
     if (updatedTask) {
     } else {
@@ -69,33 +70,29 @@ export const handleToggleScopeforDay = async (id: any, selectedDate: any, dispat
   }
 };
 
-export const findChildTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {
-  if (!tasks) {
+export const findChildTags = (tagId: number, tags: TagProps[]): TagProps[] => {
+  if (!tags) {
     console.error('Tasks is undefined!');
     return [];
   }
 
-  const directChildren = tasks.filter(task => task.parentId === taskId);
+  const directChildren = tags.filter(tag => tag.parentId === tagId);
   let allChildren = [...directChildren];
 
   directChildren.forEach(child => {
-    const grandchildren = findChildTasks(child.id, tasks);
+    const grandchildren = findChildTags(child.id, tags);
     allChildren = [...allChildren, ...grandchildren];
   });
 
   return allChildren;
 };
 
-export const findParentTasks = (taskId: number, tasks: TaskInterface[]): TaskInterface[] => {
-  const parentTask = tasks.find(task => task.id === taskId);
+export const findParentTags = (taskId: number, tags: TagProps[]): TagProps[] => {
+  const parentTask = tags.find(task => task.id === taskId);
   return parentTask && parentTask.parentId
-    ? [...findParentTasks(parentTask.parentId, tasks), parentTask]
+    ? [...findParentTags(parentTask.parentId, tags), parentTask]
     : [];
 };
-
-export function isRouteNameInScope(routeName: string, scopeRoutes: string[]) {
-  return scopeRoutes.includes(routeName);
-}
 
 const today = new Date
 export const todayFormatted = today.toISOString().split('T')[0];

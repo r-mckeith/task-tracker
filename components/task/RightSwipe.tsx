@@ -5,19 +5,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../../src/types/TaskTypes';
 import { StyleSheet } from 'react-native';
+import { TagProps } from '../../src/types/TagTypes';
 
 type RightSwipe = {
-  handleDelete: (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => Promise<void>;
+  handleDelete: (id: number, dispatch: React.Dispatch<any>) => Promise<void>;
   id: number;
-  tasks: TaskInterface[];
   dispatch: React.Dispatch<any>;
   swipeableRow: React.RefObject<Swipeable | null>;
 };
 
-export default function RightSwipe({id, tasks, dispatch, handleDelete}: RightSwipe) {
+export default function RightSwipe({id, dispatch, handleDelete}: RightSwipe) {
   return (
     <View style={styles.rightActionContainer}>
-      <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, tasks, dispatch)}>
+      <RectButton style={[styles.rightSwipeItem, styles.deleteButton]} onPress={() => handleDelete(id, dispatch)}>
         <MaterialCommunityIcons 
                 name="close-circle" 
                 size={24} 
