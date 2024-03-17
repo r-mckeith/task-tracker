@@ -18,13 +18,19 @@ export default function ScopeTask({id, inScopeDay, inScopeWeek, filter}: ScopePr
   const route = useRoute();
 
 
+  // const handleToggleScope = () => {
+  //   filter === 'month' ? handleToggleScopeforWeek(id, inScopeWeek, state, dispatch) : handleToggleScopeforDay(id, inScopeDay, state, dispatch);
+  // };
+
   const handleToggleScope = () => {
-    filter === 'month' ? handleToggleScopeforWeek(id, inScopeWeek, state, dispatch) : handleToggleScopeforDay(id, inScopeDay, state, dispatch);
+    handleToggleScopeforDay(id, inScopeDay, state, dispatch);
   };
 
   // const inScope = route.name === 'ScopeDay' ? inScopeDay === todayFormatted : inScopeWeek;
 
-  const inScope = filter === 'month' ? inScopeWeek : inScopeDay === todayFormatted;
+  // const inScope = filter === 'month' ? inScopeWeek : inScopeDay === todayFormatted;
+
+  const inScope = inScopeDay === todayFormatted;
 
   return (
     <View>

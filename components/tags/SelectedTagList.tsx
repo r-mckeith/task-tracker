@@ -1,32 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TagProps, TagDataProps } from "../../src/types/TagTypes";
+import { TagProps, TagDataProps, DateRange } from "../../src/types/TagTypes";
+import { useDateContext } from "../../src/contexts/date/useDateContext";
+import { getTagData } from "../../src/api/SupabaseTags";
 import { useTagDataContext } from "../../src/contexts/tagData/UseTagDataContext";
 
 export default function SelectedTagList() {
-  const [timeframe, setTimeframe] = useState('Day');
+  const [timeframe, setTimeframe] = useState('day');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedTagsList, setSelectedTagsList] = useState<any>([]);
 
+  const { selectedDate } = useDateContext();
   const { tagData } = useTagDataContext();
-  console.log(tagData)
+
+  const optionToEnumMap: any = {
+    'day': DateRange.Today,
+    'week': DateRange.ThisWeek,
+    'month': DateRange.ThisMonth,
+    'year': DateRange.ThisYear,
+  };
 
   useEffect(() => {
-    setSelectedTagsList(tagData);
-  }, [tagData]);
+    const fetchData = async () => {
+      try {
+        const data = await getTagData(optionToEnumMap[timeframe], selectedDate);
+        setSelectedTagsList(data);
+      } catch (error) {
+        console.error('Failed to fetch tag data:', error);
+      }
+    };
+
+    fetchData();
+  }, [selectedDate, timeframe, tagData]);
   
   return (
     <View style={styles.selectedTagList}>
       <TouchableOpacity style={styles.dropdownButton} onPress={() => setDropdownVisible(!dropdownVisible)}>
-        <Text>{timeframe}</Text>
+        <Text style={styles.dropdownOption}>{timeframe}</Text>
         <MaterialCommunityIcons name={dropdownVisible ? "chevron-up" : "chevron-down"} size={24} />
       </TouchableOpacity>
       {dropdownVisible && (
         <View style={styles.dropdownList}>
-          {['Day', 'Week', 'Month', 'Year'].map(option => (
+          {['day', 'week', 'month', 'year'].map(option => (
             <TouchableOpacity key={option} style={styles.dropdownItem} onPress={() => { setTimeframe(option); setDropdownVisible(false); }}>
-              <Text>{option}</Text>
+              <Text style={styles.dropdownOption}>{option}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -76,6 +94,10 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     zIndex: 1,
+  },
+  dropdownOption: {
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
   dropdownItem: {
     padding: 10,

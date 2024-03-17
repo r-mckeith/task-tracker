@@ -20,8 +20,8 @@ export default function TagScreen() {
   const { state: tasks } = useTaskContext();
 
   useEffect(() => {
-    const todayTasks = tasks.filter(task => task.inScopeDay === todayFormatted || task.inScopeWeek);
-    console.log('today', todayFormatted)
+    const todayTasks = tasks.filter(task => task.inScopeDay === todayFormatted);
+    console.log(todayTasks)
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
@@ -29,7 +29,7 @@ export default function TagScreen() {
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);
-  }, [tags]); 
+  }, [tags, tasks]); 
 
   return (
     <>
@@ -40,10 +40,10 @@ export default function TagScreen() {
       />
       <ScrollView style={styles.container}>
         <View style={styles.container}>
-          <Section color='pink' tags={todayTags} sectionName={'today'} />
-          <Section color='lightgreen' tags={goodTagsList} sectionName={'good'} />
-          <Section color='lightyellow' tags={neutralTagsList} sectionName={'neutral'} />
-          <Section color='pink' tags={badTagsList} sectionName={'bad'} />
+          <Section tags={todayTags} sectionName={'today'} />
+          <Section tags={goodTagsList} sectionName={'good'} />
+          <Section tags={neutralTagsList} sectionName={'neutral'} />
+          <Section tags={badTagsList} sectionName={'bad'} />
           <SelectedTagList />
         </View>
       </ScrollView>

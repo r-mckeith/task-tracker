@@ -18,27 +18,28 @@ export default function App() {
   const session = useSession();
 
   return (
-    <TaskContextProvider>
-      <TagContextProvider>
-        <TagDataContextProvider>
-          <NoteContextProvider>
-            <DateProvider>
-              <SafeAreaView style={styles.container}>
-                <MenuProvider>
-                  <GestureHandlerRootView style={{flex: 1}}>
-                    {session && session.user ?  
-                      <NavigationContainer>
-                        <MyTabs />
-                      </NavigationContainer> : 
-                      <Auth />}
-                  </GestureHandlerRootView>
-                </MenuProvider>
-              </SafeAreaView>
-            </DateProvider>
-          </NoteContextProvider>
-        </TagDataContextProvider>
-      </TagContextProvider>
-    </TaskContextProvider>
+    <DateProvider>
+      <TaskContextProvider>
+        <TagContextProvider>
+          <TagDataContextProvider>
+            <NoteContextProvider>
+                <SafeAreaView style={styles.container}>
+                  <MenuProvider>
+                    <GestureHandlerRootView style={{flex: 1}}>
+                      {session && session.user ?  
+                        <NavigationContainer>
+                          <MyTabs />
+                        </NavigationContainer> : 
+                        <Auth />}
+                    </GestureHandlerRootView>
+                  </MenuProvider>
+                </SafeAreaView>
+            </NoteContextProvider>
+          </TagDataContextProvider>
+        </TagContextProvider>
+      </TaskContextProvider>
+    </DateProvider>
+
   );
 }
 
