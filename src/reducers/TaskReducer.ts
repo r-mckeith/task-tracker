@@ -17,11 +17,9 @@ export type Action =
   ): TaskInterface[] => {
     return state.map(task => {
       if (task.id === action.id) {
-        console.log('SELECTED DATE', action.selectedDate)
         const newScopeDay = (task.inScopeDay === action.selectedDate) ? null : action.selectedDate;
         return { ...task, inScopeDay: newScopeDay };
       }
-      console.log(task)
       return task;
     });
   };

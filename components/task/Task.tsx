@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../../src/types/TaskTypes'
@@ -11,10 +11,6 @@ import ScopeTask from './ScopeTask'
 export default function Task({id, name, parentId, completed, inScopeDay, depth }: TaskInterface) {
   const { state: tasks , dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
-
-  useEffect(() => {
-    console.log(`Task ${id} completed status:`, completed);
-  }, [completed, id]);
 
   function getDepthStyle() {
     switch (depth) {

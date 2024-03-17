@@ -12,7 +12,6 @@ export const getTasks = async () => {
   if (error) {
     console.error('Failed to fetch tasks:', error);
   }
-console.log(data && data.length)
   return data || [];
 };
 
