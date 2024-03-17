@@ -36,7 +36,7 @@ export interface NewTask {
 export interface TaskInterface extends NewTask {
   id: number;
   created_at: string;
-  completed: Date | null;
+  completed: string | null;
   inScopeDay: string | null;
 }
 

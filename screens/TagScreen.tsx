@@ -8,7 +8,6 @@ import Header from '../components/Header';
 import Section from '../components/tags/Section';
 import SelectedTagList from '../components/tags/SelectedTagList';
 import { useTaskContext } from '../src/contexts/tasks/UseTaskContext';
-import { todayFormatted } from '../helpers/taskHelpers';
 
 export default function TagScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
@@ -18,13 +17,19 @@ export default function TagScreen() {
   const [badTagsList, setBadTagsList] = useState<TagProps[]>([]);
   const { tags } = useTagContext();
   const { state: tasks } = useTaskContext();
+  const selectedDateString = selectedDate.toISOString().split('T')[0];
 
   useEffect(() => {
-    const todayTasks = tasks.filter(task => task.inScopeDay === selectedDate.toISOString().split('T')[0] || task.inScopeDay && task.inScopeDay < selectedDate.toISOString().split('T')[0] && !task.completed);
+    const filteredTasks = tasks.filter(task => {
+      const isScopedForTodayOrFuture = task.inScopeDay === selectedDateString || task.inScopeDay && task.inScopeDay < selectedDateString;
+      const isUncompletedOrCompletedAfter = !task.completed || (task.completed && task.completed >= selectedDateString);
+    
+      return isScopedForTodayOrFuture && isUncompletedOrCompletedAfter;
+    });
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');
-    setTodayTags(todayTasks)
+    setTodayTags(filteredTasks)
     setGoodTagsList(goodTags);
     setNeutralTagsList(neutralTags);
     setBadTagsList(badTags);

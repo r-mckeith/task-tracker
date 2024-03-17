@@ -16,7 +16,7 @@ export default function TaskContainer({ tasks, filter }: TaskContainerProps) {
     <View style={styles.container}>
       {tasks.length > 0 ? (
         <ScrollView style={styles.taskList}>
-          <NestedList taskProps={tasks} filter={filter} />
+          <NestedList tasks={tasks} filter={filter} />
         </ScrollView>
       ) : (
         <View style={styles.emptyContainer} />

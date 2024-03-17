@@ -7,12 +7,12 @@ export const getTasks = async () => {
   const { data, error } = await supabase
     .from('tasks')
     .select('*')
-    .order('id', { ascending: true });
+    .order('id', { ascending: true })
 
   if (error) {
     console.error('Failed to fetch tasks:', error);
   }
-
+console.log(data && data.length)
   return data || [];
 };
 
@@ -50,22 +50,56 @@ export const deleteTask = async (taskId: number, tasks: TaskInterface[]) => {
 };
 
 export const markTaskAsComplete = async (taskId: number, completionDate: Date) => {
-  const { data, error } = await supabase
+  const fetchResult = await supabase
     .from('tasks')
-    .update({ completed: completionDate.toISOString() })
+    .select('completed')
+    .eq('id', taskId)
+    .single();
+
+  if (fetchResult.error || !fetchResult.data) {
+    console.error('Failed to fetch task:', fetchResult.error);
+    throw new Error('Failed to fetch task');
+  }
+
+  const task = fetchResult.data;
+
+  const newCompletionDate = task.completed ? null : completionDate;
+
+  const data = await supabase
+    .from('tasks')
+    .update({ completed: newCompletionDate })
     .eq('id', taskId);
 
-  if (error) {
-    console.error('Failed to mark task as complete:', error);
+  if (data.error) {
+    console.error('Failed to mark task as complete/incomplete:', data.error);
     throw new Error('Failed to update task');
   }
 
   if (!data) {
-    throw new Error('No data returned after insert operation');
-  } else {
-    return data[0];
-  }
-}
+        throw new Error('No data returned after insert operation');
+      } else {
+        return data;
+      }
+};
+
+
+// export const markTaskAsComplete = async (taskId: number, completionDate: Date) => {
+//   const { data, error } = await supabase
+//     .from('tasks')
+//     .update({ completed: completionDate.toISOString() })
+//     .eq('id', taskId);
+
+//   if (error) {
+//     console.error('Failed to mark task as complete:', error);
+//     throw new Error('Failed to update task');
+//   }
+
+//   if (!data) {
+//     throw new Error('No data returned after insert operation');
+//   } else {
+//     return data[0];
+//   }
+// }
 
 export const toggleScopeForDay = async (taskId: number, selectedDate: string) => {
   const { data, error } = await supabase

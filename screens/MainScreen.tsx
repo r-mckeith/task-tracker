@@ -14,8 +14,6 @@ export default function MonthlyScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
   const [selectedScope, setSelectedScope] = useState<ScopeType>('month');
 
-  const filteredTasks = useFilteredTasks(tasks, selectedDate, selectedScope);
-
   return (
     <>
       <Header

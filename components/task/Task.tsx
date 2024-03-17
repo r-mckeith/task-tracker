@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { TaskInterface } from '../../src/types/TaskTypes'
@@ -11,6 +11,10 @@ import ScopeTask from './ScopeTask'
 export default function Task({id, name, parentId, completed, inScopeDay, depth }: TaskInterface) {
   const { state: tasks , dispatch } = useTaskContext();
   const swipeableRow = useRef<Swipeable | null>(null);
+
+  useEffect(() => {
+    console.log(`Task ${id} completed status:`, completed);
+  }, [completed, id]);
 
   function getDepthStyle() {
     switch (depth) {
@@ -27,7 +31,7 @@ export default function Task({id, name, parentId, completed, inScopeDay, depth }
       <Swipeable ref={swipeableRow} renderRightActions={() => <RightSwipe handleDelete={handleDelete} id={id} tasks={tasks} dispatch={dispatch} swipeableRow={swipeableRow} />} overshootLeft={false} rightThreshold={120}>
         <View style={[styles.taskContainer, getDepthStyle()]}>
           <ScopeTask id={id} inScopeDay={inScopeDay} />
-          <Text style={[styles.taskName, parentId !== null && completed && styles.completedTask]}>{name}</Text>
+          <Text style={[styles.taskName, (parentId !== null && completed) ? styles.completedTask : null]}>{name}</Text>
           <AddTask parentId={id} depth={depth} />
         </View>
       </Swipeable>

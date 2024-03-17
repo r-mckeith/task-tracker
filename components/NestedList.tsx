@@ -4,19 +4,20 @@ import { TaskInterface } from '../src/types/TaskTypes'
 import Task from './task/Task';
 
 interface NestedListProps {
-  taskProps: TaskInterface[];
+  tasks: TaskInterface[];
   filter?: string;
 }
 
-export default function NestedList({taskProps, filter}: NestedListProps) {
+export default function NestedList({tasks, filter}: NestedListProps) {
+  console.log(tasks[0])
 
   const findRootTasks = () => {
-    const allIds = new Set(taskProps.map(task => task.id));
-    return taskProps.filter(task => !task.parentId || !allIds.has(task.parentId));
+    const allIds = new Set(tasks.map(task => task.id));
+    return tasks.filter(task => !task.parentId || !allIds.has(task.parentId));
   };
   
   const renderTasks = (parentId: number | null) => {
-    const tasksToRender = parentId === null ? findRootTasks() : taskProps.filter(task => task.parentId === parentId);
+    const tasksToRender = parentId === null ? findRootTasks() : tasks.filter(task => task.parentId === parentId);
     
     return tasksToRender
       .sort((a, b) => a.id - b.id)

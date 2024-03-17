@@ -83,7 +83,7 @@ export type Action =
     const siblingsCompleted = taskForCompleted.parentId 
         ? state.filter(task => task.parentId === taskForCompleted.parentId) 
         : [];
-    const newCompletedStatus = taskForCompleted.completed ? null : new Date();
+    const newCompletedStatus = taskForCompleted.completed ? null : new Date().toISOString();
     return state.map((task) => {
         if (task.id === actionId || descendantsCompleted.some(descendant => descendant.id === task.id)) {
             return { ...task, completed: newCompletedStatus };

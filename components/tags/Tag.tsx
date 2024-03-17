@@ -26,7 +26,7 @@ export default function Tag({ tag, sectionName }: TagComponent) {
   const swipeableRow = useRef<Swipeable | null>(null);
 
   useEffect(() => {
-    if (sectionName === 'today' && tag.completed && tag.completed === selectedDate.toISOString().split('T')[0]) {
+    if (sectionName === 'today' && tag.completed && tag.completed <= selectedDate.toISOString().split('T')[0]) {
       setIsSelected(true);
     } else {
       setIsSelected(false);
@@ -43,12 +43,8 @@ export default function Tag({ tag, sectionName }: TagComponent) {
   };
 
   const handleSelectTag = async (selectedTag: TagProps) => {
-    if (isSelected) {
-      return
-    }
-    
     if (sectionName === 'today') {
-      setIsSelected(true)
+      setIsSelected(!isSelected)
       handleToggleCompleted(tag.id, selectedDate, taskDispatch)
     } else {
       try {
