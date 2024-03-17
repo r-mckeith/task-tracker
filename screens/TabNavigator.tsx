@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MainScreen from './MainScreen';
-import TagScreen from './TagScreen';
+import List from './List';
+import Buckets from './Buckets';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,8 +14,8 @@ export function MyTabs() {
         },
       }}
     >
-      <Tab.Screen name="Today" component={TagScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="To Do" component={MainScreen} options={{ headerShown: false }}/>
+      <Tab.Screen name="Today" component={Buckets} options={{ headerShown: false }}/>
+      <Tab.Screen name="To Do" component={List} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 }
