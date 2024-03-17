@@ -1,4 +1,4 @@
-export interface TagProps extends NewTagProps {
+export interface Tag extends NewTagProps {
   id: number;
   user_id: number;
   tag_data: TagDataProps[];
@@ -23,3 +23,10 @@ export enum DateRange {
   ThisMonth,
   ThisYear
 }
+
+export interface TagProps extends NewTagProps {
+  id: number;
+  user_id: number;
+  tag_data: TagDataProps[];
+  completed?: string;
+};

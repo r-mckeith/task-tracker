@@ -52,41 +52,58 @@ export const deleteTask = async (taskId: number, tasks: TaskInterface[]) => {
 };
 
 
-export const toggleCompleted = async (id: number, currentScope: Date | null, tasks: TaskInterface[] = []) => {
-  const updateCompletionStatus = async (taskId: number, completionDate: Date | null) => {
-    const { data: currentTask, error } = await supabase
-      .from('tasks')
-      .select("completed")
-      .eq('id', taskId)
-      .single();
+// export const toggleCompleted = async (id: number, currentScope: Date | null, tasks: TaskInterface[] = []) => {
+//   const updateCompletionStatus = async (taskId: number, completionDate: Date | null) => {
+//     const { data: currentTask, error } = await supabase
+//       .from('tasks')
+//       .select("completed")
+//       .eq('id', taskId)
+//       .single();
 
-    if (error) {
-      console.error(error);
-    }
+//     if (error) {
+//       console.error(error);
+//     }
 
-    if (currentTask && currentTask.completed !== completionDate) {
-      await supabase
-        .from('tasks')
-        .update({ completed: completionDate })
-        .eq('id', taskId);
-    }
-  };
+//     if (currentTask && currentTask.completed !== completionDate) {
+//       await supabase
+//         .from('tasks')
+//         .update({ completed: completionDate })
+//         .eq('id', taskId);
+//     }
+//   };
 
-  const completionDate = currentScope ? null : new Date();
+//   const completionDate = currentScope ? null : new Date();
 
-  const childTasks = findChildTasks(id, tasks);
-  for (let task of childTasks) {
-    await updateCompletionStatus(task.id, completionDate);
+//   const childTasks = findChildTasks(id, tasks);
+//   for (let task of childTasks) {
+//     await updateCompletionStatus(task.id, completionDate);
+//   }
+
+//   const parentTasks = findParentTasks(id, tasks);
+//   for (let task of parentTasks) {
+//     await updateCompletionStatus(task.id, completionDate);
+//   }
+
+//   await updateCompletionStatus(id, completionDate);
+// };
+
+export const markTaskAsComplete = async (taskId: number, completionDate: Date) => {
+  const { data, error } = await supabase
+    .from('tasks')
+    .update({ completed: completionDate.toISOString() })
+    .eq('id', taskId);
+
+  if (error) {
+    console.error('Failed to mark task as complete:', error);
+    throw new Error('Failed to update task');
   }
 
-  const parentTasks = findParentTasks(id, tasks);
-  for (let task of parentTasks) {
-    await updateCompletionStatus(task.id, completionDate);
+  if (!data) {
+    throw new Error('No data returned after insert operation');
+  } else {
+    return data[0];
   }
-
-  await updateCompletionStatus(id, completionDate);
-};
-
+}
 
 export const toggleScopeForDay = async (id: number, currentScope: Date | string | null, tasks: TaskInterface[] = []) => {
   

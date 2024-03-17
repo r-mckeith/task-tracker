@@ -21,7 +21,6 @@ export default function TagScreen() {
 
   useEffect(() => {
     const todayTasks = tasks.filter(task => task.inScopeDay === todayFormatted);
-    console.log(todayTasks)
     const goodTags = tags.filter(tag => tag.section === 'good');
     const neutralTags = tags.filter(tag => tag.section === 'neutral');
     const badTags = tags.filter(tag => tag.section === 'bad');

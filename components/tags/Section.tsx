@@ -15,7 +15,7 @@ export default function Section({ tags, sectionName }: SectionProps) {
       <AddTag sectionName={sectionName}/>
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
-          <Tag key={index} tag={tag} />
+          <Tag key={index} tag={tag} sectionName={sectionName} />
         ))}
       </View>
     </View>

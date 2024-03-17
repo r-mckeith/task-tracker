@@ -37,9 +37,6 @@ export default function AddTagModal ({ visible, sectionName, onClose, onAddTag }
             value={newTagName}
             onChangeText={setNewTagName}
           />
-          <View style={styles.switchRow}>
-            <Text>Recurring: </Text>
-          </View>
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.iconButton} 

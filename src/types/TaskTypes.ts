@@ -30,10 +30,6 @@ export interface NewTask {
   parentId: number;
   depth: number;
   user_id: string;
-  recurringOptions: RecurringOptions;
-  inScopeMonth: Date | string | null;
-  inScopeDay: Date | string | null;
-  inScopeWeek: Date | string | null;
 }
 
 // Complete Task Interface
@@ -42,9 +38,7 @@ export interface TaskInterface extends NewTask {
   created_at: string;
   scope: Scope;
   completed: Date | null;
-  pushed: Date | string | null;
-  unScoped: Date | string | null;
-  filter?: string | null;
+  inScopeDay: string | Date;
 }
 
 // Scope Definition

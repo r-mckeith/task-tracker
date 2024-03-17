@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NewTagProps, TagProps } from "../../src/types/TagTypes";
+import { NewTagProps } from "../../src/types/TagTypes";
 import { useTagContext } from '../../src/contexts/tags/UseTagContext';
 import { addTag } from "../../src/api/SupabaseTags";
 import AddTagModal from "./AddTagModal";
 
-type AddTagProps = {
+type AddTag = {
   sectionName: string;
 };
 
-export default function AddTag({ sectionName }: AddTagProps) {
+export default function AddTag({ sectionName }: AddTag) {
   const [showModal, setShowModal] = useState(false);
 
   const { dispatch } = useTagContext();
@@ -33,13 +33,13 @@ const toDoSection = sectionName === 'today'
   
   return (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{toDoSection ? 'To Do' : sectionName}</Text>
+      <Text style={styles.sectionTitle}>{toDoSection ? 'Today' : sectionName}</Text>
       {!toDoSection && 
         <TouchableOpacity style={styles.addButton} onPress={() => setShowModal(true)}>
           <MaterialCommunityIcons name="plus-circle-outline" size={24} />
         </TouchableOpacity>
       }
-      <AddTagModal visible={showModal} onClose={() => setShowModal(false)} onAddTag={handleAddTag} sectionName={sectionName} />
+      {!toDoSection && <AddTagModal visible={showModal} onClose={() => setShowModal(false)} onAddTag={handleAddTag} sectionName={sectionName} />}
     </View>
   );
 }

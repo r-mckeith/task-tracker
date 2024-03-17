@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Modal, Switch, TouchableOpacity } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { View, Text, TextInput, Modal, TouchableOpacity } from 'react-native';
 import useUserId from '../../src/contexts/sessions/UseSessionHook';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StyleSheet } from 'react-native';
@@ -11,18 +10,14 @@ import { handleAddTask, getTaskLevelName } from '../../helpers/taskHelpers';
 export default function AddTask({ parentId, depth, variant = 'default' }: AddTaskProps) {
   const [showModal, setShowModal] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [selectedDays, setSelectedDays] = useState('');
-  const [timesPerDay, setTimesPerDay] = useState('');
-  const route = useRoute();
+
   const { dispatch } = useTaskContext();
   const userId = useUserId();
 
   const onAddTask = async () => {
-    const success = await handleAddTask(newTaskName, userId, parentId, depth, isRecurring, selectedDays, timesPerDay, route.name, dispatch);
+    const success = await handleAddTask(newTaskName, userId, parentId, depth, dispatch);
     if (success) {
       setNewTaskName('');
-      setIsRecurring(false);
       setShowModal(false);
     } else {
         console.error('Failed to add task');
@@ -59,15 +54,6 @@ export default function AddTask({ parentId, depth, variant = 'default' }: AddTas
               value={newTaskName}
               onChangeText={setNewTaskName}
             />
-            <View style={styles.switchRow}>
-              <Text>Recurring: </Text>
-              <Switch 
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={isRecurring ? "#f5dd4b" : "#f4f3f4"}
-                onValueChange={setIsRecurring}
-                value={isRecurring}
-              />
-            </View>
             <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.iconButton} 

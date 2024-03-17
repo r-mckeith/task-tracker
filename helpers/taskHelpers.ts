@@ -1,5 +1,5 @@
 import addDays from 'date-fns/addDays';
-import { deleteTask, toggleCompleted, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
+import { deleteTask, markTaskAsComplete, toggleScopeForDay, toggleScopeForWeek, pushDay, addTask } from '../src/api/SupabaseTasks';
 import { TaskInterface, NewTask } from '../src/types/TaskTypes';
 
 export const handleDelete = async (id: number, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
@@ -16,13 +16,9 @@ export const handleAddTask = async (
   userId: string | null,
   parentId: number,
   depth: number,
-  isRecurring: boolean | null = null,
-  selectedDays: string | null = null,
-  timesPerDay: string | null = null,
-  routeName: string,
   dispatch: React.Dispatch<any>
 ): Promise<boolean> => {
-  const currentDate = new Date();
+
   if (!userId) {
     throw new Error("User's ID is not available.");
   }
@@ -32,14 +28,6 @@ export const handleAddTask = async (
     parentId: parentId,
     depth: depth + 1,
     user_id: userId,
-    recurringOptions: {
-      isRecurring: isRecurring,
-      selectedDays: selectedDays,
-      timesPerDay: timesPerDay,
-    },
-    inScopeMonth: currentDate,
-    inScopeWeek: isRecurring || (routeName === 'WeeklyScreen' || routeName === 'DailyScreen') ? currentDate : null,
-    inScopeDay: isRecurring || routeName === 'DailyScreen' ? currentDate : null,
   };
 
   try {
@@ -52,11 +40,11 @@ export const handleAddTask = async (
   }
 };
 
-export const handleToggleCompleted = async (id: number, completed: Date | null, tasks: TaskInterface[], dispatch: React.Dispatch<any>) => {
+export const handleToggleCompleted = async (id: number, selectedDate: Date, dispatch: React.Dispatch<any>) => {
   dispatch({ type: 'TOGGLE_COMPLETED', id });
 
   try {
-    await toggleCompleted(id, completed, tasks);
+    await markTaskAsComplete(id, selectedDate);
   } catch (error) {
     console.error('Failed to toggle task:', error);
 
