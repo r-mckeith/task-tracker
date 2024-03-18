@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Text,
+} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { useTagContext } from "../src/contexts/tags/UseTagContext";
@@ -15,9 +21,10 @@ export default function TagScreen() {
   const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
   const { tags, dispatch } = useTagContext();
   const selectedDateString = selectedDate.toISOString().split("T")[0];
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   useEffect(() => {
-    const generalTags = tags.filter((tag) => tag.section !== "today");
+    const habitTags = tags.filter((tag) => tag.section == "habits");
 
     const filteredTodayTags = tags.filter((tag) => {
       const todayTags = tags.filter((tag) => tag.section === "today");
@@ -32,7 +39,7 @@ export default function TagScreen() {
       );
     });
     setTodayTags(filteredTodayTags);
-    setGoodTagsList(generalTags);
+    setGoodTagsList(habitTags);
   }, [tags, selectedDate]);
 
   return (
@@ -42,22 +49,39 @@ export default function TagScreen() {
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
       />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.sectionsContainer}>
-        {todayTags.length > 0 && (
-            <Text style={styles.sectionTitle}>Today</Text>
-          )}
-          {todayTags.length > 0 && (
-            <Section tags={todayTags} sectionName={"today"} />
-          )}
-          <Text style={styles.sectionTitle}>Habits</Text>
-          <Section tags={goodTagsList} sectionName={"good"} />
-          <TouchableOpacity style={styles.addButton} onPress={() => {}}>
-            <MaterialCommunityIcons name="plus-circle-outline" size={24} />
-          </TouchableOpacity>
-          <SelectedTagList />
-        </View>
-      </ScrollView>
+        <ScrollView style={styles.scrollView}>
+        <TouchableWithoutFeedback onPress={() => isEditMode && setIsEditMode(false)}>
+          <View style={styles.sectionsContainer}>
+
+            <Text style={styles.sectionTitle}>Habits</Text>
+            <Section
+              tags={goodTagsList}
+              sectionName={"habits"}
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+
+            />
+                        {todayTags.length > 0 && (
+              <Text style={styles.sectionTitle}>Today</Text>
+            )}
+            {todayTags.length > 0 && (
+              <Section
+                tags={todayTags}
+                sectionName={"today"}
+                isEditMode={isEditMode}
+                setIsEditMode={setIsEditMode}
+              />
+            )}
+            <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+              <MaterialCommunityIcons name="plus-circle-outline" size={24} />
+            </TouchableOpacity>
+
+            <SelectedTagList />
+          </View>
+
+            </TouchableWithoutFeedback>
+
+        </ScrollView>
     </>
   );
 }

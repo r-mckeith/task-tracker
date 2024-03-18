@@ -39,8 +39,12 @@ export default function NestedList({ tags }: { tags: TagProps[] }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
     backgroundColor: '#F5F5F5',
+    padding: 10,
+    marginTop: 15,
+    marginHorizontal: 10,
   },
   input: {
     height: 40,
@@ -64,6 +68,5 @@ const styles = StyleSheet.create({
   },
   subtask: {
     marginLeft: 20,
-    borderRadius: 10,
   },
 });

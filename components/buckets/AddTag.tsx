@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { NewTagProps } from "../../src/types/TagTypes";
-import { useTagContext } from '../../src/contexts/tags/UseTagContext';
+import { useTagContext } from "../../src/contexts/tags/UseTagContext";
 import { addTag } from "../../src/api/SupabaseTags";
 import AddTagModal from "./AddTagModal";
 
@@ -17,48 +17,89 @@ export default function AddTag({ sectionName }: AddTag) {
 
   const handleAddTag = async (name: string, section: string): Promise<void> => {
     const newTag: NewTagProps = {
-        name: name,
-        section: section
+      name: name,
+      section: section,
     };
 
     try {
-        const createdTag = await addTag(newTag);
-        dispatch({ type: 'ADD_TAG', payload: createdTag });
+      const createdTag = await addTag(newTag);
+      dispatch({ type: "ADD_TAG", payload: createdTag });
     } catch (error) {
-        console.error('Failed to add tag:', error);
+      console.error("Failed to add tag:", error);
     }
-};
+  };
 
-const toDoSection = sectionName === 'today'
-  
+  const toDoSection = sectionName === "today";
+
   return (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{toDoSection ? 'Today' : sectionName}</Text>
-      {!toDoSection && 
-        <TouchableOpacity style={styles.addButton} onPress={() => setShowModal(true)}>
+      <TextInput style={[styles.textInput, styles.input, { marginBottom: 10 }]}>
+        {`${sectionName}...`}
+      </TextInput>
+      <View style={styles.buttonContainer}>
+            <TouchableOpacity 
+              style={styles.iconButton} 
+              onPress={() => {}}
+            >
+              <MaterialCommunityIcons name="check-circle-outline" size={24} color={'green'} />
+            </TouchableOpacity>
+          </View>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setShowModal(true)}
+      >
+        {!toDoSection && (
           <MaterialCommunityIcons name="plus-circle-outline" size={24} />
-        </TouchableOpacity>
-      }
-      {!toDoSection && <AddTagModal visible={showModal} onClose={() => setShowModal(false)} onAddTag={handleAddTag} sectionName={sectionName} />}
+        )}
+      </TouchableOpacity>
+      {!toDoSection && (
+        <AddTagModal
+          visible={showModal}
+          onClose={() => setShowModal(false)}
+          onAddTag={handleAddTag}
+          sectionName={sectionName}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
+    flexDirection: "row",
+    alignItems: "center",
+    // justifyContent: "center",
+    // position: "relative",
+    justifyContent: "space-between", // Adjusted for side-by-side layout
+    padding: 10, // Add some padding around
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textTransform: 'capitalize',
+  input: {
+    height: 40,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    borderColor: '#bbb',
+    marginBottom: 10,
+    paddingHorizontal: 0,
+    paddingVertical: 10,
+  },
+  textInput: {
+    flex: 1, // Take up remaining space
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginRight: 10, // Space between input and button
+    paddingHorizontal: 10, // Inner spacing
+    // width: '100%',
   },
   addButton: {
-    position: 'absolute',
-    right: 0,
+    // position: "absolute",
   },
-
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // marginTop: 10,
+  },
+  iconButton: {
+    padding: 10,
+  },
 });

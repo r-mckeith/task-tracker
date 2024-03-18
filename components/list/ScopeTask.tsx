@@ -30,6 +30,7 @@ export default function ScopeTask({id, inScopeDay}: Scope) {
         size={24} 
         color={'#767577'}
         onPress={toggleScope}
+        style={{paddingLeft: 8}}
       />
     </View>
   );

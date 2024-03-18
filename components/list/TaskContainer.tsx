@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { TagProps } from '../../src/types/TagTypes';
 import NestedList from '../NestedList';
 import { ScrollView } from 'react-native-gesture-handler';
+import FunTags from '../FunTags';
 
 type TaskContainerProps = {
   tags: TagProps[];
