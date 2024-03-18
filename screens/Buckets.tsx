@@ -44,14 +44,14 @@ export default function TagScreen() {
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.sectionsContainer}>
-          <Text style={styles.sectionTitle}>Habits</Text>
-          <Section tags={goodTagsList} sectionName={"good"} />
-          {todayTags.length > 0 && (
+        {todayTags.length > 0 && (
             <Text style={styles.sectionTitle}>Today</Text>
           )}
           {todayTags.length > 0 && (
             <Section tags={todayTags} sectionName={"today"} />
           )}
+          <Text style={styles.sectionTitle}>Habits</Text>
+          <Section tags={goodTagsList} sectionName={"good"} />
           <TouchableOpacity style={styles.addButton} onPress={() => {}}>
             <MaterialCommunityIcons name="plus-circle-outline" size={24} />
           </TouchableOpacity>
