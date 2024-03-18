@@ -12,7 +12,7 @@ type SectionProps = {
 export default function Section({ tags, sectionName }: SectionProps) {
   return (
     <View style={[styles.section, { borderColor: 'black', backgroundColor: '#FFF' }]}>
-      <AddTag sectionName={sectionName}/>
+      {/* {sectionName === 'today' && <AddTag sectionName={sectionName}/>} */}
       <View style={styles.tagContainer}>
         {tags.map((tag, index) => (
           <Tag key={index} tag={tag} sectionName={sectionName} />

@@ -7,16 +7,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 type TaskContainerProps = {
   tags: TagProps[];
-  filter: string;
 };
 
-export default function TaskContainer({ tags, filter }: TaskContainerProps) {
+export default function TaskContainer({ tags }: TaskContainerProps) {
 
   return (
     <View style={styles.container}>
       {tags.length > 0 ? (
         <ScrollView style={styles.taskList}>
-          <NestedList tags={tags} filter={filter} />
+          <NestedList tags={tags} />
         </ScrollView>
       ) : (
         <View style={styles.emptyContainer} />

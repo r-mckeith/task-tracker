@@ -3,12 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Task from './list/Task';
 import { TagProps } from '../src/types/TagTypes';
 
-interface NestedListProps {
-  tags: TagProps[];
-  filter?: string;
-}
-
-export default function NestedList({tags, filter}: NestedListProps) {
+export default function NestedList({ tags }: { tags: TagProps[] }) {
 
   const findRoottags = () => {
     const allIds = new Set(tags.map(tag => tag.id));
@@ -19,7 +14,7 @@ export default function NestedList({tags, filter}: NestedListProps) {
     const tagsToRender = parentId === null ? findRoottags() : tags.filter(tag => tag.parentId === parentId);
     
     return tagsToRender
-      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => b.id - a.id)
       .map((tag, index) => (
         <View 
           key={tag.id} 

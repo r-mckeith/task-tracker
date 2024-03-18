@@ -4,7 +4,8 @@ import { supabase } from './SupabaseClient'
 export const getTags = async () => {
   const { data, error } = await supabase
     .from('tags')
-    .select('*');
+    .select('*')
+    .order('created_at', { ascending: true });
 
   if (error) {
     console.error(error);
