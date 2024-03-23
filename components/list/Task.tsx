@@ -7,6 +7,7 @@ import AddTask from "./AddTask";
 import ScopeTask from "./ScopeTask";
 import { TagProps } from "../../src/types/TagTypes";
 import { useTagContext } from "../../src/contexts/tags/UseTagContext";
+import { useTagDataContext } from "../../src/contexts/tagData/UseTagDataContext";
 
 export default function Task({
   id,
@@ -15,8 +16,12 @@ export default function Task({
   inScopeDay,
   depth,
 }: TagProps) {
-  const { dispatch: tagDispatch } = useTagContext();
+  const { tags, dispatch: tagDispatch } = useTagContext();
+  const { tagData } = useTagDataContext();
+
   const swipeableRow = useRef<Swipeable | null>(null);
+
+  console.log(tags)
 
   function getDepthStyle() {
     switch (depth) {
@@ -59,7 +64,7 @@ export default function Task({
           >
             {name}
           </Text>
-          {/* <AddTask parentId={id} depth={depth ? depth : 0} /> */}
+          <AddTask parentId={id} depth={depth ? depth : 0} />
         </View>
       </Swipeable>
     </View>

@@ -7,6 +7,7 @@ export type Action =
   | { type: 'ADD_LIST_TAG'; payload: any }
   | { type: 'UPDATE_TAG'; payload: TagProps}
   | { type: 'TOGGLE_SCOPE'; id: number; selectedDate: string }
+  | { type: 'TOGGLE_COMPLETED'; id: number; selectedDate: string }
   | { type: 'SELECT_TAG'; payload: TagProps}
 
 export const initialState = {
@@ -21,6 +22,19 @@ const updateScope = (
     if (tag.id === action.id) {
       const newScopeDay = (tag.inScopeDay === action.selectedDate) ? null : action.selectedDate;
       return { ...tag, inScopeDay: newScopeDay };
+    }
+    return tag;
+  });
+};
+
+const toggleComplete = (
+  state: TagProps[],
+  action: { id: number; selectedDate: string }
+): TagProps[] => {
+  return state.map(tag => {
+    if (tag.id === action.id) {
+      const completed = (tag.completed) ? null : action.selectedDate;
+      return { ...tag, completed: completed };
     }
     return tag;
   });

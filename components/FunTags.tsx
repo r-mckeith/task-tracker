@@ -1,22 +1,31 @@
-import React, { useState, useRef } from 'react';
-import { View, TextInput, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useRef } from "react";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
+import { TagProps } from "../src/types/TagTypes";
+import Task from "./list/Task";
 
 // A helper function to generate a unique ID for new items
 const generateID = () => Date.now().toString();
 
 const initialTags = [
-  { id: generateID(), text: 'Example Tag 1', children: [] },
+  { id: generateID(), text: "Example Tag 1", children: [] },
   // Add more tags with nested children as needed
 ];
 
-export default function DynamicTagInput() {
-  const [tags, setTags] = useState<any>(initialTags);
+export default function DynamicTagInput({ tags }: { tags: TagProps[]}) {
+  const [localTags, setLocalTags] = useState<any>(initialTags);
   const inputsRef = useRef<any>({});
 
   const addTagAtIndex = (parentID: any, index: number) => {
     const newTag = {
       id: generateID(),
-      text: '',
+      text: "",
       children: [],
     };
 
@@ -28,14 +37,19 @@ export default function DynamicTagInput() {
           newChildren.splice(index + 1, 0, newTag); // Insert at the desired position
           return { ...tag, children: newChildren };
         } else if (tag.children.length > 0) {
-          return { ...tag, children: insertNewTag(tag.children, parentID, newTag) };
+          return {
+            ...tag,
+            children: insertNewTag(tag.children, parentID, newTag),
+          };
         }
         return tag;
       });
     };
 
-    const newTags = parentID ? insertNewTag(tags, parentID, newTag) : [...tags, newTag];
-    setTags(newTags);
+    const newTags = parentID
+      ? insertNewTag(tags, parentID, newTag)
+      : [...tags, newTag];
+    setLocalTags(newTags);
 
     setTimeout(() => inputsRef.current[newTag.id]?.focus(), 100);
   };
@@ -52,7 +66,31 @@ export default function DynamicTagInput() {
       });
     };
 
-    setTags(updateText(tags));
+    setLocalTags(updateText(tags));
+  };
+
+  const findRoottags = () => {
+    const allIds = new Set(tags.map(tag => tag.id));
+    return tags.filter(tag => !tag.parentId || !allIds.has(tag.parentId));
+  };
+
+  const rendertags = (parentId: number | null) => {
+    const tagsToRender = parentId === null ? findRoottags() : tags.filter(tag => tag.parentId === parentId);
+    
+    return tagsToRender
+      .sort((a, b) => b.id - a.id)
+      .map((tag, index) => (
+        <View 
+          key={tag.id} 
+          style={[
+            parentId !== null ? styles.subtask : undefined,
+            parentId === null && index !== 0 ? styles.headerSpacing : undefined,
+          ]}
+        >
+          <Task {...tag}/>
+          {rendertags(tag.id)}
+        </View>
+      ));
   };
 
   const renderTagInput = ({ item, level = 0 }: any) => {
@@ -67,29 +105,34 @@ export default function DynamicTagInput() {
           blurOnSubmit={false}
           returnKeyType="next"
         />
-        {item && item.children && item.children.length > 0 && (
+        {/* {item && item.children && item.children.length > 0 && (
           <FlatList
             data={item.children}
             renderItem={({ item: childItem }) => renderTagInput({ item: childItem, level: level + 1 })}
             keyExtractor={(childItem) => childItem.id}
             // listKey={item.id}
           />
-        )}
+        )} */}
       </View>
     );
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => addTagAtIndex(null, tags.length)} style={styles.addButton}>
+      <TouchableOpacity
+        onPress={() => addTagAtIndex(null, tags.length)}
+        style={styles.addButton}
+      >
         <Text>Add Root Tag</Text>
       </TouchableOpacity>
-      <FlatList
+      <View style={styles.container}>{rendertags(null)}</View>
+
+      {/* <FlatList
         data={tags}
         renderItem={({ item }) => renderTagInput({ item })}
         keyExtractor={(item) => item.id}
         style={styles.list}
-      />
+      /> */}
     </View>
   );
 }
@@ -103,7 +146,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: '#000',
+    borderBottomColor: "#000",
     paddingVertical: 10,
     paddingHorizontal: 5,
     fontSize: 16,
@@ -112,6 +155,12 @@ const styles = StyleSheet.create({
   addButton: {
     padding: 10,
     marginBottom: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
+  },
+  headerSpacing: {
+    marginTop: 20,
+  },
+  subtask: {
+    marginLeft: 20,
   },
 });

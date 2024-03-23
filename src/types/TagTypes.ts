@@ -29,7 +29,7 @@ export interface TagProps extends NewTagProps {
   user_id: number;
   tag_data: TagDataProps[];
   inScopeDay?: string | null;
-  completed?: string;
+  completed?: string | null;
   depth?: number;
   parentId?: number; 
 };

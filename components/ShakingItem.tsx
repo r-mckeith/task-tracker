@@ -93,7 +93,7 @@ export default function ShakingItem({ isEditMode, tag, sectionName }: TagCompone
   };
   
   useEffect(() => {
-    if (isEditMode) {
+    if (isEditMode && sectionName !== 'today') {
       startShaking();
     } else {
       shakeAnimation.stopAnimation(() => {
@@ -129,7 +129,7 @@ export default function ShakingItem({ isEditMode, tag, sectionName }: TagCompone
       rightThreshold={20}
     >
       <View style={tagStyle}>
-        {isEditMode && (
+        {isEditMode && sectionName !== 'today' && (
           <TouchableOpacity
             style={styles.deleteBubble}
             onPress={() => handleDeleteTag(tag.id)}

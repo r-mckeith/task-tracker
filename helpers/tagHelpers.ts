@@ -43,14 +43,17 @@ export const addTagToList = async (
 };
 
 export const handleToggleCompleted = async (id: number, selectedDate: Date, dispatch: React.Dispatch<any>) => {
-  dispatch({ type: 'TOGGLE_COMPLETED', id });
+  dispatch({ type: 'TOGGLE_COMPLETED', id: id, selectedDate: selectedDate });
 
   try {
-    await markTagAsComplete(id, selectedDate);
+    const updatedTask = await markTagAsComplete(id, selectedDate);
+    
+    if (updatedTask) {
+    } else {
+      console.error('Failed to toggle complete');
+    }
   } catch (error) {
-    console.error('Failed to toggle task:', error);
-
-    dispatch({ type: 'TOGGLE_COMPLETED', id });
+    console.error('Failed to toggle complete', error);
   }
 };
 

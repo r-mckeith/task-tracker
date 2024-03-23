@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
   selectedTagList: {
     flex: 1,
     padding: 10,
-    minHeight: 250,
     backgroundColor: '#eee',
     borderTopWidth: 1,
     borderColor: '#ddd',

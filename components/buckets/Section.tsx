@@ -23,11 +23,6 @@ export default function Section({
   setIsEditMode,
 }: SectionProps) {
 
-
-  const deactivateEditMode = () => {
-    if (isEditMode) setIsEditMode(false);
-  };
-
   return (
     <TouchableWithoutFeedback
       onLongPress={() => setIsEditMode(!isEditMode)}

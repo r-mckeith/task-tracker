@@ -18,10 +18,11 @@ import SelectedTagList from "../components/buckets/SelectedTagList";
 export default function TagScreen() {
   const { selectedDate, setSelectedDate } = useDateContext();
   const [todayTags, setTodayTags] = useState<TagProps[]>([]);
-  const [goodTagsList, setGoodTagsList] = useState<TagProps[]>([]);
-  const { tags, dispatch } = useTagContext();
-  const selectedDateString = selectedDate.toISOString().split("T")[0];
+  const [habitTags, setHabitTags] = useState<TagProps[]>([]);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+  const { tags } = useTagContext();
+  const selectedDateString = selectedDate.toISOString().split("T")[0];
 
   useEffect(() => {
     const habitTags = tags.filter((tag) => tag.section == "habits");
@@ -39,7 +40,7 @@ export default function TagScreen() {
       );
     });
     setTodayTags(filteredTodayTags);
-    setGoodTagsList(habitTags);
+    setHabitTags(habitTags);
   }, [tags, selectedDate]);
 
   return (
@@ -49,21 +50,15 @@ export default function TagScreen() {
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
       />
-        <ScrollView style={styles.scrollView}>
-        <TouchableWithoutFeedback onPress={() => isEditMode && setIsEditMode(false)}>
+      <ScrollView style={styles.scrollView}>
+        <TouchableWithoutFeedback
+          onPress={() => isEditMode && setIsEditMode(false)}
+        >
           <View style={styles.sectionsContainer}>
-
-            <Text style={styles.sectionTitle}>Habits</Text>
-            <Section
-              tags={goodTagsList}
-              sectionName={"habits"}
-              isEditMode={isEditMode}
-              setIsEditMode={setIsEditMode}
-
-            />
-                        {todayTags.length > 0 && (
+            {todayTags.length > 0 && (
               <Text style={styles.sectionTitle}>Today</Text>
             )}
+
             {todayTags.length > 0 && (
               <Section
                 tags={todayTags}
@@ -72,16 +67,22 @@ export default function TagScreen() {
                 setIsEditMode={setIsEditMode}
               />
             )}
+
+            <Text style={styles.sectionTitle}>Habits</Text>
+            <Section
+              tags={habitTags}
+              sectionName={"habits"}
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+            />
             <TouchableOpacity style={styles.addButton} onPress={() => {}}>
               <MaterialCommunityIcons name="plus-circle-outline" size={24} />
             </TouchableOpacity>
 
             <SelectedTagList />
           </View>
-
-            </TouchableWithoutFeedback>
-
-        </ScrollView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </>
   );
 }
