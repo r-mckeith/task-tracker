@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Switch } from 'react-native';
 import { useTagContext } from '../src/contexts/tags/UseTagContext';
 import { useDateContext } from '../src/contexts/date/useDateContext';
-import TaskContainer from '../components/list/TaskContainer';
+import TaskContainer from '../components/tasks/TaskContainer';
 import Header from '../components/ListHeader';
-import AddTask from '../components/list/AddTask';
+import AddTask from '../components/tasks/AddTask';
 
 export default function MonthlyScreen() {
   const [showCompleted, setShowCompleted] = useState<boolean>(false)

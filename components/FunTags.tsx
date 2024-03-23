@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { TagProps } from "../src/types/TagTypes";
-import Task from "./list/Task";
+import Task from "./tasks/Task";
 
 // A helper function to generate a unique ID for new items
 const generateID = () => Date.now().toString();

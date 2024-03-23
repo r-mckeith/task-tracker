@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   section: {
     flexShrink: 1,
     flexGrow: 1,
-    minHeight: 150,
+    minHeight: 70,
     padding: 10,
     borderRadius: 10,
     marginVertical: 10,

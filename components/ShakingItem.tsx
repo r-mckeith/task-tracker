@@ -7,7 +7,7 @@ import { TagProps } from "../src/types/TagTypes";
 import { deleteTag, selectTag } from "../src/api/SupabaseTags";
 import { useTagDataContext } from "../src/contexts/tagData/UseTagDataContext";
 import { useDateContext } from "../src/contexts/date/useDateContext";
-import RightSwipe from "./buckets/RightSwipe";
+import RightSwipe from "./tags/RightSwipe";
 import { handleToggleCompleted } from "../helpers/tagHelpers";
 
 type TagComponent = {

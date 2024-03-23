@@ -1,3 +1,4 @@
+import { isSelectedDate } from "../../helpers/dateHelpers";
 import { TagProps } from "../types/TagTypes";
 
 export type Action =
@@ -7,7 +8,7 @@ export type Action =
   | { type: 'ADD_LIST_TAG'; payload: any }
   | { type: 'UPDATE_TAG'; payload: TagProps}
   | { type: 'TOGGLE_SCOPE'; id: number; selectedDate: string }
-  | { type: 'TOGGLE_COMPLETED'; id: number; selectedDate: string }
+  | { type: 'TOGGLE_COMPLETED'; id: number; selectedDate: any }
   | { type: 'SELECT_TAG'; payload: TagProps}
 
 export const initialState = {
@@ -27,18 +28,23 @@ const updateScope = (
   });
 };
 
-const toggleComplete = (
+const toggleCompleted = (
   state: TagProps[],
-  action: { id: number; selectedDate: string }
+  action: { id: number, selectedDate: any }
 ): TagProps[] => {
-  return state.map(tag => {
+  const dateFormatted = action.selectedDate.toISOString().split('T')[0];
+  return state.map((tag) => {
     if (tag.id === action.id) {
-      const completed = (tag.completed) ? null : action.selectedDate;
-      return { ...tag, completed: completed };
+      if (tag.completed) {
+        return { ...tag, completed: null };
+      } else {
+        return { ...tag, completed: dateFormatted };
+      }
+    } else {
+      return tag;
     }
-    return tag;
   });
-};
+}
 
 export function tagReducer (state: TagProps[], action: Action): TagProps[] {
   switch (action.type) {
@@ -54,6 +60,8 @@ export function tagReducer (state: TagProps[], action: Action): TagProps[] {
       return state.map((tag) => tag.id ===action.payload.id ? action.payload : tag);
     case 'TOGGLE_SCOPE':
       return updateScope(state, action);
+    case 'TOGGLE_COMPLETED':
+      return toggleCompleted(state, action);
     case 'SELECT_TAG':
       return state.map(tag => {
         if (tag.id === action.payload.tag_data?.[0]?.tag_id) {
