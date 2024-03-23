@@ -8,6 +8,7 @@ import Auth from "./components/auth/Auth";
 import TagContextProvider from "./src/contexts/tags/TagContextProvider";
 import TagDataContextProvider from "./src/contexts/tagData/TagDataContextProvider";
 import DateProvider from "./src/contexts/date/Dateprovider";
+import GroupContextProvider from "./src/contexts/groups/GroupContextProvider";
 import { MyTabs } from "./screens/TabNavigator";
 import { useSession } from "./src/contexts/sessions/UseSessionHook";
 import { StyleSheet } from "react-native";
@@ -17,23 +18,25 @@ export default function App() {
 
   return (
     <DateProvider>
-      <TagContextProvider>
-        <TagDataContextProvider>
-          <SafeAreaView style={styles.container}>
-            <MenuProvider>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                {session && session.user ? (
-                  <NavigationContainer>
-                    <MyTabs />
-                  </NavigationContainer>
-                ) : (
-                  <Auth />
-                )}
-              </GestureHandlerRootView>
-            </MenuProvider>
-          </SafeAreaView>
-        </TagDataContextProvider>
-      </TagContextProvider>
+      <GroupContextProvider>
+        <TagContextProvider>
+          <TagDataContextProvider>
+            <SafeAreaView style={styles.container}>
+              <MenuProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                  {session && session.user ? (
+                    <NavigationContainer>
+                      <MyTabs />
+                    </NavigationContainer>
+                  ) : (
+                    <Auth />
+                  )}
+                </GestureHandlerRootView>
+              </MenuProvider>
+            </SafeAreaView>
+          </TagDataContextProvider>
+        </TagContextProvider>
+      </GroupContextProvider>
     </DateProvider>
   );
 }

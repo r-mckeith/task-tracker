@@ -12,6 +12,7 @@ import AddTag from "./AddTag";
 type SectionProps = {
   tags: TagProps[];
   sectionName: string;
+  groupId: number
   isEditMode: boolean;
   setIsEditMode: (arg0: boolean) => void;
 };
@@ -19,6 +20,7 @@ type SectionProps = {
 export default function Section({
   tags,
   sectionName,
+  groupId,
   isEditMode,
   setIsEditMode,
 }: SectionProps) {
@@ -34,7 +36,7 @@ export default function Section({
           { borderColor: "black", backgroundColor: "#FFF" },
         ]}
       >
-        {isEditMode && <AddTag sectionName={sectionName} />}
+        {isEditMode && <AddTag sectionName={sectionName} groupId={groupId} setIsEditMode={setIsEditMode} />}
         <View style={styles.tagContainer}>
           {tags.map((tag, index) => (
             // <Tag

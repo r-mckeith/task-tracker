@@ -7,6 +7,7 @@ export interface Tag extends NewTagProps {
 export type NewTagProps = {
   name: string;
   section: string;
+  group_id: number
 }
 
 export type TagDataProps = {

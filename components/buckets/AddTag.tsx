@@ -3,27 +3,34 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { NewTagProps } from "../../src/types/TagTypes";
 import { useTagContext } from "../../src/contexts/tags/UseTagContext";
+import { useGroupContext } from "../../src/contexts/groups/UseGroupContext";
 import { addTag } from "../../src/api/SupabaseTags";
 import AddTagModal from "./AddTagModal";
+import { updateGroupName } from "../../src/api/SupabaseGroups";
 
 type AddTag = {
   sectionName: string;
+  groupId: number;
+  setIsEditMode: (arg0: boolean) => void;
 };
 
-export default function AddTag({ sectionName }: AddTag) {
+export default function AddTag({ sectionName, groupId, setIsEditMode }: AddTag) {
   const [showModal, setShowModal] = useState(false);
+  const [newGroupName, setNewGroupName] = useState("");
 
-  const { dispatch } = useTagContext();
+  const { dispatch: tagDispatch } = useTagContext();
+  const { dispatch: groupDispatch } = useGroupContext();
 
   const handleAddTag = async (name: string, section: string): Promise<void> => {
     const newTag: NewTagProps = {
       name: name,
       section: section,
+      group_id: groupId,
     };
 
     try {
       const createdTag = await addTag(newTag);
-      dispatch({ type: "ADD_TAG", payload: createdTag });
+      tagDispatch({ type: "ADD_TAG", payload: createdTag });
     } catch (error) {
       console.error("Failed to add tag:", error);
     }
@@ -31,13 +38,27 @@ export default function AddTag({ sectionName }: AddTag) {
 
   if (sectionName === "today") return;
 
+  function handleUpdateGroupName() {
+    if (newGroupName) {
+      groupDispatch({ type: "UPDATE_GROUP_NAME", id: groupId, name: newGroupName})
+      updateGroupName(groupId, newGroupName);
+      setIsEditMode(false)
+    }
+  }
+
   return (
     <View style={styles.sectionHeader}>
-      <TextInput style={[styles.textInput, styles.input, { marginBottom: 3 }]}>
-        {`${sectionName}...`}
-      </TextInput>
+      <TextInput
+        style={[styles.textInput, styles.input, { marginBottom: 3 }]}
+        placeholder={`${sectionName}...`}
+        value={newGroupName}
+        onChangeText={setNewGroupName}
+      />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.iconButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={handleUpdateGroupName}
+        >
           <MaterialCommunityIcons
             name="check-circle-outline"
             size={24}
