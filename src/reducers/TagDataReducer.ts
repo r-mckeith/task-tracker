@@ -13,7 +13,6 @@ export type Action =
       case 'UPDATE_TAG_DATA':
         const existingIndex = state.findIndex(item => item.tag_id === action.payload.tag_id);
         if (existingIndex >= 0) {
-          // Update the existing tag data
           const updatedState = [...state];
           updatedState[existingIndex] = { ...state[existingIndex], ...action.payload };
           return updatedState;

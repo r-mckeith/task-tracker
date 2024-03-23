@@ -1,12 +1,13 @@
-export interface TagProps extends NewTagProps {
+export interface Tag extends NewTagProps {
   id: number;
   user_id: number;
-  tag_data: TagDataProps[];
+  tag_data: TagDataProps[]; 
 };
 
 export type NewTagProps = {
   name: string;
   section: string;
+  group_id: number
 }
 
 export type TagDataProps = {
@@ -14,6 +15,7 @@ export type TagDataProps = {
   tag_id: number;
   count: number;
   tag_name: string;
+  date: Date;
 }
 
 export enum DateRange {
@@ -22,3 +24,13 @@ export enum DateRange {
   ThisMonth,
   ThisYear
 }
+
+export interface TagProps extends NewTagProps {
+  id: number;
+  user_id: number;
+  tag_data: TagDataProps[];
+  inScopeDay?: string | null;
+  completed?: string | null;
+  depth?: number;
+  parentId?: number; 
+};

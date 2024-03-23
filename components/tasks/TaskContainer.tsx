@@ -1,22 +1,21 @@
 import React from 'react';
 import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { TaskInterface } from '../../src/types/TaskTypes';
+import { TagProps } from '../../src/types/TagTypes';
 import NestedList from '../NestedList';
 import { ScrollView } from 'react-native-gesture-handler';
 
 type TaskContainerProps = {
-  tasks: TaskInterface[];
-  filter: string;
+  tags: TagProps[];
 };
 
-export default function TaskContainer({ tasks, filter }: TaskContainerProps) {
+export default function TaskContainer({ tags }: TaskContainerProps) {
 
   return (
     <View style={styles.container}>
-      {tasks.length > 0 ? (
+      {tags.length > 0 ? (
         <ScrollView style={styles.taskList}>
-          <NestedList taskProps={tasks} filter={filter} />
+          <NestedList tags={tags} />
         </ScrollView>
       ) : (
         <View style={styles.emptyContainer} />

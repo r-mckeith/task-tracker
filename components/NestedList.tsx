@@ -1,42 +1,37 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { TaskInterface } from '../src/types/TaskTypes'
-import Task from './task/Task';
+import { View, StyleSheet } from 'react-native';
+import Task from './tasks/Task';
+import { TagProps } from '../src/types/TagTypes';
 
-interface NestedListProps {
-  taskProps: TaskInterface[];
-  filter?: string;
-}
+export default function NestedList({ tags }: { tags: TagProps[] }) {
 
-export default function NestedList({taskProps, filter}: NestedListProps) {
-
-  const findRootTasks = () => {
-    const allIds = new Set(taskProps.map(task => task.id));
-    return taskProps.filter(task => !task.parentId || !allIds.has(task.parentId));
+  const findRoottags = () => {
+    const allIds = new Set(tags.map(tag => tag.id));
+    return tags.filter(tag => !tag.parentId || !allIds.has(tag.parentId));
   };
   
-  const renderTasks = (parentId: number | null) => {
-    const tasksToRender = parentId === null ? findRootTasks() : taskProps.filter(task => task.parentId === parentId);
+  const rendertags = (parentId: number | null) => {
+    const tagsToRender = parentId === null ? findRoottags() : tags.filter(tag => tag.parentId === parentId);
     
-    return tasksToRender
-      .sort((a, b) => a.id - b.id)
-      .map((task, index) => (
+    return tagsToRender
+      .sort((a, b) => b.id - a.id)
+      .map((tag, index) => (
         <View 
-          key={task.id} 
+          key={tag.id} 
           style={[
             parentId !== null ? styles.subtask : undefined,
             parentId === null && index !== 0 ? styles.headerSpacing : undefined,
           ]}
         >
-          <Task {...task} filter={filter}/>
-          {renderTasks(task.id)}
+          <Task {...tag}/>
+          {rendertags(tag.id)}
         </View>
       ));
   };
   
   return (
     <View style={styles.container}>
-      {renderTasks(null)}
+      {rendertags(null)}
     </View>
   );
 };
@@ -44,8 +39,12 @@ export default function NestedList({taskProps, filter}: NestedListProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
     backgroundColor: '#F5F5F5',
+    padding: 10,
+    marginTop: 15,
+    marginHorizontal: 10,
   },
   input: {
     height: 40,
@@ -69,6 +68,5 @@ const styles = StyleSheet.create({
   },
   subtask: {
     marginLeft: 20,
-    borderRadius: 10,
   },
 });

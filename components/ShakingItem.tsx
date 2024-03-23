@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useTagContext } from "../../src/contexts/tags/UseTagContext";
-import { TagProps } from "../../src/types/TagTypes";
-import { deleteTag, selectTag } from "../../src/api/SupabaseTags";
-import { useTagDataContext } from "../../src/contexts/tagData/UseTagDataContext";
-import { useDateContext } from "../../src/contexts/date/useDateContext";
-import RightSwipe from "./RightSwipe";
-import { handleToggleCompleted } from "../../helpers/tagHelpers";
+import { useTagContext } from "../src/contexts/tags/UseTagContext";
+import { TagProps } from "../src/types/TagTypes";
+import { deleteTag, selectTag } from "../src/api/SupabaseTags";
+import { useTagDataContext } from "../src/contexts/tagData/UseTagDataContext";
+import { useDateContext } from "../src/contexts/date/useDateContext";
+import RightSwipe from "./tags/RightSwipe";
+import { handleToggleCompleted } from "../helpers/tagHelpers";
 
 type TagComponent = {
   tag: TagProps;
@@ -16,7 +16,7 @@ type TagComponent = {
   isEditMode: boolean;
 };
 
-export default function Tag({ tag, sectionName, isEditMode }: TagComponent) {
+export default function ShakingItem({ isEditMode, tag, sectionName }: TagComponent) {
   const [isSelected, setIsSelected] = useState(false);
 
   const { dispatch: tagDispatch } = useTagContext();
@@ -65,8 +65,58 @@ export default function Tag({ tag, sectionName, isEditMode }: TagComponent) {
 
   const tagStyle = isSelected ? [styles.tag, styles.selectedTag] : styles.tag;
 
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
+
+  const startShaking = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(shakeAnimation, {
+          toValue: 0.25,
+          duration: 60,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shakeAnimation, {
+          toValue: -0.25,
+          duration: 120,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shakeAnimation, {
+          toValue: 0,
+          duration: 60,
+          useNativeDriver: true,
+        }),
+      ]),
+      {
+        iterations: -1,
+      }
+    ).start();
+  };
+  
+  useEffect(() => {
+    if (isEditMode && sectionName !== 'today') {
+      startShaking();
+    } else {
+      shakeAnimation.stopAnimation(() => {
+        shakeAnimation.setValue(0);
+      });
+    }
+  }, [isEditMode, shakeAnimation]);
+
+  const rotation = shakeAnimation.interpolate({
+    inputRange: [-1, 1],
+    outputRange: ['-0.1rad', '0.1rad'],
+  });
+
   return (
-    <Swipeable
+    <Animated.View
+      style={[
+        styles.shakingItem,
+        {
+          transform: [{ rotate: rotation }],
+        },
+      ]}
+    >
+         <Swipeable
       ref={swipeableRow}
       renderRightActions={() => (
         <RightSwipe
@@ -79,7 +129,7 @@ export default function Tag({ tag, sectionName, isEditMode }: TagComponent) {
       rightThreshold={20}
     >
       <View style={tagStyle}>
-        {isEditMode && (
+        {isEditMode && sectionName !== 'today' && (
           <TouchableOpacity
             style={styles.deleteBubble}
             onPress={() => handleDeleteTag(tag.id)}
@@ -95,8 +145,9 @@ export default function Tag({ tag, sectionName, isEditMode }: TagComponent) {
         </TouchableOpacity>
       </View>
     </Swipeable>
+    </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   tag: {
@@ -123,12 +174,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -6,
     left: -5,
-    color: "black",
-    backgroundColor: "grey",
+    borderColor: "black",
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'grey',
     borderRadius: 50,
     width: 20,
     height: 20,
     justifyContent: "center",
     alignItems: "center",
   },
+  shakingItem: {
+
+  }
 });

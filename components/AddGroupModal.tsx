@@ -1,25 +1,41 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CANCEL_BUTTON, CIRCLE_CHECK_BUTTON } from '../../src/utils/colors';
+import { CANCEL_BUTTON, CIRCLE_CHECK_BUTTON } from '../src/utils/colors';
+import { addGroup } from '../src/api/SupabaseGroups';
+import { useGroupContext } from '../src/contexts/groups/UseGroupContext';
 
-type AddTagModalProps = {
+type AddGroupModalProps = {
   visible: boolean;
-  sectionName: string;
   onClose: () => void;
-  onAddTag: (name: string, section: string) => void;
 }
 
-export default function AddTagModal ({ visible, sectionName, onClose, onAddTag }: AddTagModalProps) {
-  const [newTagName, setNewTagName] = useState('');
+export default function AddGroupModal ({ visible, onClose }: AddGroupModalProps) {
+  const [newGroupName, setNewGroupName] = useState('');
 
-  const handleAddTag = () => {
-    if (newTagName) {
-      onAddTag(newTagName, sectionName);
-      setNewTagName('');
-      onClose();
+  const { dispatch } = useGroupContext();
+
+  const handleAddGroup = async (): Promise<void> => {
+    try {
+      const createdGroup = await addGroup(newGroupName);
+      dispatch({ type: "ADD_GROUP", payload: createdGroup });
+    } catch (error) {
+      console.error("Failed to add group:", error);
     }
+
+    setNewGroupName('');
+    onClose();
   };
+
+  // const handleAddGroup = () => {
+  //   if (newGroupName) {
+  //     addGroup(newGroupName)
+  //     // onAddGroup(newGroupName);
+  //     console.log(newGroupName)
+  //     setNewGroupName('');
+  //     onClose();
+  //   }
+  // };
   
   return (
     <Modal
@@ -30,17 +46,17 @@ export default function AddTagModal ({ visible, sectionName, onClose, onAddTag }
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>New tag</Text>
+          <Text style={styles.modalText}>New group</Text>
           <TextInput
             style={[styles.textInput, styles.input, { marginBottom: 10 }]}
-            placeholder={'Tag name...'}
-            value={newTagName}
-            onChangeText={setNewTagName}
+            placeholder={'Group name...'}
+            value={newGroupName}
+            onChangeText={setNewGroupName}
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.iconButton} 
-              onPress={handleAddTag}
+              onPress={handleAddGroup}
             >
               <MaterialCommunityIcons name="check-circle-outline" size={24} color={CIRCLE_CHECK_BUTTON} />
             </TouchableOpacity>

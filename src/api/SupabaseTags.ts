@@ -4,7 +4,8 @@ import { supabase } from './SupabaseClient'
 export const getTags = async () => {
   const { data, error } = await supabase
     .from('tags')
-    .select('*');
+    .select('*')
+    .order('created_at', { ascending: true });
 
   if (error) {
     console.error(error);
@@ -16,42 +17,43 @@ export const getTags = async () => {
   return tags;
 };
 
-export const getTagData = async (range: DateRange) => {
+export const getTagData = async (range: DateRange, selectedDate: Date) => {
   let startDate: string;
   let endDate: string;
 
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth();
-  const currentDay = today.getDate();
+  const selectedYear = selectedDate.getFullYear();
+  const selectedMonth = selectedDate.getMonth();
+  const dateSelected = selectedDate.getDate();
 
   switch (range) {
     case DateRange.Today:
-      const todayFormatted = today.toISOString().split('T')[0];
-      startDate = todayFormatted + "T00:00:00.000Z";
-      endDate = todayFormatted + "T23:59:59.999Z";
+      startDate = selectedDate.toISOString().split('T')[0];
+      endDate = selectedDate.toISOString().split('T')[0];
       break;
     case DateRange.ThisWeek:
-      const oneWeekAgo = new Date(today);
-      oneWeekAgo.setDate(currentDay - 6);
-      startDate = oneWeekAgo.toISOString();
-      endDate = today.toISOString();
+      const weekStartDay = selectedDate.getDay();
+      const weekStart = new Date(selectedYear, selectedMonth, dateSelected - weekStartDay);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 7);
+
+      startDate = weekStart.toISOString();
+      endDate = weekEnd.toISOString();
       break;
     case DateRange.ThisMonth:
-      startDate = new Date(currentYear, currentMonth, 1).toISOString();
-      endDate = today.toISOString();
+      startDate = new Date(selectedYear, selectedMonth, 1).toISOString();
+      endDate = new Date(selectedYear, selectedMonth + 1, 0).toISOString();
       break;
     case DateRange.ThisYear:
-      startDate = new Date(currentYear, 0, 1).toISOString();
-      endDate = today.toISOString();
+      startDate = new Date(selectedYear, 0, 1).toISOString();
+      endDate = new Date(selectedYear, 11, 31).toISOString();
       break;
   }
 
   const { data, error } = await supabase
     .from('tag_data')
     .select('created_at, tag_id, count')
-    .filter('created_at', 'gte', startDate)
-    .filter('created_at', 'lte', endDate)
+    .filter('date', 'gte', startDate)
+    .filter('date', 'lte', endDate)
     .order('created_at', { ascending: true })
     .select();
 
@@ -83,6 +85,24 @@ export async function addTag(newTag: NewTagProps): Promise<TagProps> {
   }
 }
 
+export async function addListTag(newTag: any): Promise<TagProps> {
+  let { data: tagData, error: tagError } = await supabase
+    .from('tags')
+    .insert([newTag])
+    .select();
+
+  if (tagError) {
+    console.error(tagError);
+    throw new Error('Failed to add task');
+  }
+
+  if (!tagData) {
+    throw new Error('No data returned after insert operation');
+  } else {
+    return tagData[0];
+  }
+}
+
 // export async function editTag (noteId: number, updatedFields: Partial<NewNote>) {
 //   const { data, error } = await supabase
 //     .from('notes')
@@ -105,121 +125,47 @@ export async function deleteTag (tagId: number) {
   }
 };
 
-// export async function selectTag(id: number): Promise<TagDataProps> {
-//   const today = new Date();
-//   const todayFormatted = today.toISOString().split('T')[0];
-//   const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
-//   const endDate = todayFormatted + "T23:59:59.999Z";   // End of the day
+export const toggleScope = async (tagId: number, selectedDate: string) => {
+  const { data, error } = await supabase
+    .from('tags')
+    .select('inScopeDay')
+    .eq('id', tagId)
+    .single();
 
-//   // Check if tag_data for the tagId with today's date exists
-//   const { data, error } = await supabase
-//       .from('tag_data')
-//       .select('*')
-//       .eq('tag_id', id)
-//       .gte('created_at', startDate)
-//       .lte('created_at', endDate);
+  if (error || !data) {
+    console.error('Failed to fetch task:', error);
+    throw new Error('Failed to fetch task');
+  }
 
-//   if (error) {
-//       console.error(error);
-//       throw new Error('Failed to select tag data');
-//   }
+  const newScopeDate = data.inScopeDay ? null : selectedDate;
 
-//   // If exists, increment the count. If not, insert new row.
-//   if (data && data.length > 0) {
-//       const currentCount = data[0].count;
-//       const updatedCount = currentCount + 1;
+  const { data: updateData, error: updateError } = await supabase
+    .from('tags')
+    .update({ inScopeDay: newScopeDate })
+    .eq('id', tagId)
+    .select()
 
-//       const { data: updatedData, error: updateError } = await supabase
-//           .from('tag_data')
-//           .update({ count: updatedCount })
-//           .eq('id', data[0].id)
-//           .select();
+  if (updateError) {
+    console.error('Failed to toggle scope:', updateError);
+    throw new Error('Failed to update task');
+  }
 
-//       if (updateError) {
-//           console.error(updateError);
-//           throw new Error('Failed to update tag data count');
-//       }
+  if (!data) {
+        throw new Error('No data returned after insert operation');
+      } else {
+        return updateData;
+      }
+};
 
-//       if (!updatedData) {
-//         throw new Error('Updated data is not available.');
-//     }
-      
-//       return updatedData[0];
+export async function selectTag(tag: TagProps, selectedDate: any): Promise<TagDataProps> {
+  const dateFormatted = selectedDate.toISOString().split('T')[0];
 
-//   } else {
-//       const newData: Partial<TagDataProps> = {
-//           tag_id: id,
-//           count: 1,
-//       };
-
-//       const { data: insertedData, error: insertError } = await supabase
-//           .from('tag_data')
-//           .insert([newData])
-//           .single();
-
-//       if (insertError) {
-//           console.error(insertError);
-//           throw new Error('Failed to insert tag data');
-//       }
-
-//       return insertedData;
-//   }
-// }
-
-// export async function updateOrInsertTagData(selectedTagId: number, currentCount: number): Promise<TagDataProps> {
-//   const existingTagData = await selectTag(selectedTagId);
-
-//   if (existingTagData) {
-//       // Update existing tag data
-//       const updatedCount = existingTagData.count + 1;
-//       const { data: updatedData, error: updateError } = await supabase
-//           .from('tag_data')
-//           .update({ count: updatedCount })
-//           .eq('id', existingTagData.tag_id)
-//           .select();
-
-//       if (updateError) {
-//           console.error(updateError);
-//           throw new Error('Failed to update tag data count');
-//       }
-
-//       return updatedData[0];
-
-//   } else {
-//       // Insert new tag data
-//       const newTagData: Partial<TagDataProps> = {
-//           tag_id: selectedTagId,
-//           count: currentCount,
-//           name: 
-//       };
-
-//       const { data: insertedData, error: insertError } = await supabase
-//           .from('tag_data')
-//           .insert([newTagData])
-//           .single();
-
-//       if (insertError) {
-//           console.error(insertError);
-//           throw new Error('Failed to insert tag data');
-//       }
-
-//       return insertedData;
-//   }
-// }
-
-export async function selectTag(tag: TagProps): Promise<TagDataProps> {
-  const today = new Date();
-  const todayFormatted = today.toISOString().split('T')[0];
-  const startDate = todayFormatted + "T00:00:00.000Z";  // Start of the day
-  const endDate = todayFormatted + "T23:59:59.999Z";   // End of the day
-
-  // Check if tag_data for the tagId with today's date exists
   const { data, error } = await supabase
       .from('tag_data')
       .select('*')
       .eq('tag_id', tag.id)
-      .gte('created_at', startDate)
-      .lte('created_at', endDate);
+      .gte('date', dateFormatted)
+      .lte('date', dateFormatted);
 
   if (error) {
       console.error(error);
@@ -227,7 +173,6 @@ export async function selectTag(tag: TagProps): Promise<TagDataProps> {
   }
 
   if (data && data.length > 0) {
-      // Tag data exists, update the count
       const currentCount = data[0].count;
       const updatedCount = currentCount + 1;
 
@@ -253,14 +198,14 @@ export async function selectTag(tag: TagProps): Promise<TagDataProps> {
       const newData: Partial<TagDataProps> = {
           tag_id: tag.id,
           count: 1,
-          tag_name: tag.name
+          tag_name: tag.name,
+          date: selectedDate
       };
 
       const { data: insertedData, error: insertError } = await supabase
           .from('tag_data')
           .insert([newData])
           .select();
-          console.log("insertedData", insertedData)
 
       if (insertError) {
           console.error(insertError);
@@ -270,5 +215,38 @@ export async function selectTag(tag: TagProps): Promise<TagDataProps> {
       return insertedData[0];
   }
 }
+
+export const markTagAsComplete = async (tagId: number, completionDate: Date) => {
+  const fetchResult = await supabase
+    .from('tags')
+    .select('completed')
+    .eq('id', tagId)
+    .single();
+
+  if (fetchResult.error || !fetchResult.data) {
+    console.error('Failed to fetch tag:', fetchResult.error);
+    throw new Error('Failed to fetch tag');
+  }
+
+  const tag = fetchResult.data;
+
+  const newCompletionDate = tag.completed ? null : completionDate;
+
+  const data = await supabase
+    .from('tags')
+    .update({ completed: newCompletionDate })
+    .eq('id', tagId);
+
+  if (data.error) {
+    console.error('Failed to mark task as complete/incomplete:', data.error);
+    throw new Error('Failed to update task');
+  }
+
+  if (!data) {
+        throw new Error('No data returned after insert operation');
+      } else {
+        return data;
+      }
+};
 
 
